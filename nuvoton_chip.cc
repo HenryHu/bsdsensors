@@ -9,9 +9,13 @@
 #include "super_io.h"
 #include "port_io.h"
 #include "nuvoton_chip_info.h"
+#include "nuvoton_temp_sensor.h"
 #include <unistd.h>
+#include "util.h"
+#include "nuvoton_fan_speed.h"
 
 #include <iostream>
+#include <iomanip>
 using namespace std;
 
 using LogicalDeviceNo = uint8_t;
@@ -30,14 +34,11 @@ const SuperIO::AddressType kPortBaseAddress = 0x60;
 const PortAddress kAddrPortOffset = 0x05;
 const PortAddress kDataPortOffset = 0x06;
 
-const NuvotonChip::AddressType kConfigRegister = {0, 0x40};
+// const NuvotonChip::AddressType kConfigRegister = {0, 0x40};
 const NuvotonChip::AddressType kBankSelect = {0, 0x4E};
-const uint8_t kBankMask = 0x0f;
+const NuvotonChip::AddressType kChipID = {0, 0x58};
+// const uint8_t kBankMask = 0x0f;
 // const NuvotonChip::AddressType kPerBankMinAddr = 0x50;
-
-static uint32_t Combine(uint8_t high, uint8_t low) {
-    return ((uint32_t)high << 8) + low;
-}
 
 class NuvotonLock {
    public:
@@ -50,7 +51,8 @@ class NuvotonLock {
 
 class NuvotonChipImpl : public NuvotonChip {
    public:
-    NuvotonChipImpl() : port_io_(CreatePortIO()), entered_(false) {}
+    NuvotonChipImpl()
+        : port_io_(CreatePortIO()), entered_(false), info_(nullptr) {}
     ~NuvotonChipImpl() override {}
 
     // Enter Extended Function mode
@@ -97,12 +99,16 @@ class NuvotonChipImpl : public NuvotonChip {
                     if (kKnownNuvotonChips.count(id)) {
                         info_ = &kKnownNuvotonChips.find(id)->second;
                         cout << "Known Nuvoton Chip: " << info_->name << endl;
+                        LoadFans();
+                        return true;
+                    } else {
+                        cout << "Unknown Nuvoton Chip" << endl;
+                        return false;
                     }
-                    return true;
                 }
             }
-            io_.reset();
         }
+        io_.reset();
         return false;
     }
 
@@ -147,6 +153,16 @@ class NuvotonChipImpl : public NuvotonChip {
         return port_io_->ReadByte(data_port_, data);
     }
 
+    Status ReadWord(const NuvotonChip::AddressType& addr, uint16_t* data) {
+        uint8_t high, low;
+        RETURN_IF_ERROR(ReadByte(addr, &low));
+        NuvotonChip::AddressType high_addr = addr;
+        high_addr.first |= 0x80;
+        RETURN_IF_ERROR(ReadByte(high_addr, &high));
+        *data = Combine(high, low);
+        return OkStatus();
+    }
+
     Status SelectBank(uint8_t bank_no) {
         RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, kBankSelect.second));
         return port_io_->WriteByte(data_port_, bank_no);
@@ -164,7 +180,7 @@ class NuvotonChipImpl : public NuvotonChip {
         PortAddress port_base = Combine(base_high, base_low);
         addr_port_ = port_base + kAddrPortOffset;
         data_port_ = port_base + kDataPortOffset;
-        cerr << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
+        cout << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
              << endl;
 
         uint8_t value;
@@ -182,11 +198,38 @@ class NuvotonChipImpl : public NuvotonChip {
             CHECK(SelectDevice(kDeviceHM), "Fail to select logical device");
         }
 
-        for (int i = 0; i < 128; i++) {
-            uint8_t data;
-            CHECK(ReadByte({0, i}, &data), "Fail to read byte");
-            cout << hex << i << ":" << dec << (int)data << " ";
-            if ((i + 1) % 16 == 0) cout << endl;
+        if (info_) {
+            uint16_t vendor_id;
+            CHECK(ReadWord(info_->vendor_id_addr, &vendor_id),
+                  "fail to read vendor id");
+            cout << "Vendor ID, 0x5ca3 for Nuvoton: " << hex << vendor_id
+                 << endl;
+        }
+
+        uint8_t chip_id;
+        CHECK(ReadByte(kChipID, &chip_id), "fail to read chip id");
+        cout << "Chip ID, usually 0xc1: " << hex << (int)chip_id << endl;
+
+        for (const auto& fan : fan_speeds_) {
+            cout << "Fan " << fan->name() << " at " << fan->value() << endl;
+        }
+
+        for (uint8_t bank = 0; bank < 16; bank++) {
+            for (int i = 0; i < 256; i++) {
+                uint8_t data;
+                CHECK(ReadByte({bank, i}, &data), "Fail to read byte");
+                if (data != 255 && data != 0) {
+                    cout << hex << (int)bank << "/" << setw(2) << i << ":"
+                         << dec << setw(3) << (int)data << " ";
+                }
+                if ((i + 1) % 16 == 0) cout << endl;
+            }
+        }
+    }
+
+    void LoadFans() {
+        for (const auto& fan : info_->fans) {
+            fan_speeds_.push_back(CreateNuvotonFanSpeed(fan, this));
         }
     }
 
@@ -197,6 +240,8 @@ class NuvotonChipImpl : public NuvotonChip {
     PortAddress addr_port_, data_port_;
     bool entered_;
     const NuvotonChipInfo* info_;
+
+    std::vector<std::unique_ptr<NuvotonFanSpeed>> fan_speeds_;
 };
 
 std::unique_ptr<NuvotonChip> CreateNuvotonChip() {
