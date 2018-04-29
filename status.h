@@ -30,4 +30,12 @@ Status Errno();
 
 void CHECK(const Status& status, const std::string& message);
 
+#define RETURN_IF_ERROR(result) \
+    do {                        \
+        Status status = result; \
+        if (!status.ok()) {     \
+            return status;      \
+        }                       \
+    } while (0)
+
 #endif  // __BSDSENSORS_STATUS_H__
