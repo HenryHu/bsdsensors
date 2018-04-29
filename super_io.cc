@@ -15,20 +15,6 @@ class SuperIOImpl : public SuperIO {
 
     Status Init() override { return port_io_->Init(); }
 
-    Status Enter() override {
-        auto status = port_io_->WriteByte(port_, 0x87);
-        if (!status.ok()) return status;
-        return port_io_->WriteByte(port_, 0x87);
-    }
-
-    Status Exit() override {
-        auto status = port_io_->WriteByte(port_, 0xaa);
-        if (!status.ok()) return status;
-        status = port_io_->WriteByte(port_, 0x02);
-        if (!status.ok()) return status;
-        return port_io_->WriteByte(port_ + 1, 0x02);
-    }
-
     Status ReadByte(const AddressType& address, uint8_t* data) override {
         auto status = port_io_->WriteByte(port_, address);
         if (!status.ok()) return status;
@@ -41,6 +27,14 @@ class SuperIOImpl : public SuperIO {
         return port_io_->WriteByte(port_ + 1, data);
     }
 
+    Status DirectWriteCommand(const uint8_t data) override {
+        return port_io_->WriteByte(port_, data);
+    }
+
+    Status DirectWriteData(const uint8_t data) override {
+        return port_io_->WriteByte(port_ + 1, data);
+    }
+
    private:
     std::unique_ptr<PortIO> port_io_;
     uint32_t port_;
@@ -49,8 +43,3 @@ class SuperIOImpl : public SuperIO {
 std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port) {
     return std::make_unique<SuperIOImpl>(port);
 }
-
-SuperIOLock::SuperIOLock(SuperIO* super_io) : super_io_(super_io) {
-    super_io_->Enter();
-}
-SuperIOLock::~SuperIOLock() { super_io_->Exit(); }

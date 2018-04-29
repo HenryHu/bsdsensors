@@ -21,19 +21,10 @@ class SuperIO {
     virtual Status ReadByte(const AddressType& address, uint8_t* data) = 0;
     virtual Status WriteByte(const AddressType& address,
                              const uint8_t data) = 0;
-    virtual Status Enter() = 0;
-    virtual Status Exit() = 0;
+    virtual Status DirectWriteCommand(const uint8_t data) = 0;
+    virtual Status DirectWriteData(const uint8_t data) = 0;
 };
 
 std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port);
-
-class SuperIOLock {
-   public:
-    SuperIOLock(SuperIO* super_io);
-    ~SuperIOLock();
-
-   private:
-    SuperIO* super_io_;
-};
 
 #endif  // __BSDSENSORS_SUPER_IO_H__
