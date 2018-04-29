@@ -15,12 +15,16 @@
 #include <machine/iodev.h>
 #include <memory>
 #include <fcntl.h>
+#include <unistd.h>
 
 const char* kIODevice = "/dev/io";
 
 class PortIOImpl : public PortIO {
    public:
-    ~PortIOImpl() override {}
+    PortIOImpl() : io_fd_(-1) {}
+    ~PortIOImpl() override {
+        if (io_fd_ >= 0) close(io_fd_);
+    }
 
     Status Init() override {
         io_fd_ = open(kIODevice, O_RDWR);

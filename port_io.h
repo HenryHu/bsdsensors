@@ -13,9 +13,11 @@
 
 #include "status.h"
 
+using PortAddress = uint32_t;
+
 class PortIO {
    public:
-    using AddressType = uint32_t;
+    using AddressType = PortAddress;
     virtual ~PortIO() {}
 
     virtual Status Init() = 0;
