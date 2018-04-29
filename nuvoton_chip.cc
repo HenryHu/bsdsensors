@@ -7,11 +7,36 @@
 
 #include "nuvoton_chip.h"
 #include "super_io.h"
+#include "port_io.h"
+#include <unistd.h>
 
 #include <iostream>
 using namespace std;
 
+using LogicalDeviceNo = uint8_t;
+
+// Extended Function Enable Registers (EFERs)
 const uint32_t kNuvotonPorts[] = {0x2E, 0x4E};
+
+const SuperIO::AddressType kLogicalDeviceSelect = 0x07;
+const LogicalDeviceNo kDeviceHM = 0x0B;
+
+const SuperIO::AddressType kDeviceID = 0x20;
+const SuperIO::AddressType kGlobalOption1 = 0x28;
+
+const SuperIO::AddressType kLogicalDeviceEnabled = 0x30;
+const SuperIO::AddressType kPortBaseAddress = 0x60;
+const PortAddress kAddrPortOffset = 0x05;
+const PortAddress kDataPortOffset = 0x06;
+
+const NuvotonChip::AddressType kConfigRegister = {0, 0x40};
+const NuvotonChip::AddressType kBankSelect = {0, 0x4E};
+const uint8_t kBankMask = 0x0f;
+// const NuvotonChip::AddressType kPerBankMinAddr = 0x50;
+
+static uint32_t Combine(uint8_t high, uint8_t low) {
+    return ((uint32_t)high << 8) + low;
+}
 
 class NuvotonLock {
    public:
@@ -24,45 +49,49 @@ class NuvotonLock {
 
 class NuvotonChipImpl : public NuvotonChip {
    public:
-    NuvotonChipImpl() {}
+    NuvotonChipImpl() : port_io_(CreatePortIO()), entered_(false) {}
     ~NuvotonChipImpl() override {}
 
+    // Enter Extended Function mode
     Status Enter() override {
+        entered_ = true;
         auto status = io_->DirectWriteCommand(0x87);
         if (!status.ok()) return status;
         return io_->DirectWriteCommand(0x87);
     }
 
+    // Exit Extended Function mode
     Status Exit() override {
-        auto status = io_->DirectWriteCommand(0xaa);
-        if (!status.ok()) return status;
-        status = io_->DirectWriteCommand(0x02);
-        if (!status.ok()) return status;
-        return io_->DirectWriteData(0x02);
+        entered_ = false;
+        return io_->DirectWriteCommand(0xaa);
     }
 
     bool Detect() override {
+        if (!port_io_->Init().ok()) {
+            return false;
+        }
         for (const auto& port : kNuvotonPorts) {
             io_ = CreateSuperIO(port);
             if (!io_->Init().ok()) {
-                return false;
+                continue;
             }
 
             {
                 NuvotonLock lock(this);
                 uint16_t id = 0;
                 uint8_t result;
-                if (!io_->ReadByte(0x20, &result).ok()) {
+                if (!io_->ReadByte(kDeviceID, &result).ok()) {
                     continue;
                 }
                 id |= (uint16_t)result << 8;
-                if (!io_->ReadByte(0x21, &result).ok()) {
+                if (!io_->ReadByte(kDeviceID + 1, &result).ok()) {
                     continue;
                 }
                 id |= result;
                 if (id != 0xffff) {
                     cout << "Found SuperIO ID: " << hex << "0x" << id
                          << " at 0x" << port << endl;
+                    GetBaseAddress();
                     return true;
                 }
             }
@@ -71,10 +100,96 @@ class NuvotonChipImpl : public NuvotonChip {
         return false;
     }
 
-    void DumpInfo() override {}
+    Status IsDeviceEnabled(bool* enabled) {
+        uint8_t data;
+        RETURN_IF_ERROR(io_->ReadByte(kLogicalDeviceEnabled, &data));
+        *enabled = data & 0x1;
+        return OkStatus();
+    }
+
+    Status EnableDevice() {
+        uint8_t enabled;
+        RETURN_IF_ERROR(io_->ReadByte(kLogicalDeviceEnabled, &enabled));
+
+        enabled |= 0x1;
+        return io_->WriteByte(kLogicalDeviceEnabled, enabled);
+    }
+
+    Status SelectDevice(const LogicalDeviceNo dev_no) {
+        assert(entered_);
+        RETURN_IF_ERROR(io_->WriteByte(kLogicalDeviceSelect, dev_no));
+        bool enabled;
+        RETURN_IF_ERROR(IsDeviceEnabled(&enabled));
+        if (!enabled) {
+            cerr << "Logical device not enabled." << endl;
+            return EnableDevice();
+        }
+        return OkStatus();
+    }
+
+    Status WriteByte(const NuvotonChip::AddressType& addr,
+                     const uint8_t data) override {
+        RETURN_IF_ERROR(SelectBank(addr.first));
+        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.second));
+        return port_io_->WriteByte(data_port_, data);
+    }
+
+    Status ReadByte(const NuvotonChip::AddressType& addr,
+                    uint8_t* data) override {
+        RETURN_IF_ERROR(SelectBank(addr.first));
+        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.second));
+        return port_io_->ReadByte(data_port_, data);
+    }
+
+    Status SelectBank(uint8_t bank_no) {
+        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, kBankSelect.second));
+        return port_io_->WriteByte(data_port_, bank_no);
+    }
+
+    // Locked
+    void GetBaseAddress() {
+        assert(entered_);
+        CHECK(SelectDevice(kDeviceHM), "Fail to select logical device");
+
+        uint8_t base_high, base_low;
+        io_->ReadByte(kPortBaseAddress, &base_high);
+        io_->ReadByte(kPortBaseAddress + 1, &base_low);
+
+        PortAddress port_base = Combine(base_high, base_low);
+        addr_port_ = port_base + kAddrPortOffset;
+        data_port_ = port_base + kDataPortOffset;
+        cerr << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
+             << endl;
+
+        uint8_t value;
+        io_->ReadByte(kGlobalOption1, &value);
+        if (value & 0x10) {
+            cerr << "Enable mapping" << endl;
+            value &= ~0x10;
+            io_->WriteByte(kGlobalOption1, value);
+        }
+    }
+
+    void DumpInfo() override {
+        {
+            NuvotonLock lock(this);
+            CHECK(SelectDevice(kDeviceHM), "Fail to select logical device");
+        }
+
+        for (int i = 0; i < 128; i++) {
+            uint8_t data;
+            CHECK(ReadByte({0, i}, &data), "Fail to read byte");
+            cout << hex << i << ":" << dec << (int)data << " ";
+            if ((i + 1) % 16 == 0) cout << endl;
+        }
+    }
 
    private:
+    std::unique_ptr<PortIO> port_io_;
     std::unique_ptr<SuperIO> io_;
+
+    PortAddress addr_port_, data_port_;
+    bool entered_;
 };
 
 std::unique_ptr<NuvotonChip> CreateNuvotonChip() {
