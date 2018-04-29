@@ -8,6 +8,7 @@
 #include "nuvoton_chip.h"
 #include "super_io.h"
 #include "port_io.h"
+#include "nuvoton_chip_info.h"
 #include <unistd.h>
 
 #include <iostream>
@@ -89,9 +90,14 @@ class NuvotonChipImpl : public NuvotonChip {
                 }
                 id |= result;
                 if (id != 0xffff) {
-                    cout << "Found SuperIO ID: " << hex << "0x" << id
+                    cout << "Found Nuvoton chip, ID: " << hex << "0x" << id
                          << " at 0x" << port << endl;
                     GetBaseAddress();
+
+                    if (kKnownNuvotonChips.count(id)) {
+                        info_ = &kKnownNuvotonChips.find(id)->second;
+                        cout << "Known Nuvoton Chip: " << info_->name << endl;
+                    }
                     return true;
                 }
             }
@@ -190,6 +196,7 @@ class NuvotonChipImpl : public NuvotonChip {
 
     PortAddress addr_port_, data_port_;
     bool entered_;
+    const NuvotonChipInfo* info_;
 };
 
 std::unique_ptr<NuvotonChip> CreateNuvotonChip() {
