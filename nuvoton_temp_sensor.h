@@ -9,6 +9,7 @@
 #define __BSDSENSORS_NUVOTON_TEMP_SENSOR_H__
 
 #include "temp_sensor.h"
+#include "nuvoton_chip_info.h"
 
 #include <memory>
 #include <string>
@@ -20,6 +21,6 @@ class NuvotonTempSensor : public TempSensor {
 };
 
 std::unique_ptr<NuvotonTempSensor> CreateNuvotonTempSensor(
-    const std::string& name);
+    const NuvotonTempInfo& info, NuvotonChip* chip);
 
 #endif  // __BSDSENSORS_NUVOTON_TEMP_SENSOR_H__

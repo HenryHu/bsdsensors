@@ -11,16 +11,31 @@ using std::string;
 
 class NuvotonTempSensorImpl : public NuvotonTempSensor {
    public:
-    NuvotonTempSensorImpl(const string& name) : name_(name) {}
-    double value() override { return 0; }
+    NuvotonTempSensorImpl(const NuvotonTempInfo& info, NuvotonChip* chip)
+        : info_(info), chip_(chip) {}
 
-    string name() override { return name_; }
+    double value() override {
+        uint8_t val_int;
+        chip_->ReadByte(info_.val_int, &val_int);
+        double ret = val_int;
+        if (info_.has_frac_part) {
+            uint8_t val_frac;
+            chip_->ReadByte(info_.val_frac, &val_frac);
+            if (val_frac & 0x80) {
+                ret += 0.5;
+            }
+        }
+        return ret;
+    }
+
+    string name() override { return info_.name; }
 
    private:
-    string name_;
+    NuvotonTempInfo info_;
+    NuvotonChip* chip_;
 };
 
 std::unique_ptr<NuvotonTempSensor> CreateNuvotonTempSensor(
-    const std::string& name) {
-    return std::make_unique<NuvotonTempSensorImpl>(name);
+    const NuvotonTempInfo& info, NuvotonChip* chip) {
+    return std::make_unique<NuvotonTempSensorImpl>(info, chip);
 }

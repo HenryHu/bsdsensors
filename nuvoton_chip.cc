@@ -100,6 +100,7 @@ class NuvotonChipImpl : public NuvotonChip {
                         info_ = &kKnownNuvotonChips.find(id)->second;
                         cout << "Known Nuvoton Chip: " << info_->name << endl;
                         LoadFans();
+                        LoadTemps();
                         return true;
                     } else {
                         cout << "Unknown Nuvoton Chip" << endl;
@@ -213,8 +214,13 @@ class NuvotonChipImpl : public NuvotonChip {
         for (const auto& fan : fan_speeds_) {
             cout << "Fan " << fan->name() << " at " << fan->value() << endl;
         }
+        for (const auto& temp : temp_sensors_) {
+            cout << "Temp " << temp->name() << " at " << temp->value() << endl;
+        }
+    }
 
-        for (uint8_t bank = 0; bank < 16; bank++) {
+    void DumpAll() {
+        for (uint8_t bank = 0; bank < 11; bank++) {
             for (int i = 0; i < 256; i++) {
                 uint8_t data;
                 CHECK(ReadByte({bank, i}, &data), "Fail to read byte");
@@ -233,6 +239,12 @@ class NuvotonChipImpl : public NuvotonChip {
         }
     }
 
+    void LoadTemps() {
+        for (const auto& temp : info_->temps) {
+            temp_sensors_.push_back(CreateNuvotonTempSensor(temp, this));
+        }
+    }
+
    private:
     std::unique_ptr<PortIO> port_io_;
     std::unique_ptr<SuperIO> io_;
@@ -242,6 +254,7 @@ class NuvotonChipImpl : public NuvotonChip {
     const NuvotonChipInfo* info_;
 
     std::vector<std::unique_ptr<NuvotonFanSpeed>> fan_speeds_;
+    std::vector<std::unique_ptr<NuvotonTempSensor>> temp_sensors_;
 };
 
 std::unique_ptr<NuvotonChip> CreateNuvotonChip() {
