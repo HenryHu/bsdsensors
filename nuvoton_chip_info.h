@@ -24,6 +24,7 @@ struct NuvotonTempInfo {
     std::string name;
     bool has_frac_part;
     NuvotonChip::AddressType val_int, val_frac;
+    bool has_peci_frac;
 };
 
 struct NuvotonVoltInfo {
@@ -62,6 +63,7 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
           {"AUXTIN1", false, {4, 0x93}, {1, 0x51}},
           {"AUXTIN2", false, {4, 0x94}, {1, 0x51}},
           {"AUXTIN3", false, {4, 0x95}, {1, 0x51}},
+          {"PECI", true, {7, 0x20}, {7, 0x21}, true},
       },
       // Volts
       {
@@ -70,10 +72,16 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
           {"3Vcc", {4, 0x83}, 2.0},
           {"3Vsb", {4, 0x87}, 2.0},
           {"Vbat", {4, 0x88}, 2.0},
+          {"Vtt", {4, 0x89}},
           {"Vin0", {4, 0x84}},
           {"Vin1", {4, 0x81}},
           {"Vin2", {4, 0x8C}},
           {"Vin3", {4, 0x8D}},
+          {"Vin4", {4, 0x86}},
+          {"Vin5", {4, 0x8A}},
+          {"Vin6", {4, 0x8B}},
+          {"Vin7", {4, 0x8E}},
+          {"Vin8", {4, 0x85}},
       }}}};
 
 #endif  // __BSDSENSORS_NUVOTON_CHIP_INFO_H__

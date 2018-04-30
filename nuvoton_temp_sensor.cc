@@ -21,8 +21,17 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
         if (info_.has_frac_part) {
             uint8_t val_frac;
             chip_->ReadByte(info_.val_frac, &val_frac);
-            if (val_frac & 0x80) {
-                ret += 0.5;
+            if (info_.has_peci_frac) {
+                if (val_frac & 0x02) {
+                    ret += 0.5;
+                }
+                if (val_frac & 0x01) {
+                    ret += 0.25;
+                }
+            } else {
+                if (val_frac & 0x80) {
+                    ret += 0.5;
+                }
             }
         }
         return ret;
