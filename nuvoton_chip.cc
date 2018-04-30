@@ -9,12 +9,13 @@
 #include "super_io.h"
 #include "port_io.h"
 #include "nuvoton_chip_info.h"
+#include "nuvoton_fan_speed.h"
+#include "nuvoton_fan_control.h"
 #include "nuvoton_temp_sensor.h"
 #include "nuvoton_volt_sensor.h"
-#include <unistd.h>
 #include "util.h"
-#include "nuvoton_fan_speed.h"
 
+#include <unistd.h>
 #include <iostream>
 #include <iomanip>
 using namespace std;
@@ -220,6 +221,9 @@ class NuvotonChipImpl : public NuvotonChip {
         for (const auto& volt : volt_sensors_) {
             cout << "Volt " << volt->name() << " at " << volt->value() << endl;
         }
+        for (const auto& control : fan_controls_) {
+            cout << "Fan at " << control->current_percent() * 100 << endl;
+        }
     }
 
     void DumpAll() {
@@ -239,6 +243,7 @@ class NuvotonChipImpl : public NuvotonChip {
     void LoadSensors() {
         for (const auto& fan : info_->fans) {
             fan_speeds_.push_back(CreateNuvotonFanSpeed(fan, this));
+            fan_controls_.push_back(CreateNuvotonFanControl(fan.control, this));
         }
         for (const auto& temp : info_->temps) {
             temp_sensors_.push_back(CreateNuvotonTempSensor(temp, this));
@@ -257,6 +262,7 @@ class NuvotonChipImpl : public NuvotonChip {
     const NuvotonChipInfo* info_;
 
     std::vector<std::unique_ptr<NuvotonFanSpeed>> fan_speeds_;
+    std::vector<std::unique_ptr<NuvotonFanControl>> fan_controls_;
     std::vector<std::unique_ptr<NuvotonTempSensor>> temp_sensors_;
     std::vector<std::unique_ptr<NuvotonVoltSensor>> volt_sensors_;
 };
