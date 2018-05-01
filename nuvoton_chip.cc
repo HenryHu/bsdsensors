@@ -213,13 +213,13 @@ class NuvotonChipImpl : public NuvotonChip {
         out << "Chip ID, usually 0xc1: " << hex << (int)chip_id << endl;
 
         for (int i = 0; i < fan_speeds_.size(); i++) {
-            const NuvotonFanSpeed& fan = *fan_speeds_[i];
-            out << "Fan " << fan.name() << " at " << fan.value() << endl;
+            NuvotonFanSpeed& fan = *fan_speeds_[i];
+            fan.DumpInfo(out);
             NuvotonFanControl& control = *fan_controls_[i];
             control.DumpInfo(out);
         }
         for (const auto& temp : temp_sensors_) {
-            out << "Temp " << temp->name() << " at " << temp->value() << endl;
+            temp->DumpInfo(out);
         }
         for (const auto& volt : volt_sensors_) {
             out << "Volt " << volt->name() << " at " << volt->value() << endl;
