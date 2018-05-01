@@ -8,9 +8,10 @@
 #ifndef __BSDSENSORS_FAN_SPEED_H__
 #define __BSDSENSORS_FAN_SPEED_H__
 
+#include "util.h"
 #include <string>
 
-class FanSpeed {
+class FanSpeed : public DumpAble {
    public:
     virtual double value() const = 0;
     virtual std::string name() const = 0;

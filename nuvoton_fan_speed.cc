@@ -22,6 +22,10 @@ class NuvotonFanSpeedImpl : public NuvotonFanSpeed {
 
     std::string name() const override { return info_.name; }
 
+    void DumpInfo(std::ostream& out) override {
+        out << "Fan " << name() << " at " << value() << std::endl;
+    }
+
    private:
     NuvotonFanInfo info_;
     NuvotonChip* chip_;
