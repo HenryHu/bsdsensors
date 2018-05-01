@@ -15,11 +15,25 @@
 
 #include "nuvoton_chip.h"
 
-struct NuvotonSmartFanInfo {};
+struct NuvotonSmartFanInfo {
+    bool available;
+};
+
+struct NuvotonSmartFan4ControlPointInfo {
+    NuvotonChip::AddressType temp;
+    NuvotonChip::AddressType power;
+};
 
 struct NuvotonSmartFan4Info {
-    NuvotonChip::AddressType smartfan_t1, smartfan_t2, smartfan_t3, smartfan_t4,
-        smartfan_p1, smartfan_p2, smartfan_p3, smartfan_p4;
+    bool available;
+    std::vector<NuvotonSmartFan4ControlPointInfo> control_points;
+};
+
+enum NuvotonFanControlMode {
+    kManualMode = 0,
+    kThermalCruise = 1,
+    kSpeedCruise = 2,
+    kSmartFan4 = 4,
 };
 
 struct NuvotonFanControlInfo {
@@ -73,37 +87,95 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
             {0, 0x04},
             {0, 0x01},
             // Smart Fan I
-            {},
+            {false},
             // Smart Fan IV
-            {{1, 0x21},
-             {1, 0x22},
-             {1, 0x23},
-             {1, 0x24},
-             {1, 0x27},
-             {1, 0x28},
-             {1, 0x29},
-             {1, 0x2A}}}},
+            {true,
+             // Control points
+             {{{1, 0x21}, {1, 0x27}},
+              {{1, 0x22}, {1, 0x28}},
+              {{1, 0x23}, {1, 0x29}},
+              {{1, 0x24}, {1, 0x2A}}}}}},
           {"CPUFAN",
            {4, 0xC2},
            {4, 0xC3},
            // Fan Control
-           {{2, 0x02}, {2, 0x09}, {0, 0x04}, {0, 0x03}}},
+           {{2, 0x02},
+            {2, 0x09},
+            {0, 0x04},
+            {0, 0x03},
+            // Smart Fan I
+            {false},
+            // Smart Fan IV
+            {true,
+             // Control points
+             {{{2, 0x21}, {2, 0x27}},
+              {{2, 0x22}, {2, 0x28}},
+              {{2, 0x23}, {2, 0x29}},
+              {{2, 0x24}, {2, 0x2A}}}}}},
           {"AUXFAN0",
            {4, 0xC4},
            {4, 0xC5},
-           {{3, 0x02}, {3, 0x09}, {0, 0x04}, {0, 0x11}}},
+           {{3, 0x02},
+            {3, 0x09},
+            {0, 0x04},
+            {0, 0x11},
+            // Smart Fan I
+            {false},
+            // Smart Fan IV
+            {true,
+             // Control points
+             {{{3, 0x21}, {3, 0x27}},
+              {{3, 0x22}, {3, 0x28}},
+              {{3, 0x23}, {3, 0x29}},
+              {{3, 0x24}, {3, 0x2A}}}}}},
           {"AUXFAN1",
            {4, 0xC6},
            {4, 0xC7},
-           {{8, 0x02}, {8, 0x09}, {0, 0x04}, {0, 0x13}}},
+           {{8, 0x02},
+            {8, 0x09},
+            {0, 0x04},
+            {0, 0x13},
+            // Smart Fan I
+            {false},
+            // Smart Fan IV
+            {true,
+             // Control points
+             {{{3, 0x21}, {3, 0x27}},
+              {{3, 0x22}, {3, 0x28}},
+              {{3, 0x23}, {3, 0x29}},
+              {{3, 0x24}, {3, 0x2A}}}}}},
           {"AUXFAN2",
            {4, 0xC8},
            {4, 0xC9},
-           {{9, 0x02}, {9, 0x09}, {0, 0x04}, {0, 0x15}}},
+           {{9, 0x02},
+            {9, 0x09},
+            {0, 0x04},
+            {0, 0x15},
+            // Smart Fan I
+            {false},
+            // Smart Fan IV
+            {true,
+             // Control points
+             {{{3, 0x21}, {3, 0x27}},
+              {{3, 0x22}, {3, 0x28}},
+              {{3, 0x23}, {3, 0x29}},
+              {{3, 0x24}, {3, 0x2A}}}}}},
           {"AUXFAN3",
            {4, 0xCA},
            {4, 0xCB},
-           {{10, 0x02}, {10, 0x09}, {0, 0x04}, {0, 0x17}}},
+           {{10, 0x02},
+            {10, 0x09},
+            {0, 0x04},
+            {0, 0x17},
+            // Smart Fan I
+            {false},
+            // Smart Fan IV
+            {true,
+             // Control points
+             {{{3, 0x21}, {3, 0x27}},
+              {{3, 0x22}, {3, 0x28}},
+              {{3, 0x23}, {3, 0x29}},
+              {{3, 0x24}, {3, 0x2A}}}}}},
       },
       // Temp sensors
       {
