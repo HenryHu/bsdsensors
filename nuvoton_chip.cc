@@ -221,15 +221,16 @@ class NuvotonChipImpl : public NuvotonChip {
         for (const auto& temp : temp_sensors_) {
             temp->DumpInfo(out);
         }
-        for (const auto& volt : volt_sensors_) {
-            out << "Volt " << volt->name() << " at " << volt->value() << endl;
-        }
         NuvotonTempSource orig = temp_sensors_[0]->GetSource();
         for (int i = 8; i < 32; i++) {
+            if (i == orig) continue;
             temp_sensors_[0]->SetSource((NuvotonTempSource)i);
             temp_sensors_[0]->DumpInfo(out);
         }
         temp_sensors_[0]->SetSource(orig);
+        for (const auto& volt : volt_sensors_) {
+            out << "Volt " << volt->name() << " at " << volt->value() << endl;
+        }
     }
 
     void DumpAll(ostream& out) {
