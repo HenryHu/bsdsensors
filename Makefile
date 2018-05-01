@@ -4,7 +4,7 @@
 #
 
 SRCS=port_io.cc status.cc main.cc super_io.cc nuvoton_chip.cc nuvoton_fan_speed.cc nuvoton_temp_sensor.cc nuvoton_volt_sensor.cc nuvoton_fan_control.cc
-HDRS=port_io.h status.h super_io.h nuvoton_chip.h chip.h nuvoton_chip_info.h nuvoton_fan_speed.h fan_speed.h temp_sensor.h volt_sensor.h nuvoton_volt_sensor.h fan_control.h nuvoton_fan_control.h
+HDRS=port_io.h status.h super_io.h nuvoton_chip.h chip.h nuvoton_chip_info.h nuvoton_fan_speed.h fan_speed.h temp_sensor.h volt_sensor.h nuvoton_volt_sensor.h fan_control.h nuvoton_fan_control.h util.h
 
 CXXFLAGS+= -std=c++14
 
