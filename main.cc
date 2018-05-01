@@ -14,6 +14,6 @@ using namespace std;
 int main() {
     auto chip = CreateNuvotonChip();
     if (chip->Detect()) {
-        chip->DumpInfo();
+        chip->DumpInfo(cout);
     }
 }
