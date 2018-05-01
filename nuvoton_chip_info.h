@@ -54,6 +54,8 @@ struct NuvotonTempInfo {
     bool has_frac_part;
     NuvotonChip::AddressType val_int, val_frac;
     bool has_peci_frac;
+    bool can_select;
+    NuvotonChip::AddressType select;
 };
 
 struct NuvotonVoltInfo {
@@ -179,8 +181,8 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
       },
       // Temp sensors
       {
-          {"SYS", false, {0, 0x27}},
-          {"CPU", true, {1, 0x50}, {1, 0x51}},
+          {"SMIOVT1", false, {0, 0x27}, {0, 0}, false, true, {6, 0x21}},
+          {"SMIOVT2", true, {1, 0x50}, {1, 0x51}, false, true, {6, 0x22}},
           {"SYSTIN", false, {4, 0x90}, {1, 0x51}},
           {"CPUTIN", false, {4, 0x91}, {1, 0x51}},
           {"AUXTIN0", false, {4, 0x92}, {1, 0x51}},
