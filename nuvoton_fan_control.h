@@ -10,12 +10,22 @@
 
 #include "fan_control.h"
 #include "nuvoton_chip_info.h"
+#include "status.h"
 #include <memory>
 
 class NuvotonFanControl : public FanControl {
    public:
-    double current_percent() override = 0;
+    virtual void DumpInfo(std::ostream& out) = 0;
+    virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
 };
+
+class NuvotonFanControlManual : public FanControlMethod {
+   public:
+    virtual void SetPower(int power) = 0;
+};
+class NuvotonFanControlThermalCruise : public FanControlMethod {};
+class NuvotonFanControlSpeedCruise : public FanControlMethod {};
+class NuvotonFanControlSmartFan4 : public FanControlMethod {};
 
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip);
