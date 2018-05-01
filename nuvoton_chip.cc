@@ -194,7 +194,7 @@ class NuvotonChipImpl : public NuvotonChip {
         }
     }
 
-    void DumpInfo() override {
+    void DumpInfo(std::ostream& out) override {
         {
             NuvotonLock lock(this);
             CHECK(SelectDevice(kDeviceHM), "Fail to select logical device");
@@ -204,38 +204,38 @@ class NuvotonChipImpl : public NuvotonChip {
             uint16_t vendor_id;
             CHECK(ReadWord(info_->vendor_id_addr, &vendor_id),
                   "fail to read vendor id");
-            cout << "Vendor ID, 0x5ca3 for Nuvoton: " << hex << vendor_id
-                 << endl;
+            out << "Vendor ID, 0x5ca3 for Nuvoton: " << hex << vendor_id
+                << endl;
         }
 
         uint8_t chip_id;
         CHECK(ReadByte(kChipID, &chip_id), "fail to read chip id");
-        cout << "Chip ID, usually 0xc1: " << hex << (int)chip_id << endl;
+        out << "Chip ID, usually 0xc1: " << hex << (int)chip_id << endl;
 
-        for (const auto& fan : fan_speeds_) {
-            cout << "Fan " << fan->name() << " at " << fan->value() << endl;
+        for (int i = 0; i < fan_speeds_.size(); i++) {
+            const NuvotonFanSpeed& fan = *fan_speeds_[i];
+            out << "Fan " << fan.name() << " at " << fan.value() << endl;
+            NuvotonFanControl& control = *fan_controls_[i];
+            control.DumpInfo(out);
         }
         for (const auto& temp : temp_sensors_) {
-            cout << "Temp " << temp->name() << " at " << temp->value() << endl;
+            out << "Temp " << temp->name() << " at " << temp->value() << endl;
         }
         for (const auto& volt : volt_sensors_) {
-            cout << "Volt " << volt->name() << " at " << volt->value() << endl;
-        }
-        for (const auto& control : fan_controls_) {
-            cout << "Fan at " << control->current_percent() * 100 << endl;
+            out << "Volt " << volt->name() << " at " << volt->value() << endl;
         }
     }
 
-    void DumpAll() {
+    void DumpAll(ostream& out) {
         for (uint8_t bank = 0; bank < 11; bank++) {
             for (int i = 0; i < 256; i++) {
                 uint8_t data;
                 CHECK(ReadByte({bank, i}, &data), "Fail to read byte");
                 if (data != 255 && data != 0) {
-                    cout << hex << (int)bank << "/" << setw(2) << i << ":"
-                         << dec << setw(3) << (int)data << " ";
+                    out << hex << (int)bank << "/" << setw(2) << i << ":" << dec
+                        << setw(3) << (int)data << " ";
                 }
-                if ((i + 1) % 16 == 0) cout << endl;
+                if ((i + 1) % 16 == 0) out << endl;
             }
         }
     }

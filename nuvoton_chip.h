@@ -10,15 +10,15 @@
 
 #include "chip.h"
 #include "status.h"
+#include "util.h"
 
 #include <memory>
 
-class NuvotonChip : public Chip {
+class NuvotonChip : public Chip, public DumpAble {
    public:
     using AddressType = std::pair<uint8_t, uint8_t>;
 
     bool Detect() override = 0;
-    virtual void DumpInfo() = 0;
 
     virtual Status Enter() = 0;
     virtual Status Exit() = 0;
