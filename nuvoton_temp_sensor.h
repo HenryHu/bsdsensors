@@ -14,10 +14,46 @@
 #include <memory>
 #include <string>
 
+enum NuvotonTempSource {
+    kSourceSYSTIN = 1,
+    kSourceCPUTIN = 2,
+    kSourceAUXTIN0 = 3,
+    kSourceAUXTIN1 = 4,
+    kSourceAUXTIN2 = 5,
+    kSourceAUXTIN3 = 6,
+    kSourceReserved = 7,
+    kSourceSMBUSMASTER0 = 8,
+    kSourceSMBUSMASTER1 = 9,
+    kSourceSMBUSMASTER2 = 10,
+    kSourceSMBUSMASTER3 = 11,
+    kSourceSMBUSMASTER4 = 12,
+    kSourceSMBUSMASTER5 = 13,
+    kSourceSMBUSMASTER6 = 14,
+    kSourceSMBUSMASTER7 = 15,
+    kSourcePECI0 = 16,
+    kSourcePECI1 = 17,
+    kSourcePCHCPUMAX = 18,
+    kSourcePCH = 19,
+    kSourcePCHCPU = 20,
+    kSourcePCHMCH = 21,
+    kSourceDIM0 = 22,
+    kSourceDIM1 = 23,
+    kSourceDIM2 = 24,
+    kSourceDIM3 = 25,
+    kSourceBYTE = 26,
+    kSource27 = 27,
+    kSource28 = 28,
+    kSource29 = 29,
+    kSource30 = 30,
+    kSource31 = 31,
+};
+
 class NuvotonTempSensor : public TempSensor {
    public:
     double value() override = 0;
     std::string name() override = 0;
+
+    virtual Status SetSource(NuvotonTempSource target) = 0;
 };
 
 std::unique_ptr<NuvotonTempSensor> CreateNuvotonTempSensor(

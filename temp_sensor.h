@@ -8,9 +8,10 @@
 #ifndef __BSDSENSORS_TEMP_SENSOR_H__
 #define __BSDSENSORS_TEMP_SENSOR_H__
 
+#include "util.h"
 #include <string>
 
-class TempSensor {
+class TempSensor : public DumpAble {
    public:
     // Temperature in Celsius
     virtual double value() = 0;
