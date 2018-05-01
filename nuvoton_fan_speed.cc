@@ -13,14 +13,14 @@ class NuvotonFanSpeedImpl : public NuvotonFanSpeed {
     NuvotonFanSpeedImpl(const NuvotonFanInfo& info, NuvotonChip* chip)
         : info_(info), chip_(chip) {}
 
-    double value() override {
+    double value() const override {
         uint8_t high, low;
         chip_->ReadByte(info_.rpm_high, &high);
         chip_->ReadByte(info_.rpm_low, &low);
         return Combine(high, low);
     }
 
-    std::string name() override { return info_.name; }
+    std::string name() const override { return info_.name; }
 
    private:
     NuvotonFanInfo info_;
