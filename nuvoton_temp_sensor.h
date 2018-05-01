@@ -53,6 +53,7 @@ class NuvotonTempSensor : public TempSensor {
     double value() override = 0;
     std::string name() override = 0;
 
+    virtual NuvotonTempSource GetSource() = 0;
     virtual Status SetSource(NuvotonTempSource target) = 0;
 };
 

@@ -143,7 +143,7 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
 
     string name() override { return info_.name; }
 
-    NuvotonTempSource GetSource() {
+    NuvotonTempSource GetSource() override {
         uint8_t source;
         chip_->ReadByte(info_.select, &source);
         return (NuvotonTempSource)(source & 0x1f);
