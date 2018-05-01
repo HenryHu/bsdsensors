@@ -11,7 +11,7 @@
 
 using std::string;
 
-static string GetSourceName(NuvotonTempSource source) {
+string GetSourceName(NuvotonTempSource source) {
     switch (source) {
         case kSourceSYSTIN: {
             return "SYSTIN";

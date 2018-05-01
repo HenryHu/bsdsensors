@@ -38,7 +38,7 @@ enum NuvotonFanControlMode {
 
 struct NuvotonFanControlInfo {
     NuvotonChip::AddressType mode_select, output_value_write, output_type,
-        output_value_read;
+        output_value_read, temp_source, temp_value_int, temp_value_frac;
     NuvotonSmartFanInfo smart_fan;
     NuvotonSmartFan4Info smart_fan4;
 };
@@ -88,6 +88,9 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
             {1, 0x09},
             {0, 0x04},
             {0, 0x01},
+            {1, 0x00},
+            {0, 0x73},
+            {0, 0x74},
             // Smart Fan I
             {false},
             // Smart Fan IV
@@ -105,6 +108,9 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
             {2, 0x09},
             {0, 0x04},
             {0, 0x03},
+            {2, 0x00},
+            {0, 0x75},
+            {0, 0x76},
             // Smart Fan I
             {false},
             // Smart Fan IV
@@ -121,6 +127,9 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
             {3, 0x09},
             {0, 0x04},
             {0, 0x11},
+            {3, 0x00},
+            {0, 0x77},
+            {0, 0x78},
             // Smart Fan I
             {false},
             // Smart Fan IV
@@ -137,6 +146,9 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
             {8, 0x09},
             {0, 0x04},
             {0, 0x13},
+            {8, 0x00},
+            {0, 0x79},
+            {0, 0x7A},
             // Smart Fan I
             {false},
             // Smart Fan IV
@@ -153,6 +165,9 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
             {9, 0x09},
             {0, 0x04},
             {0, 0x15},
+            {9, 0x00},
+            {0, 0x7B},
+            {0, 0x7C},
             // Smart Fan I
             {false},
             // Smart Fan IV
@@ -169,6 +184,9 @@ const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips = {
             {10, 0x09},
             {0, 0x04},
             {0, 0x17},
+            {10, 0x00},
+            {0, 0x7D},
+            {0, 0x7E},
             // Smart Fan I
             {false},
             // Smart Fan IV

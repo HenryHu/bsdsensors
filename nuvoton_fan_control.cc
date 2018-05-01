@@ -6,6 +6,7 @@
  */
 
 #include "nuvoton_fan_control.h"
+#include "nuvoton_temp_sensor.h"
 #include <iostream>
 
 using std::string;
@@ -131,6 +132,22 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         return chip_->WriteByte(info_.mode_select, mode);
     }
 
+    NuvotonTempSource GetTempSource() {
+        uint8_t source;
+        chip_->ReadByte(info_.temp_source, &source);
+        source &= 0x1f;
+        return (NuvotonTempSource)source;
+    }
+
+    double GetTempValue() {
+        uint8_t int_part, frac_part;
+        chip_->ReadByte(info_.temp_value_int, &int_part);
+        chip_->ReadByte(info_.temp_value_frac, &frac_part);
+        double ret = int_part;
+        if (frac_part & 0x80) ret += 0.5;
+        return ret;
+    }
+
     void DumpInfo(std::ostream& out) override {
         out << "    at " << std::dec << (int)(current_percent() * 100) << "%"
             << " with ";
@@ -157,6 +174,8 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
             }
         }
         out << std::endl;
+        out << "    temp source: " << GetSourceName(GetTempSource())
+            << " value: " << GetTempValue() << std::endl;
         out << "    control:";
         out << " Manual";
         if (iv_) {

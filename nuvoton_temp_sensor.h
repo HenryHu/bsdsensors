@@ -48,6 +48,8 @@ enum NuvotonTempSource {
     kSource31 = 31,
 };
 
+std::string GetSourceName(NuvotonTempSource source);
+
 class NuvotonTempSensor : public TempSensor {
    public:
     double value() override = 0;
