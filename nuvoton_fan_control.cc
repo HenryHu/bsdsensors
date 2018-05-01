@@ -66,12 +66,10 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
     Status Apply() override {
         for (int i = 0; i < info_.control_points.size(); i++) {
             const auto& control_point = info_.control_points[i];
-            uint8_t temp, power;
             RETURN_IF_ERROR(
                 chip_->WriteByte(control_point.temp, control_points_[i].temp));
             RETURN_IF_ERROR(chip_->WriteByte(control_point.power,
                                              control_points_[i].power));
-            control_points_.push_back({temp, power});
         }
 
         return OkStatus();
