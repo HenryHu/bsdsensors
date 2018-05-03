@@ -27,3 +27,11 @@ target_link_libraries(${PROJECT_NAME}-bin ${PROJECT_NAME})
 install(TARGETS ${PROJECT_NAME}-bin DESTINATION bin)
 install(FILES "${PROJECT_BINARY_DIR}/config.h"
     DESTINATION include/${PROJECT_NAME})
+
+include (InstallRequiredSystemLibraries)
+set (CPACK_RESOURCE_FILE_LICENSE
+    "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set (CPACK_PACKAGE_VERSION_MAJOR "${bsdsensors_VERSION_MAJOR}")
+set (CPACK_PACKAGE_VERSION_MINOR "${bsdsensors_VERSION_MINOR}")
+include (CPack)
+
