@@ -5,6 +5,9 @@ project(bsdsensors)
 set (bsdsensors_VERSION_MAJOR 0)
 set (bsdsensors_VERSION_MINOR 1)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 14)
+
 configure_file (
     "${PROJECT_SOURCE_DIR}/config.h.in"
     "${PROJECT_BINARY_DIR}/config.h"
@@ -13,7 +16,6 @@ configure_file (
 include_directories("${PROJECT_BINARY_DIR}")
 
 add_definitions('-Wall')
-add_definitions('-std=c++14')
 
 add_subdirectory(lib)
 add_subdirectory(include)
