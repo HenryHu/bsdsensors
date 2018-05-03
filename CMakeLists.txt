@@ -16,9 +16,14 @@ add_definitions('-Wall')
 add_definitions('-std=c++14')
 
 add_subdirectory(lib)
+add_subdirectory(include)
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 
 add_executable(${PROJECT_NAME}-bin src/main.cc)
 set_target_properties(${PROJECT_NAME}-bin
     PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}-bin ${PROJECT_NAME})
+
+install(TARGETS ${PROJECT_NAME}-bin DESTINATION bin)
+install(FILES "${PROJECT_BINARY_DIR}/config.h"
+    DESTINATION include/${PROJECT_NAME})
