@@ -15,7 +15,6 @@
 
 class NuvotonFanControl : public FanControl {
    public:
-    virtual void DumpInfo(std::ostream& out) = 0;
     virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
 };
 

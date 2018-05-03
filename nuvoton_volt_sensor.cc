@@ -28,6 +28,10 @@ class NuvotonVoltSensorImpl : public NuvotonVoltSensor {
 
     string name() override { return info_.name; }
 
+    void DumpInfo(std::ostream& out) override {
+        out << "Volt " << name() << " at " << value() << std::endl;
+    }
+
    private:
     NuvotonVoltInfo info_;
     NuvotonChip* chip_;

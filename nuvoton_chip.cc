@@ -229,7 +229,7 @@ class NuvotonChipImpl : public NuvotonChip {
         }
         temp_sensors_[0]->SetSource(orig);
         for (const auto& volt : volt_sensors_) {
-            out << "Volt " << volt->name() << " at " << volt->value() << endl;
+            volt->DumpInfo(out);
         }
     }
 

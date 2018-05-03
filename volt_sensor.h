@@ -8,9 +8,11 @@
 #ifndef __BSDSENSORS_VOLT_SENSOR_H__
 #define __BSDSENSORS_VOLT_SENSOR_H__
 
+#include "util.h"
+
 #include <string>
 
-class VoltSensor {
+class VoltSensor : public DumpAble {
    public:
     virtual std::string name() = 0;
     virtual double value() = 0;

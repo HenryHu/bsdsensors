@@ -13,11 +13,7 @@
 
 #include <memory>
 
-class NuvotonVoltSensor : public VoltSensor {
-   public:
-    double value() override = 0;
-    std::string name() override = 0;
-};
+class NuvotonVoltSensor : public VoltSensor {};
 
 std::unique_ptr<NuvotonVoltSensor> CreateNuvotonVoltSensor(
     const NuvotonVoltInfo& info, NuvotonChip* chip);
