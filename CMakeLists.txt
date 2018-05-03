@@ -15,7 +15,7 @@ configure_file (
 
 include_directories("${PROJECT_BINARY_DIR}")
 
-add_definitions('-Wall')
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 add_subdirectory(lib)
 add_subdirectory(include)
