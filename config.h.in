@@ -1,0 +1,14 @@
+/*
+ * config.h
+ * Copyright (C) 2018 Henry Hu
+ *
+ * Distributed under terms of the 3-clause BSD license.
+ */
+
+#ifndef __BSDSENSORS_CONFIG_H__
+#define __BSDSENSORS_CONFIG_H__
+
+#define bsdsensors_VERSION_MAJOR @bsdsensors_VERSION_MAJOR@
+#define bsdsensors_VERSION_MINOR @bsdsensors_VERSION_MINOR@
+
+#endif  // __BSDSENSORS_CONFIG_H__

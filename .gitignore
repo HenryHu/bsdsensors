@@ -33,6 +33,6 @@
 
 compile_commands.json
 .vim-template*
-bsdsensors
 
 *.swp
+build
