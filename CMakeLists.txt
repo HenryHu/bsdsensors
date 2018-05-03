@@ -18,5 +18,7 @@ add_definitions('-std=c++14')
 add_subdirectory(lib)
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 
-add_executable(${PROJECT_NAME} main.cc)
-target_link_libraries(${PROJECT_NAME} libbsdsensors)
+add_executable(${PROJECT_NAME}-bin src/main.cc)
+set_target_properties(${PROJECT_NAME}-bin
+    PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}-bin ${PROJECT_NAME})
