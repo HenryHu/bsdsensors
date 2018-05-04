@@ -98,8 +98,8 @@ class NuvotonChipImpl : public NuvotonChip {
                          << " at 0x" << port << endl;
                     GetBaseAddress();
 
-                    if (kKnownNuvotonChips.count(id)) {
-                        info_ = &kKnownNuvotonChips.find(id)->second;
+                    info_ = FindNuvotonChip(id);
+                    if (info_ != nullptr) {
                         cout << "Known Nuvoton Chip: " << info_->name << endl;
                         LoadSensors();
                         return true;

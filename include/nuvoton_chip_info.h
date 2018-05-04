@@ -69,6 +69,7 @@ struct NuvotonVoltInfo {
 };
 
 struct NuvotonChipInfo {
+    uint16_t device_id;
     std::string name;
     NuvotonChip::AddressType vendor_id_addr;
     std::vector<NuvotonFanInfo> fans;
@@ -76,6 +77,15 @@ struct NuvotonChipInfo {
     std::vector<NuvotonVoltInfo> volts;
 };
 
-extern const std::map<uint16_t, NuvotonChipInfo> kKnownNuvotonChips;
+extern void RegisterNuvotonChipInfo(const NuvotonChipInfo& info);
+
+NuvotonChipInfo* FindNuvotonChip(uint16_t device_id);
+
+class RegisterNuvotonChip {
+   public:
+    RegisterNuvotonChip(const NuvotonChipInfo& info) {
+        RegisterNuvotonChipInfo(info);
+    }
+};
 
 #endif  // __BSDSENSORS_NUVOTON_CHIP_INFO_H__
