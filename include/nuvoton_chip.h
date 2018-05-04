@@ -14,9 +14,14 @@
 
 #include <memory>
 
+struct NuvotonAddress {
+    int bank, addr;
+    Bits bits;
+};
+
 class NuvotonChip : public Chip, public DumpAble {
    public:
-    using AddressType = std::pair<uint8_t, uint8_t>;
+    using AddressType = NuvotonAddress;
 
     bool Detect() override = 0;
 

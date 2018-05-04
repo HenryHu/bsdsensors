@@ -133,7 +133,7 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
                     ret += 0.25;
                 }
             } else {
-                if (val_frac & 0x80) {
+                if (val_frac) {
                     ret += 0.5;
                 }
             }
@@ -146,14 +146,11 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
     NuvotonTempSource GetSource() override {
         uint8_t source;
         chip_->ReadByte(info_.select, &source);
-        return (NuvotonTempSource)(source & 0x1f);
+        return (NuvotonTempSource)(source);
     }
 
     Status SetSource(NuvotonTempSource target) override {
-        uint8_t source;
-        chip_->ReadByte(info_.select, &source);
-        source = (source & ~0x1f) | target;
-        return chip_->WriteByte(info_.select, source);
+        return chip_->WriteByte(info_.select, target);
     }
 
     bool invalid() {

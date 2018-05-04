@@ -143,30 +143,38 @@ class NuvotonChipImpl : public NuvotonChip {
 
     Status WriteByte(const NuvotonChip::AddressType& addr,
                      const uint8_t data) override {
-        RETURN_IF_ERROR(SelectBank(addr.first));
-        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.second));
-        return port_io_->WriteByte(data_port_, data);
+        uint8_t orig = 0;
+        if (!addr.bits.full()) {
+            RETURN_IF_ERROR(ReadByte(addr, &orig));
+        }
+        RETURN_IF_ERROR(SelectBank(addr.bank));
+        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
+        return port_io_->WriteByte(data_port_,
+                                   BitsToByte(addr.bits, orig, data));
     }
 
     Status ReadByte(const NuvotonChip::AddressType& addr,
                     uint8_t* data) override {
-        RETURN_IF_ERROR(SelectBank(addr.first));
-        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.second));
-        return port_io_->ReadByte(data_port_, data);
+        RETURN_IF_ERROR(SelectBank(addr.bank));
+        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
+        uint8_t value;
+        RETURN_IF_ERROR(port_io_->ReadByte(data_port_, &value));
+        *data = BitsFromByte(addr.bits, value);
+        return OkStatus();
     }
 
     Status ReadWord(const NuvotonChip::AddressType& addr, uint16_t* data) {
         uint8_t high, low;
         RETURN_IF_ERROR(ReadByte(addr, &low));
         NuvotonChip::AddressType high_addr = addr;
-        high_addr.first |= 0x80;
+        high_addr.bank |= 0x80;
         RETURN_IF_ERROR(ReadByte(high_addr, &high));
         *data = Combine(high, low);
         return OkStatus();
     }
 
     Status SelectBank(uint8_t bank_no) {
-        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, kBankSelect.second));
+        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, kBankSelect.addr));
         return port_io_->WriteByte(data_port_, bank_no);
     }
 

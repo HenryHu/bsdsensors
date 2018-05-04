@@ -119,21 +119,16 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     NuvotonFanControlMode GetControlMode() {
         uint8_t mode;
         chip_->ReadByte(info_.mode_select, &mode);
-        mode >>= 4;
         return (NuvotonFanControlMode)mode;
     }
 
     Status SetControlMode(NuvotonFanControlMode target) override {
-        uint8_t mode;
-        RETURN_IF_ERROR(chip_->ReadByte(info_.mode_select, &mode));
-        mode = (mode & ~0xf0) | (target << 4);
-        return chip_->WriteByte(info_.mode_select, mode);
+        return chip_->WriteByte(info_.mode_select, target);
     }
 
     NuvotonTempSource GetTempSource() {
         uint8_t source;
         chip_->ReadByte(info_.temp_source, &source);
-        source &= 0x1f;
         return (NuvotonTempSource)source;
     }
 
@@ -142,7 +137,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         chip_->ReadByte(info_.temp_value_int, &int_part);
         chip_->ReadByte(info_.temp_value_frac, &frac_part);
         double ret = int_part;
-        if (frac_part & 0x80) ret += 0.5;
+        if (frac_part) ret += 0.5;
         return ret;
     }
 
