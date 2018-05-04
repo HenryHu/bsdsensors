@@ -10,6 +10,7 @@
 #include <unistd.h>
 
 using namespace std;
+using namespace bsdsensors;
 
 int main() {
     auto chip = CreateNuvotonChip();

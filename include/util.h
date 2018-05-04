@@ -11,6 +11,8 @@
 #include <cstdint>
 #include <iostream>
 
+namespace bsdsensors {
+
 class DumpAble {
    public:
     virtual void DumpInfo(std::ostream& out) = 0;
@@ -37,5 +39,7 @@ struct Bits {
 
 extern uint8_t BitsFromByte(const Bits& bits, uint8_t byte);
 extern uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value);
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_UTIL_H__

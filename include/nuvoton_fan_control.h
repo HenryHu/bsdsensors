@@ -13,6 +13,8 @@
 #include "status.h"
 #include <memory>
 
+namespace bsdsensors {
+
 class NuvotonFanControl : public FanControl {
    public:
     virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
@@ -28,5 +30,7 @@ class NuvotonFanControlSmartFan4 : public FanControlMethod {};
 
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip);
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_NUVOTON_FAN_CONTROL_H__

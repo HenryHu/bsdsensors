@@ -7,6 +7,8 @@
 
 #include "nuvoton_chip_info.h"
 
+namespace bsdsensors {
+
 std::map<uint16_t, NuvotonChipInfo>* KnownNuvotonChips() {
     static std::map<uint16_t, NuvotonChipInfo> known_chips;
     return &known_chips;
@@ -24,3 +26,5 @@ NuvotonChipInfo* FindNuvotonChip(uint16_t device_id) {
         return nullptr;
     }
 }
+
+}  // namespace bsdsensors

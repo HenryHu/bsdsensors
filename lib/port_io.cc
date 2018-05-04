@@ -17,6 +17,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+namespace bsdsensors {
+
 const char* kIODevice = "/dev/io";
 
 class PortIOImpl : public PortIO {
@@ -68,3 +70,5 @@ class PortIOImpl : public PortIO {
 std::unique_ptr<PortIO> CreatePortIO() {
     return std::make_unique<PortIOImpl>();
 }
+
+}  // namespace bsdsensors

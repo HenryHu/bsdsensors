@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+namespace bsdsensors {
+
 using std::string;
 
 const int E_OK = 0;
@@ -41,3 +43,5 @@ void CHECK(const Status& status, const std::string& message) {
         throw std::runtime_error(error_msg);
     }
 }
+
+}  // namespace bsdsensors

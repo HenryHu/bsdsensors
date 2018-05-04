@@ -8,6 +8,8 @@
 #include "super_io.h"
 #include "port_io.h"
 
+namespace bsdsensors {
+
 class SuperIOImpl : public SuperIO {
    public:
     ~SuperIOImpl() override {}
@@ -43,3 +45,5 @@ class SuperIOImpl : public SuperIO {
 std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port) {
     return std::make_unique<SuperIOImpl>(port);
 }
+
+}  // namespace bsdsensors

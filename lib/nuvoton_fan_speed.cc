@@ -8,6 +8,8 @@
 #include "nuvoton_fan_speed.h"
 #include "util.h"
 
+namespace bsdsensors {
+
 class NuvotonFanSpeedImpl : public NuvotonFanSpeed {
    public:
     NuvotonFanSpeedImpl(const NuvotonFanInfo& info, NuvotonChip* chip)
@@ -35,3 +37,5 @@ std::unique_ptr<NuvotonFanSpeed> CreateNuvotonFanSpeed(
     const NuvotonFanInfo& info, NuvotonChip* chip) {
     return std::make_unique<NuvotonFanSpeedImpl>(info, chip);
 }
+
+}  // namespace bsdsensors

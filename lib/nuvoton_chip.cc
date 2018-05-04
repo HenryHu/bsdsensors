@@ -20,6 +20,8 @@
 #include <iomanip>
 using namespace std;
 
+namespace bsdsensors {
+
 using LogicalDeviceNo = uint8_t;
 
 // Extended Function Enable Registers (EFERs)
@@ -285,3 +287,5 @@ class NuvotonChipImpl : public NuvotonChip {
 std::unique_ptr<NuvotonChip> CreateNuvotonChip() {
     return std::make_unique<NuvotonChipImpl>();
 }
+
+}  // namespace bsdsensors

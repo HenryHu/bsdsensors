@@ -7,6 +7,8 @@
 
 #include "nuvoton_chip_info.h"
 
+namespace bsdsensors {
+
 NuvotonChipInfo kNCT6779D{
     0xC561,
     "NCT6779D",
@@ -149,3 +151,5 @@ NuvotonChipInfo kNCT6779D{
     }};
 
 RegisterNuvotonChip kRegisterNCT6779D(kNCT6779D);
+
+}  // namespace bsdsensors

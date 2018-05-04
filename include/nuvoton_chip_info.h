@@ -15,6 +15,8 @@
 
 #include "nuvoton_chip.h"
 
+namespace bsdsensors {
+
 struct NuvotonSmartFanInfo {
     bool available;
 };
@@ -87,5 +89,7 @@ class RegisterNuvotonChip {
         RegisterNuvotonChipInfo(info);
     }
 };
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_NUVOTON_CHIP_INFO_H__

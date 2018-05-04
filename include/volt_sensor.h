@@ -12,10 +12,14 @@
 
 #include <string>
 
+namespace bsdsensors {
+
 class VoltSensor : public DumpAble {
    public:
     virtual std::string name() = 0;
     virtual double value() = 0;
 };
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_VOLT_SENSOR_H__

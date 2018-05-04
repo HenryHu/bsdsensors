@@ -12,6 +12,8 @@
 #include "util.h"
 #include <string>
 
+namespace bsdsensors {
+
 class FanControl : public DumpAble {
    public:
     virtual double current_percent() const = 0;
@@ -23,5 +25,7 @@ class FanControlMethod : public DumpAble {
     virtual Status Observe() = 0;
     virtual Status Apply() = 0;
 };
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_FAN_CONTROL_H__

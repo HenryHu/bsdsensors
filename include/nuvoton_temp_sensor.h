@@ -14,6 +14,8 @@
 #include <memory>
 #include <string>
 
+namespace bsdsensors {
+
 enum NuvotonTempSource {
     kSourceSYSTIN = 1,
     kSourceCPUTIN = 2,
@@ -61,5 +63,7 @@ class NuvotonTempSensor : public TempSensor {
 
 std::unique_ptr<NuvotonTempSensor> CreateNuvotonTempSensor(
     const NuvotonTempInfo& info, NuvotonChip* chip);
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_NUVOTON_TEMP_SENSOR_H__

@@ -14,6 +14,8 @@
 
 #include <memory>
 
+namespace bsdsensors {
+
 struct NuvotonAddress {
     int bank, addr;
     Bits bits;
@@ -33,5 +35,7 @@ class NuvotonChip : public Chip, public DumpAble {
 };
 
 std::unique_ptr<NuvotonChip> CreateNuvotonChip();
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_NUVOTON_CHIP_H__

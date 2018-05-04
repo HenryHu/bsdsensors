@@ -10,6 +10,8 @@
 
 #include <string>
 
+namespace bsdsensors {
+
 class Status {
    public:
     Status(int code, const std::string& error_message);
@@ -37,5 +39,7 @@ void CHECK(const Status& status, const std::string& message);
             return status;      \
         }                       \
     } while (0)
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_STATUS_H__

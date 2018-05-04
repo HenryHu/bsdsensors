@@ -13,6 +13,8 @@
 
 #include "status.h"
 
+namespace bsdsensors {
+
 using PortAddress = uint32_t;
 
 class PortIO {
@@ -27,5 +29,7 @@ class PortIO {
 };
 
 std::unique_ptr<PortIO> CreatePortIO();
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_PORT_IO_H__

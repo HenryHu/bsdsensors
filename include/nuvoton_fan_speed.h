@@ -11,9 +11,13 @@
 #include "fan_speed.h"
 #include "nuvoton_chip_info.h"
 
+namespace bsdsensors {
+
 class NuvotonFanSpeed : public FanSpeed {};
 
 std::unique_ptr<NuvotonFanSpeed> CreateNuvotonFanSpeed(
     const NuvotonFanInfo& info, NuvotonChip* chip);
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_NUVOTON_FAN_SPEED_H__

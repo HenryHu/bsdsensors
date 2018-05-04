@@ -7,6 +7,8 @@
 
 #include "nuvoton_chip_info.h"
 
+namespace bsdsensors {
+
 const NuvotonChipInfo kNCT6102D = {0x1061,
                                    "NCT6102D",
                                    {0, 0xFE},
@@ -146,3 +148,5 @@ const NuvotonChipInfo kNCT6102D = {0x1061,
                                    }};
 
 RegisterNuvotonChip kRegisterNCT6102D(kNCT6102D);
+
+}  // namespace bsdsensors

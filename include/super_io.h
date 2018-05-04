@@ -13,6 +13,8 @@
 
 #include "status.h"
 
+namespace bsdsensors {
+
 class SuperIO {
    public:
     using AddressType = uint32_t;
@@ -26,5 +28,7 @@ class SuperIO {
 };
 
 std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port);
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_SUPER_IO_H__

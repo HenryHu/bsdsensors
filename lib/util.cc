@@ -7,6 +7,8 @@
 
 #include "util.h"
 
+namespace bsdsensors {
+
 // Return @bits in @byte.
 uint8_t BitsFromByte(const Bits& bits, uint8_t byte) {
     assert(bits.first <= 8);
@@ -33,3 +35,5 @@ uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value) {
     uint8_t mask = (1 << (bits.first - bits.last + 1)) - 1;
     return (byte & ~(mask << bits.last)) | ((value & mask) << bits.last);
 }
+
+}  // namespace bsdsensors

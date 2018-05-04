@@ -9,6 +9,8 @@
 
 #include <cmath>
 
+namespace bsdsensors {
+
 using std::string;
 
 string GetSourceName(NuvotonTempSource source) {
@@ -174,3 +176,5 @@ std::unique_ptr<NuvotonTempSensor> CreateNuvotonTempSensor(
     const NuvotonTempInfo& info, NuvotonChip* chip) {
     return std::make_unique<NuvotonTempSensorImpl>(info, chip);
 }
+
+}  // namespace bsdsensors

@@ -7,6 +7,8 @@
 
 #include "nuvoton_volt_sensor.h"
 
+namespace bsdsensors {
+
 using std::string;
 
 const double kVoltUnit = 0.008;  // 1 = 8mV
@@ -41,3 +43,5 @@ std::unique_ptr<NuvotonVoltSensor> CreateNuvotonVoltSensor(
     const NuvotonVoltInfo& info, NuvotonChip* chip) {
     return std::make_unique<NuvotonVoltSensorImpl>(info, chip);
 }
+
+}  // namespace bsdsensors

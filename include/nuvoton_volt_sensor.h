@@ -13,9 +13,13 @@
 
 #include <memory>
 
+namespace bsdsensors {
+
 class NuvotonVoltSensor : public VoltSensor {};
 
 std::unique_ptr<NuvotonVoltSensor> CreateNuvotonVoltSensor(
     const NuvotonVoltInfo& info, NuvotonChip* chip);
+
+}  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_NUVOTON_VOLT_SENSOR_H__

@@ -9,6 +9,8 @@
 #include "nuvoton_temp_sensor.h"
 #include <iostream>
 
+namespace bsdsensors {
+
 using std::string;
 
 static double PowerToPercent(int power) { return 1.0 * power / 255 * 100.0; }
@@ -193,3 +195,5 @@ std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip) {
     return std::make_unique<NuvotonFanControlImpl>(info, chip);
 }
+
+}  // namespace bsdsensors
