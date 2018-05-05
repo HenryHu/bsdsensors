@@ -11,101 +11,44 @@ namespace bsdsensors {
 
 KnownChips<NuvotonChipInfo> NuvotonChips;
 
+const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
+    {kSourceSYSTIN, "SYSTIN"},
+    {kSourceCPUTIN, "CPUTIN"},
+    {kSourceAUXTIN0, "AUXTIN0"},
+    {kSourceAUXTIN1, "AUXTIN1"},
+    {kSourceAUXTIN2, "AUXTIN2"},
+    {kSourceAUXTIN3, "AUXTIN3"},
+    {kSourceReserved, "Reserved"},
+    {kSourceSMBUSMASTER0, "SMBUS0"},
+    {kSourceSMBUSMASTER1, "SMBUS1"},
+    {kSourceSMBUSMASTER2, "SMBUS2"},
+    {kSourceSMBUSMASTER3, "SMBUS3"},
+    {kSourceSMBUSMASTER4, "SMBUS4"},
+    {kSourceSMBUSMASTER5, "SMBUS5"},
+    {kSourceSMBUSMASTER6, "SMBUS6"},
+    {kSourceSMBUSMASTER7, "SMBUS7"},
+    {kSourcePECI0, "PECI0"},
+    {kSourcePECI1, "PECI1"},
+    {kSourcePCHCPUMAX, "PCH_CPU_MAX"},
+    {kSourcePCH, "PCH"},
+    {kSourcePCHCPU, "PCH_CPU"},
+    {kSourcePCHMCH, "MCH"},
+    {kSourceDIM0, "DIM0"},
+    {kSourceDIM1, "DIM1"},
+    {kSourceDIM2, "DIM2"},
+    {kSourceDIM3, "DIM3"},
+    {kSourceBYTE, "TSI_BYTE"},
+    {kSource27, "Source27"},
+    {kSource28, "Source28"},
+    {kSource29, "Source29"},
+    {kSource30, "Source30"},
+    {kSource31, "Source31"},
+};
+
 std::string GetNuvotonSourceName(NuvotonTempSource source) {
-    switch (source) {
-        case kSourceSYSTIN: {
-            return "SYSTIN";
-        }
-        case kSourceCPUTIN: {
-            return "CPUTIN";
-        }
-        case kSourceAUXTIN0: {
-            return "AUXTIN0";
-        }
-        case kSourceAUXTIN1: {
-            return "AUXTIN1";
-        }
-        case kSourceAUXTIN2: {
-            return "AUXTIN2";
-        }
-        case kSourceAUXTIN3: {
-            return "AUXTIN3";
-        }
-        case kSourceReserved: {
-            break;
-        }
-        case kSourceSMBUSMASTER0: {
-            break;
-        }
-        case kSourceSMBUSMASTER1: {
-            break;
-        }
-        case kSourceSMBUSMASTER2: {
-            break;
-        }
-        case kSourceSMBUSMASTER3: {
-            break;
-        }
-        case kSourceSMBUSMASTER4: {
-            break;
-        }
-        case kSourceSMBUSMASTER5: {
-            break;
-        }
-        case kSourceSMBUSMASTER6: {
-            break;
-        }
-        case kSourceSMBUSMASTER7: {
-            break;
-        }
-        case kSourcePECI0: {
-            return "PECI0";
-        }
-        case kSourcePECI1: {
-            return "PECI1";
-        }
-        case kSourcePCHCPUMAX: {
-            return "PCH_CPU_MAX";
-        }
-        case kSourcePCH: {
-            return "PCH";
-        }
-        case kSourcePCHCPU: {
-            return "PCH_CPU";
-        }
-        case kSourcePCHMCH: {
-            return "MCH";
-        }
-        case kSourceDIM0: {
-            return "DIM0";
-        }
-        case kSourceDIM1: {
-            return "DIM1";
-        }
-        case kSourceDIM2: {
-            return "DIM2";
-        }
-        case kSourceDIM3: {
-            return "DIM3";
-        }
-        case kSourceBYTE: {
-            return "TSI_BYTE";
-        }
-        case kSource27: {
-            return "Source27";
-        }
-        case kSource28: {
-            return "Source28";
-        }
-        case kSource29: {
-            return "Source29";
-        }
-        case kSource30: {
-            return "Source30";
-        }
-        case kSource31: {
-            return "Source31";
-        }
+    auto entry = kNuvotonTempSourceName.find(source);
+    if (entry != kNuvotonTempSourceName.end()) {
+        return entry->second;
     }
     return "Unknown";
 }
