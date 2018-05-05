@@ -114,7 +114,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         uint8_t value;
         double ret;
         chip_->ReadByte(info_.output_value_read, &value);
-        ret = 1.0 * value / 255.0;
+        ret = value / 255.0;
         return ret;
     }
 
