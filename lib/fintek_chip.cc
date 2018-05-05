@@ -95,6 +95,7 @@ class FintekChipImpl : public FintekChip {
                     if (info_ != nullptr) {
                         std::cout << "Known Fintek Chip: " << info_->name
                                   << std::endl;
+                        LoadSensors();
                         return true;
                     } else {
                         std::cout << "Unknown Fintek Chip" << std::endl;
@@ -183,6 +184,16 @@ class FintekChipImpl : public FintekChip {
             uint16_t vendor = Combine(vendor_high, vendor_low);
             std::cerr << "Device vendor, usually " << std::hex << kVendorFintek
                       << ": " << vendor << std::endl;
+        }
+
+        for (const auto& temp : temp_sensors_) {
+            temp->DumpInfo(out);
+        }
+        for (const auto& fan : fans_) {
+            fan->DumpInfo(out);
+        }
+        for (const auto& volt : volt_sensors_) {
+            volt->DumpInfo(out);
         }
     }
 

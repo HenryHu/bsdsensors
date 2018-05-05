@@ -12,9 +12,14 @@
 #include "fan_control.h"
 #include "fintek_chip_info.h"
 
+#include <ostream>
+
 namespace bsdsensors {
 
-class FintekFan : public FanSpeed, public FanControl {};
+class FintekFan : public FanSpeed, public FanControl {
+   public:
+    void DumpInfo(std::ostream& out) override = 0;
+};
 
 std::unique_ptr<FintekFan> CreateFintekFan(const FintekFanInfo& info,
                                            FintekChip* chip);
