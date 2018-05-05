@@ -19,6 +19,10 @@ class KnownChips {
         chips_.insert(std::make_pair(info.device_id, info));
     }
 
+    void RegisterChipInfo(const ChipInfo& info, uint16_t device_id) {
+        chips_.insert(std::make_pair(device_id, info));
+    }
+
     ChipInfo* Find(uint16_t device_id) {
         auto ret = chips_.find(device_id);
         if (ret != chips_.end()) {
@@ -37,6 +41,12 @@ class RegisterChip {
    public:
     RegisterChip(const ChipInfo& info, KnownChips<ChipInfo>* chips) {
         chips->RegisterChipInfo(info);
+    }
+
+    // Override device id
+    RegisterChip(const ChipInfo& info, KnownChips<ChipInfo>* chips,
+                 uint16_t device_id) {
+        chips->RegisterChipInfo(info, device_id);
     }
 };
 
