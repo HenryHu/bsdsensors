@@ -90,6 +90,7 @@ struct NuvotonFanControlInfo {
 struct NuvotonFanInfo {
     std::string name;
     NuvotonChip::AddressType rpm_high, rpm_low;
+    NuvotonChip::AddressType count, divisor;
     NuvotonFanControlInfo control;
 };
 

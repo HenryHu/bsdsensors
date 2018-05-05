@@ -33,6 +33,8 @@ const NuvotonChipInfo kNCT6102D = {
          // RPM
          {0, 0x30},
          {0, 0x31},
+         {},
+         {},
          // Fan Control
          {{1, 0x13, {7, 4}},
           {1, 0x19},
@@ -54,6 +56,8 @@ const NuvotonChipInfo kNCT6102D = {
         {"CPUFAN",
          {0, 0x32},
          {0, 0x33},
+         {},
+         {},
          // Fan Control
          {{1, 0x23, {7, 4}},
           {1, 0x29},
@@ -75,6 +79,8 @@ const NuvotonChipInfo kNCT6102D = {
         {"AUXFAN",
          {0, 0x34},
          {0, 0x35},
+         {},
+         {},
          {{1, 0x33, {7, 4}},
           {1, 0x39},
           true,

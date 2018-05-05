@@ -34,6 +34,8 @@ NuvotonChipInfo kNCT6776F{
          // RPM
          {6, 0x56},
          {6, 0x57},
+         {},
+         {},
          // Fan Control
          // mode
          {{1, 0x02, {7, 4}},
@@ -60,6 +62,8 @@ NuvotonChipInfo kNCT6776F{
         {"CPUFAN",
          {6, 0x58},
          {6, 0x59},
+         {},
+         {},
          // Fan Control
          {{2, 0x02, {7, 4}},
           {2, 0x09},
@@ -81,6 +85,8 @@ NuvotonChipInfo kNCT6776F{
         {"AUXFAN",
          {6, 0x5A},
          {6, 0x5B},
+         {},
+         {},
          {{3, 0x02, {7, 4}},
           {3, 0x09},
           false,
