@@ -95,10 +95,9 @@ class NuvotonChipImpl : public NuvotonChip {
                     continue;
                 }
                 id |= result;
-                if (id != 0xffff) {
+                if (id != 0xffff && GetBaseAddress()) {
                     cout << "Found Nuvoton chip, ID: " << hex << "0x" << id
                          << " at 0x" << port << endl;
-                    GetBaseAddress();
 
                     info_ = NuvotonChips.Find(id);
                     if (info_ != nullptr) {
@@ -181,15 +180,19 @@ class NuvotonChipImpl : public NuvotonChip {
     }
 
     // Locked
-    void GetBaseAddress() {
+    bool GetBaseAddress() {
         assert(entered_);
         CHECK(SelectDevice(kDeviceHM), "Fail to select logical device");
 
         uint8_t base_high, base_low;
-        io_->ReadByte(kPortBaseAddress, &base_high);
-        io_->ReadByte(kPortBaseAddress + 1, &base_low);
+        if (!io_->ReadByte(kPortBaseAddress, &base_high).ok()) return false;
+        if (!io_->ReadByte(kPortBaseAddress + 1, &base_low).ok()) return false;
 
         PortAddress port_base = Combine(base_high, base_low);
+        if (port_base == 0xffff) {
+            return false;
+        }
+
         addr_port_ = port_base + kAddrPortOffset;
         data_port_ = port_base + kDataPortOffset;
         cout << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
@@ -202,6 +205,8 @@ class NuvotonChipImpl : public NuvotonChip {
             value &= ~0x10;
             io_->WriteByte(kGlobalOption1, value);
         }
+
+        return true;
     }
 
     void DumpInfo(std::ostream& out) override {

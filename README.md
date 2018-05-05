@@ -7,8 +7,27 @@ Getting sensor values on FreeBSD
 ## nuvoTon
 
 * NCT6102D / NCT6106D
-    Not tested, just followed the document.
+
+    Document available.
+    No hardware to test.
 * NCT6779D
-    Not tested, just followed the to document.
+
+    Document available.
+    No hardware to test.
 * NCT6793D (partial)
+
+    Document not available. Based on NCT6779D.
     Tested on ASUS Z270-A PRIME
+
+## ITE
+
+* IT8772E (WIP)
+
+    Document available, no hardware to test.
+
+## Fintek
+
+* F71869A
+
+    Document available.
+    No hardware to test.
