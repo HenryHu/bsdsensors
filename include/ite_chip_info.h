@@ -15,6 +15,7 @@
 namespace bsdsensors {
 
 struct ITEChipInfo {
+    uint16_t device_id;
     std::string name;
 };
 
