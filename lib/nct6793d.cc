@@ -9,6 +9,25 @@
 
 namespace bsdsensors {
 
+std::map<NuvotonTempSource, uint8_t> kNCT6793DTempSource{
+    {kSourceSYSTIN, 1},        {kSourceCPUTIN, 2},
+    {kSourceAUXTIN0, 3},       {kSourceAUXTIN1, 4},
+    {kSourceAUXTIN2, 5},       {kSourceAUXTIN3, 6},
+    {kSourceReserved, 7},      {kSourceSMBUSMASTER0, 8},
+    {kSourceSMBUSMASTER1, 9},  {kSourceSMBUSMASTER2, 10},
+    {kSourceSMBUSMASTER3, 11}, {kSourceSMBUSMASTER4, 12},
+    {kSourceSMBUSMASTER5, 13}, {kSourceSMBUSMASTER6, 14},
+    {kSourceSMBUSMASTER7, 15}, {kSourcePECI0, 16},
+    {kSourcePECI1, 17},        {kSourcePCHCPUMAX, 18},
+    {kSourcePCH, 19},          {kSourcePCHCPU, 20},
+    {kSourcePCHMCH, 21},       {kSourceDIM0, 22},
+    {kSourceDIM1, 23},         {kSourceDIM2, 24},
+    {kSourceDIM3, 25},         {kSourceBYTE, 26},
+    {kSource27, 27},           {kSource28, 28},
+    {kSource29, 29},           {kSource30, 30},
+    {kSource31, 31},
+};
+
 const NuvotonChipInfo kNCT6793D = {
     0xd121,
     "NCT6793D",
@@ -140,22 +159,17 @@ const NuvotonChipInfo kNCT6793D = {
             {{3, 0x24}, {3, 0x2A}}}}}},
     },
     // Temp sensors
+    kNCT6793DTempSource,
     {
-        {"SMIOVT1", false, {0, 0x27}, {0, 0}, false, true, {6, 0x21, {4, 0}}},
-        {"SMIOVT2",
-         true,
-         {1, 0x50},
-         {1, 0x51, {7}},
-         false,
-         true,
-         {6, 0x22, {4, 0}}},
-        {"SYSTIN", false, {4, 0x90}},
-        {"CPUTIN", false, {4, 0x91}},
-        {"AUXTIN0", false, {4, 0x92}},
-        {"AUXTIN1", false, {4, 0x93}},
-        {"AUXTIN2", false, {4, 0x94}},
-        {"AUXTIN3", false, {4, 0x95}},
-        {"PECI", true, {7, 0x20}, {7, 0x21, {1, 0}}, true},
+        {"SMIOVT1", {0, 0x27}, {}, false, true, {6, 0x21, {4, 0}}},
+        {"SMIOVT2", {1, 0x50}, {1, 0x51, {7}}, false, true, {6, 0x22, {4, 0}}},
+        {"SYSTIN", {4, 0x90}},
+        {"CPUTIN", {4, 0x91}},
+        {"AUXTIN0", {4, 0x92}},
+        {"AUXTIN1", {4, 0x93}},
+        {"AUXTIN2", {4, 0x94}},
+        {"AUXTIN3", {4, 0x95}},
+        {"PECI", {7, 0x20}, {7, 0x21, {1, 0}}, true},
     },
     // Volts
     {

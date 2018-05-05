@@ -13,7 +13,7 @@ namespace bsdsensors {
 
 using std::string;
 
-string GetSourceName(NuvotonTempSource source) {
+string GetNuvotonSourceName(NuvotonTempSource source) {
     switch (source) {
         case kSourceSYSTIN: {
             return "SYSTIN";
@@ -67,46 +67,43 @@ string GetSourceName(NuvotonTempSource source) {
             return "PECI1";
         }
         case kSourcePCHCPUMAX: {
-            break;
+            return "PCH_CPU_MAX";
         }
         case kSourcePCH: {
             return "PCH";
         }
         case kSourcePCHCPU: {
-            break;
+            return "PCH_CPU";
         }
         case kSourcePCHMCH: {
-            break;
+            return "MCH";
         }
         case kSourceDIM0: {
-            break;
+            return "DIM0";
         }
         case kSourceDIM1: {
-            break;
+            return "DIM1";
         }
         case kSourceDIM2: {
-            break;
+            return "DIM2";
         }
         case kSourceDIM3: {
-            break;
+            return "DIM3";
         }
         case kSourceBYTE: {
-            break;
+            return "TSI_BYTE";
         }
         case kSource27: {
             return "Source27";
         }
         case kSource28: {
             return "Source28";
-            break;
         }
         case kSource29: {
             return "Source29";
-            break;
         }
         case kSource30: {
             return "Source30";
-            break;
         }
         case kSource31: {
             return "Source31";
@@ -117,14 +114,16 @@ string GetSourceName(NuvotonTempSource source) {
 
 class NuvotonTempSensorImpl : public NuvotonTempSensor {
    public:
-    NuvotonTempSensorImpl(const NuvotonTempInfo& info, NuvotonChip* chip)
-        : info_(info), chip_(chip) {}
+    NuvotonTempSensorImpl(const NuvotonTempInfo& info,
+                          const NuvotonTempSourceTable& table,
+                          NuvotonChip* chip)
+        : info_(info), table_(table), chip_(chip) {}
 
     double value() override {
         uint8_t val_int;
         chip_->ReadByte(info_.val_int, &val_int);
         double ret = val_int;
-        if (info_.has_frac_part) {
+        if (info_.val_frac.valid) {
             uint8_t val_frac;
             chip_->ReadByte(info_.val_frac, &val_frac);
             if (info_.has_peci_frac) {
@@ -148,11 +147,22 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
     NuvotonTempSource GetSource() override {
         uint8_t source;
         chip_->ReadByte(info_.select, &source);
-        return (NuvotonTempSource)(source);
+        for (const auto& entry : table_) {
+            if (entry.second == source) {
+                return entry.first;
+            }
+        }
+        return (NuvotonTempSource)source;
     }
 
     Status SetSource(NuvotonTempSource target) override {
-        return chip_->WriteByte(info_.select, target);
+        auto entry = table_.find(target);
+        if (entry != table_.end()) {
+            return chip_->WriteByte(info_.select, entry->second);
+        } else {
+            return Status(EINVAL, "Unavailable temp source " +
+                                      GetNuvotonSourceName(target));
+        }
     }
 
     bool invalid() {
@@ -163,18 +173,21 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
         if (invalid()) return;
         out << "Temp " << name() << " at " << value() << std::endl;
         if (info_.can_select) {
-            out << "    source: " << GetSourceName(GetSource()) << std::endl;
+            out << "    source: " << GetNuvotonSourceName(GetSource())
+                << std::endl;
         }
     }
 
    private:
-    NuvotonTempInfo info_;
+    const NuvotonTempInfo& info_;
+    const NuvotonTempSourceTable& table_;
     NuvotonChip* chip_;
 };
 
 std::unique_ptr<NuvotonTempSensor> CreateNuvotonTempSensor(
-    const NuvotonTempInfo& info, NuvotonChip* chip) {
-    return std::make_unique<NuvotonTempSensorImpl>(info, chip);
+    const NuvotonTempInfo& info, const NuvotonTempSourceTable& table,
+    NuvotonChip* chip) {
+    return std::make_unique<NuvotonTempSensorImpl>(info, table, chip);
 }
 
 }  // namespace bsdsensors

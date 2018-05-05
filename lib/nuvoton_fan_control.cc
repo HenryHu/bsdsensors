@@ -169,7 +169,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
             }
         }
         out << std::endl;
-        out << "    temp source: " << GetSourceName(GetTempSource())
+        out << "    temp source: " << GetNuvotonSourceName(GetTempSource())
             << " value: " << GetTempValue() << std::endl;
         out << "    control:";
         out << " Manual";

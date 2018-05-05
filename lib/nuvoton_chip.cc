@@ -268,7 +268,8 @@ class NuvotonChipImpl : public NuvotonChip {
             fan_controls_.push_back(CreateNuvotonFanControl(fan.control, this));
         }
         for (const auto& temp : info_->temps) {
-            temp_sensors_.push_back(CreateNuvotonTempSensor(temp, this));
+            temp_sensors_.push_back(
+                CreateNuvotonTempSensor(temp, info_->temp_table, this));
         }
         for (const auto& volt : info_->volts) {
             volt_sensors_.push_back(CreateNuvotonVoltSensor(volt, this));

@@ -19,6 +19,12 @@ namespace bsdsensors {
 struct NuvotonAddress {
     int bank, addr;
     Bits bits;
+    bool valid;
+
+    NuvotonAddress() : valid(false) {}
+    NuvotonAddress(int bank, int addr) : bank(bank), addr(addr), valid(true) {}
+    NuvotonAddress(int bank, int addr, Bits bits)
+        : bank(bank), addr(addr), bits(bits), valid(true) {}
 };
 
 class NuvotonChip : public Chip {
