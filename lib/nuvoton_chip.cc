@@ -100,7 +100,7 @@ class NuvotonChipImpl : public NuvotonChip {
                          << " at 0x" << port << endl;
                     GetBaseAddress();
 
-                    info_ = FindNuvotonChip(id);
+                    info_ = NuvotonChips.Find(id);
                     if (info_ != nullptr) {
                         cout << "Known Nuvoton Chip: " << info_->name << endl;
                         LoadSensors();

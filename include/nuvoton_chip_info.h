@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+#include "chip_info.h"
 #include "nuvoton_chip.h"
 
 namespace bsdsensors {
@@ -79,16 +80,7 @@ struct NuvotonChipInfo {
     std::vector<NuvotonVoltInfo> volts;
 };
 
-extern void RegisterNuvotonChipInfo(const NuvotonChipInfo& info);
-
-NuvotonChipInfo* FindNuvotonChip(uint16_t device_id);
-
-class RegisterNuvotonChip {
-   public:
-    RegisterNuvotonChip(const NuvotonChipInfo& info) {
-        RegisterNuvotonChipInfo(info);
-    }
-};
+extern KnownChips<NuvotonChipInfo> NuvotonChips;
 
 }  // namespace bsdsensors
 
