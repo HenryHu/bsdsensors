@@ -54,6 +54,8 @@ enum NuvotonTempSource {
 
 using NuvotonTempSourceTable = std::map<NuvotonTempSource, uint8_t>;
 
+extern std::string GetNuvotonSourceName(NuvotonTempSource source);
+
 struct NuvotonSmartFanInfo {
     bool available;
 };

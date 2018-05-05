@@ -16,8 +16,6 @@
 
 namespace bsdsensors {
 
-std::string GetNuvotonSourceName(NuvotonTempSource source);
-
 class NuvotonTempSensor : public TempSensor {
    public:
     double value() override = 0;

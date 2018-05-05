@@ -6,7 +6,6 @@
  */
 
 #include "nuvoton_fan_control.h"
-#include "nuvoton_temp_sensor.h"
 #include <iostream>
 
 namespace bsdsensors {
