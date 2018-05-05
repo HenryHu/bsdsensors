@@ -11,6 +11,8 @@
 #include <cstdint>
 #include <iostream>
 
+#include <memory>
+
 namespace bsdsensors {
 
 class DumpAble {
@@ -25,7 +27,9 @@ inline uint16_t Combine(uint8_t high, uint8_t low) {
 // Some bits in a byte
 // [4:0] -> first: 4 width: 5
 struct Bits {
-    int first, last;
+    const int first, last;
+    std::unique_ptr<Bits> next = nullptr;
+    const int other_parts_len = 0;
 
     // Full byte
     Bits() : first(7), last(0) {}
@@ -33,8 +37,22 @@ struct Bits {
     Bits(int bit) : first(bit), last(bit) {}
     // General case
     Bits(int first, int last) : first(first), last(last) {}
+    // Multiple ranges
+    Bits(int first, int last, Bits&& next)
+        : first(first),
+          last(last),
+          next(new Bits(next)),
+          other_parts_len(next.total_width()) {}
 
-    bool full() const { return first - last + 1 == 8; }
+    Bits(const Bits& another) : first(another.first), last(another.last) {
+        if (another.next) {
+            next = std::make_unique<Bits>(*another.next.get());
+        }
+    }
+
+    bool full() const { return width() == 8; }
+    int width() const { return first - last + 1; }
+    int total_width() const { return width() + other_parts_len; }
 };
 
 extern uint8_t BitsFromByte(const Bits& bits, uint8_t byte);

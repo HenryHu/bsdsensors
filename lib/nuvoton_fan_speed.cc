@@ -10,16 +10,27 @@
 
 namespace bsdsensors {
 
+const int kCountDividend = 1.35e6;
+
 class NuvotonFanSpeedImpl : public NuvotonFanSpeed {
    public:
     NuvotonFanSpeedImpl(const NuvotonFanInfo& info, NuvotonChip* chip)
         : info_(info), chip_(chip) {}
 
     double value() const override {
-        uint8_t high, low;
-        chip_->ReadByte(info_.rpm_high, &high);
-        chip_->ReadByte(info_.rpm_low, &low);
-        return Combine(high, low);
+        if (info_.rpm_high.valid) {
+            uint8_t high, low;
+            chip_->ReadByte(info_.rpm_high, &high);
+            chip_->ReadByte(info_.rpm_low, &low);
+            return Combine(high, low);
+        } else {
+            uint8_t count, divisor;
+            chip_->ReadByte(info_.count, &count);
+            chip_->ReadByte(info_.divisor, &divisor);
+            // From 0~7 to 1~2^7=128
+            divisor = 1 << divisor;
+            return kCountDividend / count / divisor;
+        }
     }
 
     std::string name() const override { return info_.name; }

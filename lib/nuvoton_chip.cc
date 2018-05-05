@@ -150,8 +150,15 @@ class NuvotonChipImpl : public NuvotonChip {
         }
         RETURN_IF_ERROR(SelectBank(addr.bank));
         RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
-        return port_io_->WriteByte(data_port_,
-                                   BitsToByte(addr.bits, orig, data));
+        uint8_t my_part = data >> addr.other_parts_len;
+        RETURN_IF_ERROR(port_io_->WriteByte(
+            data_port_, BitsToByte(addr.bits, orig, my_part)));
+        if (addr.next) {
+            uint8_t other_part = data & ((1 << addr.other_parts_len) - 1);
+            return WriteByte(*addr.next.get(), other_part);
+        } else {
+            return OkStatus();
+        }
     }
 
     Status ReadByte(const NuvotonChip::AddressType& addr,
@@ -160,7 +167,14 @@ class NuvotonChipImpl : public NuvotonChip {
         RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
         uint8_t value;
         RETURN_IF_ERROR(port_io_->ReadByte(data_port_, &value));
-        *data = BitsFromByte(addr.bits, value);
+        uint8_t my_part = BitsFromByte(addr.bits, value);
+        if (addr.next) {
+            uint8_t other_part;
+            RETURN_IF_ERROR(ReadByte(*addr.next.get(), &other_part));
+            *data = my_part << addr.other_parts_len | other_part;
+        } else {
+            *data = my_part;
+        }
         return OkStatus();
     }
 

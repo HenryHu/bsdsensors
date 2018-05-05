@@ -19,7 +19,14 @@ uint8_t BitsFromByte(const Bits& bits, uint8_t byte) {
         return byte;
     }
 
-    return (byte >> bits.last) & ((1 << (bits.first - bits.last + 1)) - 1);
+    uint8_t my_part = (byte >> bits.last) & ((1 << bits.width()) - 1);
+
+    if (bits.next) {
+        return (my_part << bits.other_parts_len) |
+               BitsFromByte(*bits.next, byte);
+    } else {
+        return my_part;
+    }
 }
 
 // Return @byte with @bits replaced by @value.
@@ -32,8 +39,15 @@ uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value) {
         return value;
     }
 
-    uint8_t mask = (1 << (bits.first - bits.last + 1)) - 1;
-    return (byte & ~(mask << bits.last)) | ((value & mask) << bits.last);
+    uint8_t mask = (1 << bits.width()) - 1;
+    uint8_t my_ret = (byte & ~(mask << bits.last)) |
+                     (((value >> bits.other_parts_len) & mask) << bits.last);
+    if (bits.next) {
+        return BitsToByte(*bits.next, my_ret,
+                          value & ((1 << bits.other_parts_len) - 1));
+    } else {
+        return my_ret;
+    }
 }
 
 }  // namespace bsdsensors
