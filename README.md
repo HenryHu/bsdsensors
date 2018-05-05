@@ -10,6 +10,10 @@ Getting sensor values on FreeBSD
 
     Document available.
     No hardware to test.
+* NCT6776F
+
+    Document available.
+    No hardware to test.
 * NCT6779D
 
     Document available.
