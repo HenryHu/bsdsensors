@@ -21,7 +21,7 @@ struct NuvotonAddress {
     Bits bits;
 };
 
-class NuvotonChip : public Chip, public DumpAble {
+class NuvotonChip : public Chip {
    public:
     using AddressType = NuvotonAddress;
 

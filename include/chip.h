@@ -8,9 +8,11 @@
 #ifndef __BSDSENSORS_CHIP_H__
 #define __BSDSENSORS_CHIP_H__
 
+#include "util.h"
+
 namespace bsdsensors {
 
-class Chip {
+class Chip : public DumpAble {
    public:
     virtual ~Chip() {}
 
