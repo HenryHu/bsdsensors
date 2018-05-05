@@ -6,15 +6,21 @@
  */
 
 #include "nuvoton_chip.h"
+#include "ite_chip.h"
 #include <iostream>
 #include <unistd.h>
 
 using namespace std;
 using namespace bsdsensors;
 
+const std::function<std::unique_ptr<Chip>()> kCreateChips[] = {
+    CreateNuvotonChip, CreateITEChip};
+
 int main() {
-    auto chip = CreateNuvotonChip();
-    if (chip->Detect()) {
-        chip->DumpInfo(cout);
+    for (const auto& CreateChip : kCreateChips) {
+        auto chip = CreateChip();
+        if (chip->Detect()) {
+            chip->DumpInfo(cout);
+        }
     }
 }
