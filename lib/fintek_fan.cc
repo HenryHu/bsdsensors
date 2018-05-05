@@ -9,6 +9,8 @@
 
 namespace bsdsensors {
 
+const int kFanCountDividend = 1.5e6;
+
 class FintekFanImpl : public FintekFan {
    public:
     FintekFanImpl(const FintekFanInfo& info, FintekChip* chip)
@@ -18,7 +20,9 @@ class FintekFanImpl : public FintekFan {
         uint8_t high, low;
         chip_->ReadByte(info_.count_high, &high);
         chip_->ReadByte(info_.count_low, &low);
-        return Combine(high, low);
+        int count = Combine(high, low);
+        // return RPM
+        return kFanCountDividend / count;
     }
 
     std::string name() const override { return info_.name; }
