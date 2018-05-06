@@ -11,19 +11,15 @@
 #include "chip.h"
 #include "status.h"
 #include "util.h"
+#include "address.h"
 
 namespace bsdsensors {
 
-struct ITEAddress {
-    int addr;
-    Bits bits;
-};
+using ITEAddress = BasicAddress;
 
 class ITEChip : public Chip {
    public:
     using AddressType = ITEAddress;
-
-    bool Detect() override = 0;
 
     virtual Status Enter() = 0;
     virtual Status Exit() = 0;

@@ -11,27 +11,15 @@
 #include "chip.h"
 #include "status.h"
 #include "util.h"
+#include "address.h"
 
 namespace bsdsensors {
 
-struct FintekAddress {
-    int addr;
-    Bits bits;
-    bool valid;
-
-    // Default: invalid
-    FintekAddress() : valid(false) {}
-    // Full byte
-    FintekAddress(int addr) : addr(addr), valid(true) {}
-    // Bits
-    FintekAddress(int addr, Bits bits) : addr(addr), bits(bits), valid(true) {}
-};
+using FintekAddress = BasicAddress;
 
 class FintekChip : public Chip {
    public:
-    using AddressType = FintekAddress;
-
-    bool Detect() override = 0;
+    using AddressType = BasicAddress;
 
     virtual Status Enter() = 0;
     virtual Status Exit() = 0;
