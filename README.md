@@ -32,7 +32,7 @@ Getting sensor values on FreeBSD
 
 * IT8772E (WIP)
 
-    Document available, no hardware to test.
+    Document available, not started.
 
 ## Fintek
 
@@ -40,3 +40,9 @@ Getting sensor values on FreeBSD
 
     Document available.
     No hardware to test.
+
+## Microchip
+
+* SIO1007 (WIP)
+
+    Document available, not started.
