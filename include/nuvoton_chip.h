@@ -17,9 +17,11 @@
 
 namespace bsdsensors {
 
+using NuvotonAddress = BankedAddress;
+
 class NuvotonChip : public Chip {
    public:
-    using AddressType = BankedAddress;
+    using AddressType = NuvotonAddress;
 
     virtual Status Enter() = 0;
     virtual Status Exit() = 0;
