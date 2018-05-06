@@ -43,6 +43,3 @@ Getting sensor values on FreeBSD
 
 ## Microchip
 
-* SIO1007 (WIP)
-
-    Document available, not started.
