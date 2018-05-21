@@ -209,6 +209,25 @@ class FintekChipImpl : public FintekChip {
         }
     }
 
+    Status GetSensorValues(SensorsProto* sensors) override {
+        for (const auto& fan : fans_) {
+            FanSpeedProto* speed = sensors->add_fan_speeds();
+            speed->set_name(fan->name());
+            speed->set_value(fan->value());
+        }
+        for (const auto& temp_sensor : temp_sensors_) {
+            TemperatureProto* temp = sensors->add_temperatures();
+            temp->set_name(temp_sensor->name());
+            temp->set_value(temp_sensor->value());
+        }
+        for (const auto& volt_sensor : volt_sensors_) {
+            VoltageProto* volt = sensors->add_voltages();
+            volt->set_name(volt_sensor->name());
+            volt->set_value(volt_sensor->value());
+        }
+        return OkStatus();
+    }
+
    private:
     std::unique_ptr<PortIO> port_io_;
     std::unique_ptr<SuperIO> io_;

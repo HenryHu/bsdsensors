@@ -174,6 +174,10 @@ class MicrochipChipImpl : public MicrochipChip {
         }
     }
 
+    Status GetSensorValues(SensorsProto* sensors) override {
+        return OkStatus();
+    }
+
    private:
     std::unique_ptr<PortIO> port_io_;
     std::unique_ptr<SuperIO> io_;

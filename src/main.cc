@@ -23,6 +23,16 @@ int main() {
         auto chip = CreateChip();
         if (chip->Detect()) {
             chip->DumpInfo(cout);
+
+            SensorsProto sensors;
+            Status status = chip->GetSensorValues(&sensors);
+            if (!status.ok()) {
+                cerr << "Error reading sensors: " << status.error_message()
+                     << endl;
+                continue;
+            }
+
+            cout << sensors.DebugString() << endl;
         }
     }
 }
