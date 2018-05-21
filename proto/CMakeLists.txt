@@ -1,0 +1,6 @@
+file(GLOB PROTOS *.proto)
+
+PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${PROTOS})
+include_directories(${PROTOBUF_INCLUDE_DIR})
+
+add_library(${PROJECT_NAME}-protos ${PROTO_SRCS})
