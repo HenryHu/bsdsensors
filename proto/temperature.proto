@@ -2,7 +2,7 @@ syntax = 'proto3';
 
 package bsdsensors;
 
-message Temperature {
+message TemperatureProto {
     string name = 1;
     // Temperature in celsius.
     double value = 2;

@@ -1,0 +1,13 @@
+syntax = 'proto3';
+
+package bsdsensors;
+
+import "fan_speed.proto";
+import "temperature.proto";
+import "voltage.proto";
+
+message SensorsProto {
+    repeated FanSpeedProto fan_speeds = 1;
+    repeated TemperatureProto temperatures = 2;
+    repeated VoltageProto voltages = 3;
+}

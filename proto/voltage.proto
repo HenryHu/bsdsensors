@@ -2,7 +2,7 @@ syntax = 'proto3';
 
 package bsdsensors;
 
-message Voltage {
+message VoltageProto {
     string name = 1;
     // Voltage value in Volts.
     double value = 2;
