@@ -135,7 +135,7 @@ class NuvotonChipImpl : public NuvotonChip {
         bool enabled;
         RETURN_IF_ERROR(IsDeviceEnabled(&enabled));
         if (!enabled) {
-            cerr << "Logical device not enabled." << endl;
+            LOG(INFO) << "Logical device not enabled.";
             return EnableDevice();
         }
         return OkStatus();
@@ -215,7 +215,7 @@ class NuvotonChipImpl : public NuvotonChip {
         uint8_t value;
         io_->ReadByte(kGlobalOption1, &value);
         if (value & 0x10) {
-            cerr << "Enable mapping" << endl;
+            LOG(INFO) << "Enable mapping";
             value &= ~0x10;
             io_->WriteByte(kGlobalOption1, value);
         }

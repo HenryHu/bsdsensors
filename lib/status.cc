@@ -6,6 +6,7 @@
  */
 
 #include "status.h"
+#include "util.h"
 
 #include <errno.h>
 
@@ -39,8 +40,9 @@ Status Errno() {
 void CHECK(const Status& status, const std::string& message) {
     if (!status.ok()) {
         const string& error_msg = message + ": " + status.error_message();
-        std::cerr << error_msg << std::endl;
-        throw std::runtime_error(error_msg);
+        LOG(FATAL) << error_msg;
+        // std::cerr << error_msg << std::endl;
+        // throw std::runtime_error(error_msg);
     }
 }
 
