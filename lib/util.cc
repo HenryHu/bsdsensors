@@ -52,22 +52,51 @@ uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value) {
     }
 }
 
+void PrintTempValue(const TemperatureProto& temp, std::ostream& out) {
+    out << "Temperature " << temp.name() << ": " << temp.value() << " C";
+    if (!temp.source().empty()) {
+        out << " from " << temp.source();
+    }
+    out << std::endl;
+}
+
+void PrintFanSpeedValue(const FanSpeedProto& fan_speed, std::ostream& out) {
+    out << "Fan " << fan_speed.name() << ": " << fan_speed.value() << " RPM"
+        << std::endl;
+}
+
+void PrintVoltValue(const VoltageProto& volt, std::ostream& out) {
+    out << "Voltage " << volt.name() << ": " << volt.value() << " V"
+        << std::endl;
+}
+
 void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
     for (const auto& temp : sensors.temperatures()) {
-        out << "Temperature " << temp.name() << ": " << temp.value() << " C";
-        if (!temp.source().empty()) {
-            out << " from " << temp.source();
-        }
-        out << std::endl;
+        PrintTempValue(temp, out);
     }
     for (const auto& volt : sensors.voltages()) {
-        out << "Voltage " << volt.name() << ": " << volt.value() << " V"
-            << std::endl;
+        PrintVoltValue(volt, out);
     }
     for (const auto& fan_speed : sensors.fan_speeds()) {
-        out << "Fan " << fan_speed.name() << ": " << fan_speed.value() << " RPM"
-            << std::endl;
+        PrintFanSpeedValue(fan_speed, out);
     }
+}
+
+std::vector<std::string> StrSplit(const std::string& str, const char delim) {
+    std::vector<std::string> result;
+    int start = 0;
+    for (int i = 0; i < str.length(); i++) {
+        if (str[i] == delim) {
+            if (start < i) {
+                result.push_back(str.substr(start, i - start));
+            }
+            start = i + 1;
+        }
+    }
+    if (start < str.length()) {
+        result.push_back(str.substr(start));
+    }
+    return result;
 }
 
 }  // namespace bsdsensors

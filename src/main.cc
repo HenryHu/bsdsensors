@@ -51,6 +51,43 @@ int main(int argc, char** argv) {
             if (FLAGS_sensors.empty()) {
                 PrintSensorValues(sensors, cout);
             } else {
+                for (const auto& sensor : StrSplit(FLAGS_sensors, ',')) {
+                    const auto& parts = StrSplit(sensor, ':');
+                    if (parts.size() != 2) {
+                        LOG(ERROR) << "malformed sensor: " << sensor;
+                        continue;
+                    }
+
+                    bool found = false;
+                    if (parts[0] == "fan") {
+                        for (const auto& fan_speed : sensors.fan_speeds()) {
+                            if (fan_speed.name() == parts[1]) {
+                                PrintFanSpeedValue(fan_speed, cout);
+                                found = true;
+                            }
+                        }
+                    } else if (parts[0] == "temp") {
+                        for (const auto& temp : sensors.temperatures()) {
+                            if (temp.name() == parts[1]) {
+                                PrintTempValue(temp, cout);
+                                found = true;
+                            }
+                        }
+                    } else if (parts[0] == "volt") {
+                        for (const auto& volt : sensors.voltages()) {
+                            if (volt.name() == parts[1]) {
+                                PrintVoltValue(volt, cout);
+                                found = true;
+                            }
+                        }
+                    } else {
+                        LOG(ERROR) << "unknown sensor type: " << parts[0];
+                        continue;
+                    }
+                    if (!found) {
+                        LOG(ERROR) << "sensor not found: " << parts[1];
+                    }
+                }
             }
         }
     }
