@@ -16,7 +16,6 @@
 #include "util.h"
 
 #include <unistd.h>
-#include <iostream>
 #include <iomanip>
 using namespace std;
 
@@ -96,16 +95,16 @@ class NuvotonChipImpl : public NuvotonChip {
                 }
                 id |= result;
                 if (id != 0xffff && GetBaseAddress()) {
-                    cout << "Found Nuvoton chip, ID: " << hex << "0x" << id
-                         << " at 0x" << port << endl;
+                    LOG(INFO) << "Found Nuvoton chip, ID: " << hex << "0x" << id
+                              << " at 0x" << port;
 
                     info_ = NuvotonChips.Find(id);
                     if (info_ != nullptr) {
-                        cout << "Known Nuvoton Chip: " << info_->name << endl;
+                        LOG(INFO) << "Known Nuvoton Chip: " << info_->name;
                         LoadSensors();
                         return true;
                     } else {
-                        cout << "Unknown Nuvoton Chip" << endl;
+                        LOG(INFO) << "Unknown Nuvoton Chip";
                         return false;
                     }
                 }
@@ -209,8 +208,9 @@ class NuvotonChipImpl : public NuvotonChip {
 
         addr_port_ = port_base + kAddrPortOffset;
         data_port_ = port_base + kDataPortOffset;
-        cout << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
-             << endl;
+
+        LOG(INFO) << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
+                  << endl;
 
         uint8_t value;
         io_->ReadByte(kGlobalOption1, &value);

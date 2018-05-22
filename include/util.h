@@ -15,6 +15,9 @@
 
 #include <memory>
 
+#include <glog/logging.h>
+#undef CHECK
+
 namespace bsdsensors {
 
 class DumpAble {
