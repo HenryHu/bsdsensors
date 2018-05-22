@@ -7,7 +7,11 @@ project(bsdsensors)
 set (bsdsensors_VERSION_MAJOR 0)
 set (bsdsensors_VERSION_MINOR 1)
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+
 find_package(Protobuf REQUIRED)
+find_package(gflags REQUIRED)
+find_package(Glog REQUIRED)
 
 # config
 
@@ -37,7 +41,13 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 add_executable(${PROJECT_NAME}-bin src/main.cc)
 set_target_properties(${PROJECT_NAME}-bin
     PROPERTIES OUTPUT_NAME ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME}-bin ${PROJECT_NAME} ${PROJECT_NAME}-protos ${PROTOBUF_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}-bin
+    ${PROJECT_NAME}
+    ${PROJECT_NAME}-protos
+    ${PROTOBUF_LIBRARIES}
+    gflags
+    Glog::Glog
+    )
 
 # install
 
