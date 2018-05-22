@@ -6,4 +6,6 @@ message TemperatureProto {
     string name = 1;
     // Temperature in celsius.
     double value = 2;
+    // Temperature source.
+    string source = 3;
 }

@@ -300,6 +300,11 @@ class NuvotonChipImpl : public NuvotonChip {
             TemperatureProto* temp = sensors->add_temperatures();
             temp->set_name(temp_sensor->name());
             temp->set_value(temp_sensor->value());
+
+            if (temp_sensor->HasSource()) {
+                temp->set_source(
+                    GetNuvotonSourceName(temp_sensor->GetSource()));
+            }
         }
         for (const auto& volt_sensor : volt_sensors_) {
             VoltageProto* volt = sensors->add_voltages();

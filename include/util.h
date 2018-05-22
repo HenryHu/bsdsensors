@@ -8,6 +8,8 @@
 #ifndef __BSDSENSORS_UTIL_H__
 #define __BSDSENSORS_UTIL_H__
 
+#include "sensors.pb.h"
+
 #include <cstdint>
 #include <iostream>
 
@@ -57,6 +59,8 @@ struct Bits {
 
 extern uint8_t BitsFromByte(const Bits& bits, uint8_t byte);
 extern uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value);
+
+extern void PrintSensorValues(const SensorsProto& sensors, std::ostream& out);
 
 }  // namespace bsdsensors
 

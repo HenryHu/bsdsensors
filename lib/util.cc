@@ -7,6 +7,8 @@
 
 #include "util.h"
 
+#include <iostream>
+
 namespace bsdsensors {
 
 // Return @bits in @byte.
@@ -47,6 +49,24 @@ uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value) {
                           value & ((1 << bits.other_parts_len) - 1));
     } else {
         return my_ret;
+    }
+}
+
+void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
+    for (const auto& temp : sensors.temperatures()) {
+        out << "Temperature " << temp.name() << ": " << temp.value() << " C";
+        if (!temp.source().empty()) {
+            out << " from " << temp.source();
+        }
+        out << std::endl;
+    }
+    for (const auto& volt : sensors.voltages()) {
+        out << "Voltage " << volt.name() << ": " << volt.value() << " V"
+            << std::endl;
+    }
+    for (const auto& fan_speed : sensors.fan_speeds()) {
+        out << "Fan " << fan_speed.name() << ": " << fan_speed.value() << " RPM"
+            << std::endl;
     }
 }
 
