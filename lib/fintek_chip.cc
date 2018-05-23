@@ -210,11 +210,6 @@ class FintekChipImpl : public FintekChip {
     }
 
     Status GetSensorValues(SensorsProto* sensors) override {
-        for (const auto& fan : fans_) {
-            FanSpeedProto* speed = sensors->add_fan_speeds();
-            speed->set_name(fan->name());
-            speed->set_value(fan->value());
-        }
         for (const auto& temp_sensor : temp_sensors_) {
             TemperatureProto* temp = sensors->add_temperatures();
             temp->set_name(temp_sensor->name());

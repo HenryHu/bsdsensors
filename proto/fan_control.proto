@@ -1,0 +1,22 @@
+syntax = 'proto3';
+
+package bsdsensors;
+
+import 'nuvoton_fan_control.proto';
+
+message GenericFanControlMethod {
+    double percent = 1;
+}
+
+message FanControlMethodProto {
+    string name = 1;
+    oneof method {
+        GenericFanControlMethod generic_method = 2;
+        nuvoton.FanControlMethod nuvoton_method = 3;
+    }
+}
+
+message FanControlProto {
+    string current_method = 1;
+    repeated FanControlMethodProto methods = 2;
+}

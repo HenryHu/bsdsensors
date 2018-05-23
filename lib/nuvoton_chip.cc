@@ -291,10 +291,21 @@ class NuvotonChipImpl : public NuvotonChip {
     }
 
     Status GetSensorValues(SensorsProto* sensors) override {
-        for (const auto& fan : fan_speeds_) {
-            FanSpeedProto* speed = sensors->add_fan_speeds();
-            speed->set_name(fan->name());
+        for (int i = 0; i < fan_speeds_.size(); i++) {
+            const auto& fan = fan_speeds_[i];
+            FanProto* fan_proto = sensors->add_fans();
+            fan_proto->set_name(fan->name());
+
+            FanSpeedProto* speed = fan_proto->mutable_speed();
             speed->set_value(fan->value());
+
+            const auto& fan_control = fan_controls_[i];
+            FanControlProto* control = fan_proto->mutable_control();
+
+            FanControlMethod* method;
+            RETURN_IF_ERROR(fan_control->GetCurrentMethod(&method));
+
+            control->set_current_method(method->name());
         }
         for (const auto& temp_sensor : temp_sensors_) {
             TemperatureProto* temp = sensors->add_temperatures();

@@ -127,6 +127,30 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         return chip_->WriteByte(info_.mode_select, target);
     }
 
+    Status GetCurrentMethod(FanControlMethod** method) override {
+        NuvotonFanControlMode mode = GetControlMode();
+        switch (mode) {
+            case kManualMode: {
+                *method = manual_.get();
+                break;
+            }
+            case kThermalCruise: {
+                *method = thermal_.get();
+                break;
+            }
+            case kSpeedCruise: {
+                *method = speed_.get();
+                break;
+            }
+            case kSmartFan4: {
+                *method = iv_.get();
+                break;
+            }
+            default: { return Status(EINVAL, "Unknown fan control mode"); }
+        }
+        return OkStatus();
+    }
+
     NuvotonTempSource GetTempSource() {
         uint8_t source;
         chip_->ReadByte(info_.temp_source, &source);
@@ -193,6 +217,20 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip) {
     return std::make_unique<NuvotonFanControlImpl>(info, chip);
+}
+
+void PrintNuvotonFanControlMethod(const nuvoton::FanControlMethod& method,
+                                  std::ostream& out) {
+    out << "    at " << std::dec << method.percent() << "%";
+
+    switch (method.params_case()) {
+        case nuvoton::FanControlMethod::kSmartFanIvParams: {
+            break;
+        }
+        case nuvoton::FanControlMethod::PARAMS_NOT_SET: {
+            break;
+        }
+    }
 }
 
 }  // namespace bsdsensors

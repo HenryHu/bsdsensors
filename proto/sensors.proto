@@ -5,9 +5,16 @@ package bsdsensors;
 import "fan_speed.proto";
 import "temperature.proto";
 import "voltage.proto";
+import "fan_control.proto";
+
+message FanProto {
+    string name = 1;
+    FanSpeedProto speed = 2;
+    FanControlProto control = 3;
+}
 
 message SensorsProto {
-    repeated FanSpeedProto fan_speeds = 1;
+    repeated FanProto fans = 1;
     repeated TemperatureProto temperatures = 2;
     repeated VoltageProto voltages = 3;
 }

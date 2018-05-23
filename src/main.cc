@@ -10,6 +10,7 @@
 #include "fintek_chip.h"
 #include "microchip_chip.h"
 #include "util.h"
+#include "value_util.h"
 #include <iostream>
 #include <unistd.h>
 #include <gflags/gflags.h>
@@ -37,9 +38,9 @@ void PrintSelectedSensors(const SensorsProto& sensors, const string& selected) {
 
         bool found = false;
         if (parts[0] == "fan") {
-            for (const auto& fan_speed : sensors.fan_speeds()) {
-                if (fan_speed.name() == parts[1]) {
-                    PrintFanSpeedValue(fan_speed, FLAGS_value, cout);
+            for (const auto& fan : sensors.fans()) {
+                if (fan.name() == parts[1]) {
+                    PrintFanSpeedValue(fan, FLAGS_value, cout);
                     found = true;
                 }
             }

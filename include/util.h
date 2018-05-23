@@ -8,8 +8,6 @@
 #ifndef __BSDSENSORS_UTIL_H__
 #define __BSDSENSORS_UTIL_H__
 
-#include "sensors.pb.h"
-
 #include <cstdint>
 #include <iostream>
 
@@ -64,14 +62,6 @@ struct Bits {
 
 extern uint8_t BitsFromByte(const Bits& bits, uint8_t byte);
 extern uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value);
-
-extern void PrintSensorValues(const SensorsProto& sensors, std::ostream& out);
-extern void PrintTempValue(const TemperatureProto& temp, bool value_only,
-                           std::ostream& out);
-extern void PrintFanSpeedValue(const FanSpeedProto& fan_speed, bool value_only,
-                               std::ostream& out);
-extern void PrintVoltValue(const VoltageProto& volt, bool value_only,
-                           std::ostream& out);
 
 extern std::vector<std::string> StrSplit(const std::string& str,
                                          const char delim);

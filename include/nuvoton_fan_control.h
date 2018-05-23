@@ -10,6 +10,7 @@
 
 #include "fan_control.h"
 #include "nuvoton_chip_info.h"
+#include "nuvoton_fan_control.pb.h"
 #include "status.h"
 #include <memory>
 
@@ -18,6 +19,7 @@ namespace bsdsensors {
 class NuvotonFanControl : public FanControl {
    public:
     virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
+    virtual Status GetCurrentMethod(FanControlMethod** method) = 0;
 };
 
 class NuvotonFanControlManual : public FanControlMethod {
@@ -30,6 +32,9 @@ class NuvotonFanControlSmartFan4 : public FanControlMethod {};
 
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip);
+
+void PrintNuvotonFanControlMethod(const nuvoton::FanControlMethod& method,
+                                  std::ostream& out);
 
 }  // namespace bsdsensors
 

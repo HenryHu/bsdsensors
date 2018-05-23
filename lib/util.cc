@@ -52,52 +52,6 @@ uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value) {
     }
 }
 
-void PrintTempValue(const TemperatureProto& temp, bool value_only,
-                    std::ostream& out) {
-    if (value_only) {
-        out << temp.value();
-    } else {
-        out << "Temperature " << temp.name() << ": " << temp.value() << " C";
-        if (!temp.source().empty()) {
-            out << " from " << temp.source();
-        }
-    }
-    out << std::endl;
-}
-
-void PrintFanSpeedValue(const FanSpeedProto& fan_speed, bool value_only,
-                        std::ostream& out) {
-    if (value_only) {
-        out << fan_speed.value();
-    } else {
-        out << "Fan " << fan_speed.name() << ": " << fan_speed.value()
-            << " RPM";
-    }
-    out << std::endl;
-}
-
-void PrintVoltValue(const VoltageProto& volt, bool value_only,
-                    std::ostream& out) {
-    if (value_only) {
-        out << volt.value();
-    } else {
-        out << "Voltage " << volt.name() << ": " << volt.value() << " V";
-    }
-    out << std::endl;
-}
-
-void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
-    for (const auto& temp : sensors.temperatures()) {
-        PrintTempValue(temp, false, out);
-    }
-    for (const auto& volt : sensors.voltages()) {
-        PrintVoltValue(volt, false, out);
-    }
-    for (const auto& fan_speed : sensors.fan_speeds()) {
-        PrintFanSpeedValue(fan_speed, false, out);
-    }
-}
-
 std::vector<std::string> StrSplit(const std::string& str, const char delim) {
     std::vector<std::string> result;
     int start = 0;

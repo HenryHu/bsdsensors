@@ -3,7 +3,6 @@ syntax = 'proto3';
 package bsdsensors;
 
 message FanSpeedProto {
-    string name = 1;
     // Fan speed in RPM.
-    double value = 2;
+    double value = 1;
 }
