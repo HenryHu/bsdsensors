@@ -52,33 +52,49 @@ uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value) {
     }
 }
 
-void PrintTempValue(const TemperatureProto& temp, std::ostream& out) {
-    out << "Temperature " << temp.name() << ": " << temp.value() << " C";
-    if (!temp.source().empty()) {
-        out << " from " << temp.source();
+void PrintTempValue(const TemperatureProto& temp, bool value_only,
+                    std::ostream& out) {
+    if (value_only) {
+        out << temp.value();
+    } else {
+        out << "Temperature " << temp.name() << ": " << temp.value() << " C";
+        if (!temp.source().empty()) {
+            out << " from " << temp.source();
+        }
     }
     out << std::endl;
 }
 
-void PrintFanSpeedValue(const FanSpeedProto& fan_speed, std::ostream& out) {
-    out << "Fan " << fan_speed.name() << ": " << fan_speed.value() << " RPM"
-        << std::endl;
+void PrintFanSpeedValue(const FanSpeedProto& fan_speed, bool value_only,
+                        std::ostream& out) {
+    if (value_only) {
+        out << fan_speed.value();
+    } else {
+        out << "Fan " << fan_speed.name() << ": " << fan_speed.value()
+            << " RPM";
+    }
+    out << std::endl;
 }
 
-void PrintVoltValue(const VoltageProto& volt, std::ostream& out) {
-    out << "Voltage " << volt.name() << ": " << volt.value() << " V"
-        << std::endl;
+void PrintVoltValue(const VoltageProto& volt, bool value_only,
+                    std::ostream& out) {
+    if (value_only) {
+        out << volt.value();
+    } else {
+        out << "Voltage " << volt.name() << ": " << volt.value() << " V";
+    }
+    out << std::endl;
 }
 
 void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
     for (const auto& temp : sensors.temperatures()) {
-        PrintTempValue(temp, out);
+        PrintTempValue(temp, false, out);
     }
     for (const auto& volt : sensors.voltages()) {
-        PrintVoltValue(volt, out);
+        PrintVoltValue(volt, false, out);
     }
     for (const auto& fan_speed : sensors.fan_speeds()) {
-        PrintFanSpeedValue(fan_speed, out);
+        PrintFanSpeedValue(fan_speed, false, out);
     }
 }
 

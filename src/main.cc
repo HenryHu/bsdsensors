@@ -17,6 +17,7 @@
 
 DEFINE_string(sensors, "", "comma-separated list of sensors to print");
 DEFINE_bool(debug, false, "print debug output");
+DEFINE_bool(value, false, "print value only");
 
 using namespace std;
 using namespace bsdsensors;
@@ -62,21 +63,22 @@ int main(int argc, char** argv) {
                     if (parts[0] == "fan") {
                         for (const auto& fan_speed : sensors.fan_speeds()) {
                             if (fan_speed.name() == parts[1]) {
-                                PrintFanSpeedValue(fan_speed, cout);
+                                PrintFanSpeedValue(fan_speed, FLAGS_value,
+                                                   cout);
                                 found = true;
                             }
                         }
                     } else if (parts[0] == "temp") {
                         for (const auto& temp : sensors.temperatures()) {
                             if (temp.name() == parts[1]) {
-                                PrintTempValue(temp, cout);
+                                PrintTempValue(temp, FLAGS_value, cout);
                                 found = true;
                             }
                         }
                     } else if (parts[0] == "volt") {
                         for (const auto& volt : sensors.voltages()) {
                             if (volt.name() == parts[1]) {
-                                PrintVoltValue(volt, cout);
+                                PrintVoltValue(volt, FLAGS_value, cout);
                                 found = true;
                             }
                         }
