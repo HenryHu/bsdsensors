@@ -260,6 +260,19 @@ std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     return std::make_unique<NuvotonFanControlImpl>(info, chip);
 }
 
+void PrintNuvotonSmartFanIVParams(const nuvoton::SmartFanIVParams& params,
+                                  std::ostream& out) {
+    bool first = true;
+    out << "    ";
+    for (const auto& control_point : params.control_points()) {
+        if (!first) out << ", ";
+        first = false;
+        out << (int)control_point.temp() << "C -> "
+            << (int)control_point.percent() << "%";
+    }
+    out << std::endl;
+}
+
 void PrintNuvotonFanControlMethod(const nuvoton::FanControlMethod& method,
                                   std::ostream& out) {
     switch (method.params_case()) {
@@ -267,17 +280,7 @@ void PrintNuvotonFanControlMethod(const nuvoton::FanControlMethod& method,
             break;
         }
         case nuvoton::FanControlMethod::kSmartFanIvParams: {
-            const nuvoton::SmartFanIVParams& params =
-                method.smart_fan_iv_params();
-            bool first = true;
-            out << "    ";
-            for (const auto& control_point : params.control_points()) {
-                if (!first) out << ", ";
-                first = false;
-                out << (int)control_point.temp() << "C -> "
-                    << (int)control_point.percent() << "%";
-            }
-            out << std::endl;
+            PrintNuvotonSmartFanIVParams(method.smart_fan_iv_params(), out);
             break;
         }
         case nuvoton::FanControlMethod::PARAMS_NOT_SET: {
