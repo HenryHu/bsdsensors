@@ -15,10 +15,13 @@
 #include <unistd.h>
 #include <gflags/gflags.h>
 #include <glog/logging.h>
+#include <google/protobuf/util/json_util.h>
 
 DEFINE_string(sensors, "", "comma-separated list of sensors to print");
 DEFINE_bool(debug, false, "print debug output");
 DEFINE_bool(value, false, "print value only");
+DEFINE_bool(proto, false, "print raw proto");
+DEFINE_bool(json, false, "print proto in json");
 
 using namespace std;
 using namespace bsdsensors;
@@ -91,7 +94,21 @@ int main(int argc, char** argv) {
                 continue;
             }
             if (FLAGS_sensors.empty()) {
-                PrintSensorValues(sensors, cout);
+                if (FLAGS_proto) {
+                    cout << sensors.DebugString() << endl;
+                } else if (FLAGS_json) {
+                    string json_string;
+
+                    google::protobuf::util::JsonPrintOptions options;
+                    options.add_whitespace = true;
+                    options.always_print_primitive_fields = true;
+                    options.preserve_proto_field_names = true;
+
+                    MessageToJsonString(sensors, &json_string, options);
+                    cout << json_string << endl;
+                } else {
+                    PrintSensorValues(sensors, cout);
+                }
             } else {
                 PrintSelectedSensors(sensors, FLAGS_sensors);
             }
