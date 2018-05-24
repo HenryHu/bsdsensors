@@ -225,6 +225,8 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
 
     void FillState(FanControlProto* proto) override {
         proto->set_current_percent(current_percent());
+        proto->set_temp_source(GetNuvotonSourceName(GetTempSource()));
+        proto->set_temp_value(GetTempValue());
         if (manual_) {
             FanControlMethodProto* method = proto->add_methods();
             method->set_name(manual_->name());

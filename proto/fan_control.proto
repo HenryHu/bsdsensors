@@ -20,4 +20,7 @@ message FanControlProto {
     string current_method = 1;
     double current_percent = 2;
     repeated FanControlMethodProto methods = 3;
+
+    string temp_source = 4;
+    double temp_value = 5;
 }

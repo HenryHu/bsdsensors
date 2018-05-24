@@ -62,7 +62,12 @@ void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
 
 void PrintFanControlStatus(const FanControlProto& fan_control,
                            std::ostream& out) {
-    out << "  control method: " << fan_control.current_method() << std::endl;
+    out << "  Current: " << (int)(fan_control.current_percent() * 100) << "%";
+    out << " Control method: " << fan_control.current_method() << std::endl;
+    if (!fan_control.temp_source().empty()) {
+        out << "  Temp source: " << fan_control.temp_source() << " at "
+            << fan_control.temp_value() << " C" << std::endl;
+    }
     for (const auto& method : fan_control.methods()) {
         out << "  Method " << method.name() << ":" << std::endl;
         switch (method.method_case()) {
