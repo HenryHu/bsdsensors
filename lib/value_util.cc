@@ -75,7 +75,7 @@ void PrintFanControlStatus(const FanControlProto& fan_control,
                 break;
             }
             case FanControlMethodProto::kNuvotonMethod: {
-                PrintNuvotonFanControlMethod(method.nuvoton_method(), out);
+                out << method.nuvoton_method();
                 break;
             }
             case FanControlMethodProto::METHOD_NOT_SET: {

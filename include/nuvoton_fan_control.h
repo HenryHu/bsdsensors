@@ -34,8 +34,8 @@ class NuvotonFanControlSmartFan4 : public FanControlMethod {};
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip);
 
-void PrintNuvotonFanControlMethod(const nuvoton::FanControlMethod& method,
-                                  std::ostream& out);
+std::ostream& operator<<(std::ostream& out,
+                         const nuvoton::FanControlMethod& method);
 
 }  // namespace bsdsensors
 

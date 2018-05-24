@@ -260,8 +260,8 @@ std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     return std::make_unique<NuvotonFanControlImpl>(info, chip);
 }
 
-void PrintNuvotonSmartFanIVParams(const nuvoton::SmartFanIVParams& params,
-                                  std::ostream& out) {
+std::ostream& operator<<(std::ostream& out,
+                         const nuvoton::SmartFanIVParams& params) {
     bool first = true;
     out << "    ";
     for (const auto& control_point : params.control_points()) {
@@ -271,22 +271,24 @@ void PrintNuvotonSmartFanIVParams(const nuvoton::SmartFanIVParams& params,
             << (int)control_point.percent() << "%";
     }
     out << std::endl;
+    return out;
 }
 
-void PrintNuvotonFanControlMethod(const nuvoton::FanControlMethod& method,
-                                  std::ostream& out) {
+std::ostream& operator<<(std::ostream& out,
+                         const nuvoton::FanControlMethod& method) {
     switch (method.params_case()) {
         case nuvoton::FanControlMethod::kManualParams: {
             break;
         }
         case nuvoton::FanControlMethod::kSmartFanIvParams: {
-            PrintNuvotonSmartFanIVParams(method.smart_fan_iv_params(), out);
+            out << method.smart_fan_iv_params();
             break;
         }
         case nuvoton::FanControlMethod::PARAMS_NOT_SET: {
             break;
         }
     }
+    return out;
 }
 
 }  // namespace bsdsensors
