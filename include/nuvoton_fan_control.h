@@ -20,6 +20,7 @@ class NuvotonFanControl : public FanControl {
    public:
     virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
     virtual Status GetCurrentMethod(FanControlMethod** method) = 0;
+    virtual void FillState(FanControlProto* proto) = 0;
 };
 
 class NuvotonFanControlManual : public FanControlMethod {

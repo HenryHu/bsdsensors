@@ -2,6 +2,10 @@ syntax = 'proto3';
 
 package bsdsensors.nuvoton;
 
+message ManualParams {
+    double percent = 1;
+}
+
 message ControlPoint {
     double temp = 1;
     double percent = 2;
@@ -12,8 +16,8 @@ message SmartFanIVParams {
 }
 
 message FanControlMethod {
-    double percent = 2;
     oneof params {
+        ManualParams manual_params = 1;
         SmartFanIVParams smart_fan_iv_params = 3;
     }
 }

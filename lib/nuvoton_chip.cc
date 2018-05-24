@@ -306,6 +306,8 @@ class NuvotonChipImpl : public NuvotonChip {
             RETURN_IF_ERROR(fan_control->GetCurrentMethod(&method));
 
             control->set_current_method(method->name());
+
+            fan_control->FillState(control);
         }
         for (const auto& temp_sensor : temp_sensors_) {
             TemperatureProto* temp = sensors->add_temperatures();

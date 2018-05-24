@@ -10,6 +10,9 @@
 
 #include "status.h"
 #include "util.h"
+
+#include "fan_control.pb.h"
+
 #include <string>
 
 namespace bsdsensors {
@@ -24,6 +27,8 @@ class FanControlMethod : public DumpAble {
     virtual std::string name() const = 0;
     virtual Status Observe() = 0;
     virtual Status Apply() = 0;
+
+    virtual void FillState(FanControlMethodProto* proto) = 0;
 };
 
 }  // namespace bsdsensors

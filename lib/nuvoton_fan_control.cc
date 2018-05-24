@@ -34,6 +34,11 @@ class NuvotonFanControlManualImpl : public NuvotonFanControlManual {
     void DumpInfo(std::ostream& out) override {}
     void SetPower(int percent) override { power = PercentToPower(percent); }
 
+    void FillState(FanControlMethodProto* proto) override {
+        proto->mutable_nuvoton_method()->mutable_manual_params()->set_percent(
+            PowerToPercent(power));
+    }
+
    private:
     uint8_t power;
 
@@ -87,6 +92,19 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
                 << (int)PowerToPercent(control_point.power) << "%";
         }
         out << std::endl;
+    }
+
+    void FillState(FanControlMethodProto* proto) override {
+        Observe();
+
+        nuvoton::FanControlMethod* method = proto->mutable_nuvoton_method();
+        nuvoton::SmartFanIVParams* params =
+            method->mutable_smart_fan_iv_params();
+        for (const auto& control_point : control_points_) {
+            nuvoton::ControlPoint* point_proto = params->add_control_points();
+            point_proto->set_temp(control_point.temp);
+            point_proto->set_percent(PowerToPercent(control_point.power));
+        }
     }
 
    private:
@@ -205,6 +223,27 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         }
     }
 
+    void FillState(FanControlProto* proto) override {
+        proto->set_current_percent(current_percent());
+        if (manual_) {
+            FanControlMethodProto* method = proto->add_methods();
+            method->set_name(manual_->name());
+        }
+        if (thermal_) {
+            FanControlMethodProto* method = proto->add_methods();
+            method->set_name(thermal_->name());
+        }
+        if (speed_) {
+            FanControlMethodProto* method = proto->add_methods();
+            method->set_name(speed_->name());
+        }
+        if (iv_) {
+            FanControlMethodProto* method = proto->add_methods();
+            method->set_name(iv_->name());
+            iv_->FillState(method);
+        }
+    }
+
    private:
     NuvotonFanControlInfo info_;
     NuvotonChip* chip_;
@@ -221,10 +260,22 @@ std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
 
 void PrintNuvotonFanControlMethod(const nuvoton::FanControlMethod& method,
                                   std::ostream& out) {
-    out << "    at " << std::dec << method.percent() << "%";
-
     switch (method.params_case()) {
+        case nuvoton::FanControlMethod::kManualParams: {
+            break;
+        }
         case nuvoton::FanControlMethod::kSmartFanIvParams: {
+            const nuvoton::SmartFanIVParams& params =
+                method.smart_fan_iv_params();
+            bool first = true;
+            out << "    ";
+            for (const auto& control_point : params.control_points()) {
+                if (!first) out << ", ";
+                first = false;
+                out << (int)control_point.temp() << "C -> "
+                    << (int)control_point.percent() << "%";
+            }
+            out << std::endl;
             break;
         }
         case nuvoton::FanControlMethod::PARAMS_NOT_SET: {
