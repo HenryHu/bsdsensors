@@ -24,3 +24,11 @@ message FanControlProto {
     string temp_source = 4;
     double temp_value = 5;
 }
+
+message SetFanControlMethodProto {
+    string name = 1;
+}
+
+message SetFanControlTempSource {
+    string source = 1;
+}

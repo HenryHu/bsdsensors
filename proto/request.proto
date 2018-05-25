@@ -1,0 +1,12 @@
+syntax = 'proto3';
+
+package bsdsensors;
+
+import "fan_control.proto";
+
+message Request {
+    oneof request {
+        SetFanControlMethodProto set_fan_control_method = 1;
+        SetFanControlTempSource set_fan_control_temp_source = 2;
+    }
+}
