@@ -12,6 +12,8 @@
 #include "status.h"
 #include "sensors.pb.h"
 
+#include <string>
+
 namespace bsdsensors {
 
 class Chip : public DumpAble {
@@ -21,6 +23,9 @@ class Chip : public DumpAble {
     virtual bool Detect() = 0;
 
     virtual Status GetSensorValues(SensorsProto* sensors) = 0;
+
+    virtual std::string name() = 0;
+    virtual void set_name(const std::string& name) = 0;
 };
 
 }  // namespace bsdsensors

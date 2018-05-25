@@ -55,8 +55,14 @@ class NuvotonLock {
 class NuvotonChipImpl : public NuvotonChip {
    public:
     NuvotonChipImpl()
-        : port_io_(CreatePortIO()), entered_(false), info_(nullptr) {}
+        : port_io_(CreatePortIO()),
+          entered_(false),
+          info_(nullptr),
+          name_("nuvoton") {}
     ~NuvotonChipImpl() override {}
+
+    std::string name() override { return name_; }
+    void set_name(const std::string& name) override { this->name_ = name; }
 
     // Enter Extended Function mode
     Status Enter() override {
@@ -291,6 +297,7 @@ class NuvotonChipImpl : public NuvotonChip {
     }
 
     Status GetSensorValues(SensorsProto* sensors) override {
+        sensors->set_name(name_);
         for (int i = 0; i < fan_speeds_.size(); i++) {
             const auto& fan = fan_speeds_[i];
             FanProto* fan_proto = sensors->add_fans();
@@ -334,6 +341,7 @@ class NuvotonChipImpl : public NuvotonChip {
     PortAddress addr_port_, data_port_;
     bool entered_;
     const NuvotonChipInfo* info_;
+    std::string name_;
 
     std::vector<std::unique_ptr<NuvotonFanSpeed>> fan_speeds_;
     std::vector<std::unique_ptr<NuvotonFanControl>> fan_controls_;

@@ -42,8 +42,14 @@ class MicrochipLock {
 class MicrochipChipImpl : public MicrochipChip {
    public:
     MicrochipChipImpl()
-        : port_io_(CreatePortIO()), entered_(false), info_(nullptr) {}
+        : port_io_(CreatePortIO()),
+          entered_(false),
+          info_(nullptr),
+          name_("microchip") {}
     ~MicrochipChipImpl() override {}
+
+    std::string name() override { return name_; }
+    void set_name(const std::string& name) override { this->name_ = name; }
 
     // Enter Extended Function mode
     Status Enter() override {
@@ -185,6 +191,7 @@ class MicrochipChipImpl : public MicrochipChip {
     PortAddress addr_port_, data_port_;
     bool entered_;
     const MicrochipChipInfo* info_;
+    std::string name_;
 };
 
 std::unique_ptr<MicrochipChip> CreateMicrochipChip() {

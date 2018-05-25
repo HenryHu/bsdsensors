@@ -45,8 +45,14 @@ class FintekLock {
 class FintekChipImpl : public FintekChip {
    public:
     FintekChipImpl()
-        : port_io_(CreatePortIO()), entered_(false), info_(nullptr) {}
+        : port_io_(CreatePortIO()),
+          entered_(false),
+          info_(nullptr),
+          name_("fintek") {}
     ~FintekChipImpl() override {}
+
+    std::string name() override { return name_; }
+    void set_name(const std::string& name) override { this->name_ = name; }
 
     // Enter Extended Function mode
     Status Enter() override {
@@ -230,6 +236,7 @@ class FintekChipImpl : public FintekChip {
     PortAddress addr_port_, data_port_;
     bool entered_;
     const FintekChipInfo* info_;
+    std::string name_;
 
     std::vector<std::unique_ptr<FintekFan>> fans_;
     std::vector<std::unique_ptr<FintekVoltSensor>> volt_sensors_;

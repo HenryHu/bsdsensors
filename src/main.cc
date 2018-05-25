@@ -11,6 +11,7 @@
 #include "microchip_chip.h"
 #include "util.h"
 #include "value_util.h"
+#include "dev_db.h"
 #include <iostream>
 #include <unistd.h>
 #include <gflags/gflags.h>
@@ -22,6 +23,8 @@ DEFINE_bool(debug, false, "print debug output");
 DEFINE_bool(value, false, "print value only");
 DEFINE_bool(proto, false, "print raw proto");
 DEFINE_bool(json, false, "print proto in json");
+DEFINE_string(request, "", "request configuration change");
+DEFINE_string(chip, "", "specify which chip to print");
 
 using namespace std;
 using namespace bsdsensors;
@@ -40,9 +43,17 @@ int main(int argc, char** argv) {
         FLAGS_logtostderr = true;
     }
 
+    std::unique_ptr<DeviceDb> dev_db = CreateDeviceDb();
+
     for (const auto& CreateChip : kCreateChips) {
         auto chip = CreateChip();
         if (chip->Detect()) {
+            chip->set_name(dev_db->Register(chip->name(), nullptr));
+
+            if (!FLAGS_chip.empty() && FLAGS_chip != chip->name()) {
+                continue;
+            }
+
             if (FLAGS_debug) {
                 chip->DumpInfo(cerr);
             }

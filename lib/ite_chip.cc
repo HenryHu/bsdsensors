@@ -43,8 +43,15 @@ class ITELock {
 
 class ITEChipImpl : public ITEChip {
    public:
-    ITEChipImpl() : port_io_(CreatePortIO()), entered_(false), info_(nullptr) {}
+    ITEChipImpl()
+        : port_io_(CreatePortIO()),
+          entered_(false),
+          info_(nullptr),
+          name_("ite") {}
     ~ITEChipImpl() override {}
+
+    std::string name() override { return name_; }
+    void set_name(const std::string& name) override { this->name_ = name; }
 
     // Enter Extended Function mode
     Status Enter() override {
@@ -192,6 +199,7 @@ class ITEChipImpl : public ITEChip {
     PortAddress addr_port_, data_port_;
     bool entered_;
     const ITEChipInfo* info_;
+    std::string name_;
 };
 
 std::unique_ptr<ITEChip> CreateITEChip() {

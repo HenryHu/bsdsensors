@@ -17,4 +17,6 @@ message SensorsProto {
     repeated FanProto fans = 1;
     repeated TemperatureProto temperatures = 2;
     repeated VoltageProto voltages = 3;
+
+    string name = 4;
 }
