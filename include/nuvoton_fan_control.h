@@ -19,6 +19,7 @@ namespace bsdsensors {
 class NuvotonFanControl : public FanControl {
    public:
     virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
+    virtual Status SetControlMode(const std::string& target) = 0;
     virtual Status GetCurrentMethod(FanControlMethod** method) = 0;
     virtual void FillState(FanControlProto* proto) = 0;
 };
@@ -36,6 +37,9 @@ std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
 
 std::ostream& operator<<(std::ostream& out,
                          const nuvoton::FanControlMethod& method);
+
+Status ParseNuvotonFanControlMode(const std::string& str_mode,
+                                  NuvotonFanControlMode* mode);
 
 }  // namespace bsdsensors
 

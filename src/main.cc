@@ -12,6 +12,7 @@
 #include "util.h"
 #include "value_util.h"
 #include "dev_db.h"
+#include "request.pb.h"
 #include <iostream>
 #include <unistd.h>
 #include <gflags/gflags.h>
@@ -28,6 +29,9 @@ DEFINE_string(chip, "", "specify which chip to print");
 
 using namespace std;
 using namespace bsdsensors;
+
+using google::protobuf::util::JsonParseOptions;
+using google::protobuf::util::JsonPrintOptions;
 
 const std::function<std::unique_ptr<Chip>()> kCreateChips[] = {
     CreateNuvotonChip, CreateITEChip, CreateFintekChip, CreateMicrochipChip};
@@ -57,6 +61,25 @@ int main(int argc, char** argv) {
             if (FLAGS_debug) {
                 chip->DumpInfo(cerr);
             }
+
+            if (!FLAGS_request.empty()) {
+                Request request;
+                if (!JsonStringToMessage(FLAGS_request, &request,
+                                         JsonParseOptions())
+                         .ok() &&
+                    !request.ParseFromString(FLAGS_request)) {
+                    LOG(ERROR) << "Malformed request " << FLAGS_request;
+                    continue;
+                }
+
+                Status status = chip->ProcessRequest(request);
+                if (!status.ok()) {
+                    LOG(ERROR) << "Process error: " << status.error_message();
+                }
+                LOG(INFO) << "Request processed";
+                continue;
+            }
+
             SensorsProto sensors;
             Status status = chip->GetSensorValues(&sensors);
             if (!status.ok()) {

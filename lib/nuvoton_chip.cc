@@ -334,6 +334,36 @@ class NuvotonChipImpl : public NuvotonChip {
         return OkStatus();
     }
 
+    NuvotonFanControl* GetFanControlByName(const string& name) {
+        for (int i = 0; i < fan_speeds_.size(); i++) {
+            if (fan_speeds_[i]->name() == name) {
+                return fan_controls_[i].get();
+            }
+        }
+        return nullptr;
+    }
+
+    Status ProcessRequest(const Request& request) override {
+        switch (request.request_case()) {
+            case Request::kSetFanControlMethod: {
+                const SetFanControlMethodProto& req =
+                    request.set_fan_control_method();
+                NuvotonFanControl* fan_control =
+                    GetFanControlByName(req.name());
+                if (fan_control == nullptr) {
+                    return Status(EINVAL, "Unknown fan " + req.name());
+                }
+                LOG(INFO) << "Setting fan control method to " << req.method();
+                return fan_control->SetControlMode(req.method());
+            }
+            case Request::kSetFanControlTempSource: {
+                break;
+            }
+            default: { return Status(ENOSYS, "Request not supported"); }
+        }
+        return OkStatus();
+    }
+
    private:
     std::unique_ptr<PortIO> port_io_;
     std::unique_ptr<SuperIO> io_;

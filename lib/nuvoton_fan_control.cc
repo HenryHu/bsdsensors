@@ -145,6 +145,12 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         return chip_->WriteByte(info_.mode_select, target);
     }
 
+    Status SetControlMode(const std::string& target) override {
+        NuvotonFanControlMode mode;
+        RETURN_IF_ERROR(ParseNuvotonFanControlMode(target, &mode));
+        return SetControlMode(mode);
+    }
+
     Status GetCurrentMethod(FanControlMethod** method) override {
         NuvotonFanControlMode mode = GetControlMode();
         switch (mode) {
@@ -289,6 +295,19 @@ std::ostream& operator<<(std::ostream& out,
         }
     }
     return out;
+}
+
+Status ParseNuvotonFanControlMode(const std::string& str_mode,
+                                  NuvotonFanControlMode* mode) {
+    if (str_mode == "Manual") {
+        *mode = kManualMode;
+        return OkStatus();
+    }
+    if (str_mode == "SmartFan IV") {
+        *mode = kSmartFan4;
+        return OkStatus();
+    }
+    return Status(EINVAL, "Unknown mode " + str_mode);
 }
 
 }  // namespace bsdsensors

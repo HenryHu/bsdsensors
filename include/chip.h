@@ -11,6 +11,7 @@
 #include "util.h"
 #include "status.h"
 #include "sensors.pb.h"
+#include "request.pb.h"
 
 #include <string>
 
@@ -26,6 +27,8 @@ class Chip : public DumpAble {
 
     virtual std::string name() = 0;
     virtual void set_name(const std::string& name) = 0;
+
+    virtual Status ProcessRequest(const Request& request) { return OkStatus(); }
 };
 
 }  // namespace bsdsensors

@@ -27,6 +27,7 @@ message FanControlProto {
 
 message SetFanControlMethodProto {
     string name = 1;
+    string method = 2;
 }
 
 message SetFanControlTempSource {
