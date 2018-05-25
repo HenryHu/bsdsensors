@@ -31,46 +31,6 @@ const std::function<std::unique_ptr<Chip>()> kCreateChips[] = {
 
 const char* kUsageMessage = "bsdsensors - Tool to get hardware sensor values";
 
-void PrintSelectedSensors(const SensorsProto& sensors, const string& selected) {
-    for (const auto& sensor : StrSplit(selected, ',')) {
-        const auto& parts = StrSplit(sensor, ':');
-        if (parts.size() != 2) {
-            LOG(ERROR) << "malformed sensor: " << sensor;
-            continue;
-        }
-
-        bool found = false;
-        if (parts[0] == "fan") {
-            for (const auto& fan : sensors.fans()) {
-                if (fan.name() == parts[1]) {
-                    PrintFanSpeedValue(fan, FLAGS_value, cout);
-                    found = true;
-                }
-            }
-        } else if (parts[0] == "temp") {
-            for (const auto& temp : sensors.temperatures()) {
-                if (temp.name() == parts[1]) {
-                    PrintTempValue(temp, FLAGS_value, cout);
-                    found = true;
-                }
-            }
-        } else if (parts[0] == "volt") {
-            for (const auto& volt : sensors.voltages()) {
-                if (volt.name() == parts[1]) {
-                    PrintVoltValue(volt, FLAGS_value, cout);
-                    found = true;
-                }
-            }
-        } else {
-            LOG(ERROR) << "unknown sensor type: " << parts[0];
-            continue;
-        }
-        if (!found) {
-            LOG(ERROR) << "sensor not found: " << parts[1];
-        }
-    }
-}
-
 int main(int argc, char** argv) {
     gflags::SetUsageMessage(kUsageMessage);
     gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -110,7 +70,7 @@ int main(int argc, char** argv) {
                     PrintSensorValues(sensors, cout);
                 }
             } else {
-                PrintSelectedSensors(sensors, FLAGS_sensors);
+                PrintSelectedSensors(sensors, FLAGS_sensors, FLAGS_value, cout);
             }
         }
     }

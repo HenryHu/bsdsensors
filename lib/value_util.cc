@@ -10,58 +10,45 @@
 
 namespace bsdsensors {
 
-void PrintTempValue(const TemperatureProto& temp, bool value_only,
-                    std::ostream& out) {
-    if (value_only) {
-        out << temp.value();
-    } else {
-        out << "Temperature " << temp.name() << ": " << temp.value() << " C";
-        if (!temp.source().empty()) {
-            out << " from " << temp.source();
-        }
+using namespace std;
+
+void PrintTempValue(const TemperatureProto& temp, std::ostream& out) {
+    out << "Temperature " << temp.name() << ": " << temp.value() << " C";
+    if (!temp.source().empty()) {
+        out << " from " << temp.source();
     }
     out << std::endl;
 }
 
-void PrintFanSpeedValue(const FanProto& fan, bool value_only,
-                        std::ostream& out) {
-    if (value_only) {
-        out << fan.speed().value();
-    } else {
-        out << "Fan " << fan.name() << ": " << fan.speed().value() << " RPM";
-    }
+void PrintFanSpeedValue(const FanProto& fan, std::ostream& out) {
+    out << "Fan " << fan.name() << ": " << fan.speed().value() << " RPM";
     out << std::endl;
 }
 
 void PrintFanStatus(const FanProto& fan, std::ostream& out) {
-    PrintFanSpeedValue(fan, false, out);
-    PrintFanControlStatus(fan.control(), out);
+    PrintFanSpeedValue(fan, out);
+    out << fan.control();
 }
 
-void PrintVoltValue(const VoltageProto& volt, bool value_only,
-                    std::ostream& out) {
-    if (value_only) {
-        out << volt.value();
-    } else {
-        out << "Voltage " << volt.name() << ": " << volt.value() << " V";
-    }
+void PrintVoltValue(const VoltageProto& volt, std::ostream& out) {
+    out << "Voltage " << volt.name() << ": " << volt.value() << " V";
     out << std::endl;
 }
 
 void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
     for (const auto& temp : sensors.temperatures()) {
-        PrintTempValue(temp, false, out);
+        PrintTempValue(temp, out);
     }
     for (const auto& volt : sensors.voltages()) {
-        PrintVoltValue(volt, false, out);
+        PrintVoltValue(volt, out);
     }
     for (const auto& fan : sensors.fans()) {
         PrintFanStatus(fan, out);
     }
 }
 
-void PrintFanControlStatus(const FanControlProto& fan_control,
-                           std::ostream& out) {
+std::ostream& operator<<(std::ostream& out,
+                         const FanControlProto& fan_control) {
     out << "  Current: " << (int)(fan_control.current_percent() * 100) << "%";
     out << " Control method: " << fan_control.current_method() << std::endl;
     if (!fan_control.temp_source().empty()) {
@@ -81,6 +68,48 @@ void PrintFanControlStatus(const FanControlProto& fan_control,
             case FanControlMethodProto::METHOD_NOT_SET: {
                 break;
             }
+        }
+    }
+    return out;
+}
+
+void PrintSelectedSensors(const SensorsProto& sensors, const string& selected,
+                          bool value_only, std::ostream& out) {
+    for (const auto& sensor : StrSplit(selected, ',')) {
+        const auto& parts = StrSplit(sensor, ':');
+        if (parts.size() != 2) {
+            LOG(ERROR) << "malformed sensor: " << sensor;
+            continue;
+        }
+
+        bool found = false;
+        if (parts[0] == "fan") {
+            for (const auto& fan : sensors.fans()) {
+                if (fan.name() == parts[1]) {
+                    out << fan.speed().value() << endl;
+                    found = true;
+                }
+            }
+        } else if (parts[0] == "temp") {
+            for (const auto& temp : sensors.temperatures()) {
+                if (temp.name() == parts[1]) {
+                    out << temp.value() << endl;
+                    found = true;
+                }
+            }
+        } else if (parts[0] == "volt") {
+            for (const auto& volt : sensors.voltages()) {
+                if (volt.name() == parts[1]) {
+                    out << volt.value() << endl;
+                    found = true;
+                }
+            }
+        } else {
+            LOG(ERROR) << "unknown sensor type: " << parts[0];
+            continue;
+        }
+        if (!found) {
+            LOG(ERROR) << "sensor not found: " << parts[1];
         }
     }
 }
