@@ -40,6 +40,24 @@ const std::function<std::unique_ptr<Chip>()> kCreateChips[] = {
 
 const char* kUsageMessage = "bsdsensors - Tool to get hardware sensor values";
 
+void PrintAllSensors(const SensorsProto& sensors, bool in_proto, bool in_json) {
+    if (in_proto) {
+        cout << sensors.DebugString() << endl;
+    } else if (in_json) {
+        string json_string;
+
+        google::protobuf::util::JsonPrintOptions options;
+        options.add_whitespace = true;
+        options.always_print_primitive_fields = true;
+        options.preserve_proto_field_names = true;
+
+        MessageToJsonString(sensors, &json_string, options);
+        cout << json_string << endl;
+    } else {
+        PrintSensorValues(sensors, cout);
+    }
+}
+
 int main(int argc, char** argv) {
     gflags::SetUsageMessage(kUsageMessage);
     gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -79,34 +97,20 @@ int main(int argc, char** argv) {
                     LOG(ERROR) << "Process error: " << status.error_message();
                 }
                 LOG(INFO) << "Request processed";
-                continue;
-            }
-
-            SensorsProto sensors;
-            Status status = chip->GetSensorValues(&sensors);
-            if (!status.ok()) {
-                LOG(ERROR) << "Error reading sensors: "
-                           << status.error_message();
-                continue;
-            }
-            if (FLAGS_sensors.empty()) {
-                if (FLAGS_proto) {
-                    cout << sensors.DebugString() << endl;
-                } else if (FLAGS_json) {
-                    string json_string;
-
-                    google::protobuf::util::JsonPrintOptions options;
-                    options.add_whitespace = true;
-                    options.always_print_primitive_fields = true;
-                    options.preserve_proto_field_names = true;
-
-                    MessageToJsonString(sensors, &json_string, options);
-                    cout << json_string << endl;
-                } else {
-                    PrintSensorValues(sensors, cout);
-                }
             } else {
-                PrintSelectedSensors(sensors, FLAGS_sensors, FLAGS_value, cout);
+                SensorsProto sensors;
+                Status status = chip->GetSensorValues(&sensors);
+                if (!status.ok()) {
+                    LOG(ERROR)
+                        << "Error reading sensors: " << status.error_message();
+                    continue;
+                }
+                if (FLAGS_sensors.empty()) {
+                    PrintAllSensors(sensors, FLAGS_proto, FLAGS_json);
+                } else {
+                    PrintSelectedSensors(sensors, FLAGS_sensors, FLAGS_value,
+                                         cout);
+                }
             }
         }
     }
