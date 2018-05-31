@@ -21,6 +21,9 @@ class NuvotonFanControl : public FanControl {
     virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
     virtual Status SetControlMode(const std::string& target) = 0;
     virtual Status GetCurrentMethod(FanControlMethod** method) = 0;
+
+    virtual Status SetTempSource(const std::string& name) = 0;
+
     virtual void FillState(FanControlProto* proto) = 0;
 };
 

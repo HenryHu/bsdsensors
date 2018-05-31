@@ -19,6 +19,7 @@
 namespace bsdsensors {
 
 enum NuvotonTempSource {
+    kSourceUnknown = 0,
     kSourceSYSTIN = 1,
     kSourceCPUTIN = 2,
     kSourceAUXTIN0 = 3,
@@ -55,6 +56,7 @@ enum NuvotonTempSource {
 using NuvotonTempSourceTable = std::map<NuvotonTempSource, uint8_t>;
 
 extern std::string GetNuvotonSourceName(NuvotonTempSource source);
+extern NuvotonTempSource GetNuvotonSourceByName(const std::string& name);
 
 struct NuvotonSmartFanInfo {
     bool available;

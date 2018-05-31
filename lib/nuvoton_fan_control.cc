@@ -181,6 +181,10 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         return (NuvotonTempSource)source;
     }
 
+    Status SetTempSource(NuvotonTempSource source) {
+        return chip_->WriteByte(info_.temp_source, source);
+    }
+
     double GetTempValue() {
         uint8_t int_part, frac_part;
         chip_->ReadByte(info_.temp_value_int, &int_part);
@@ -188,6 +192,15 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         double ret = int_part;
         if (frac_part) ret += 0.5;
         return ret;
+    }
+
+    Status SetTempSource(const string& name) override {
+        NuvotonTempSource source = GetNuvotonSourceByName(name);
+        if (source == kSourceUnknown) {
+            return Status(EINVAL, "Invalid temp source name " + name);
+        } else {
+            return SetTempSource(source);
+        }
     }
 
     void DumpInfo(std::ostream& out) override {

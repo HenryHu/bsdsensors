@@ -30,6 +30,7 @@ message SetFanControlMethodProto {
     string method = 2;
 }
 
-message SetFanControlTempSource {
-    string source = 1;
+message SetFanControlTempSourceProto {
+    string name = 1;
+    string source = 2;
 }
