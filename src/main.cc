@@ -18,6 +18,7 @@
 #include <gflags/gflags.h>
 #include <glog/logging.h>
 #include <google/protobuf/util/json_util.h>
+#include <google/protobuf/text_format.h>
 
 DEFINE_string(sensors, "", "comma-separated list of sensors to print");
 DEFINE_bool(debug, false, "print debug output");
@@ -30,6 +31,7 @@ DEFINE_string(chip, "", "specify which chip to print");
 using namespace std;
 using namespace bsdsensors;
 
+using google::protobuf::TextFormat;
 using google::protobuf::util::JsonParseOptions;
 using google::protobuf::util::JsonPrintOptions;
 
@@ -67,7 +69,7 @@ int main(int argc, char** argv) {
                 if (!JsonStringToMessage(FLAGS_request, &request,
                                          JsonParseOptions())
                          .ok() &&
-                    !request.ParseFromString(FLAGS_request)) {
+                    !TextFormat::ParseFromString(FLAGS_request, &request)) {
                     LOG(ERROR) << "Malformed request " << FLAGS_request;
                     continue;
                 }
