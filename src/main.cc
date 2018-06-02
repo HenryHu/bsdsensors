@@ -22,6 +22,7 @@
 
 DEFINE_string(sensors, "", "comma-separated list of sensors to print");
 DEFINE_bool(debug, false, "print debug output");
+DEFINE_bool(quiet, false, "be quiet, less log");
 DEFINE_bool(value, false, "print value only");
 DEFINE_bool(proto, false, "print raw proto");
 DEFINE_bool(json, false, "print proto in json");
@@ -63,7 +64,7 @@ int main(int argc, char** argv) {
     gflags::ParseCommandLineFlags(&argc, &argv, true);
     google::InitGoogleLogging(argv[0]);
 
-    if (FLAGS_debug) {
+    if (!FLAGS_quiet) {
         FLAGS_logtostderr = true;
     }
 
