@@ -25,11 +25,12 @@ class NuvotonFanControl : public FanControl {
     virtual Status SetTempSource(const std::string& name) = 0;
 
     virtual void FillState(FanControlProto* proto) = 0;
+    virtual Status HandleRequest(const FanControlRequest& request) = 0;
 };
 
 class NuvotonFanControlManual : public FanControlMethod {
    public:
-    virtual void SetPower(int power) = 0;
+    virtual Status SetPower(int power) = 0;
 };
 class NuvotonFanControlThermalCruise : public FanControlMethod {};
 class NuvotonFanControlSpeedCruise : public FanControlMethod {};

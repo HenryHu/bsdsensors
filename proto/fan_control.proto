@@ -25,12 +25,20 @@ message FanControlProto {
     double temp_value = 5;
 }
 
-message SetFanControlMethodProto {
-    string name = 1;
-    string method = 2;
+message SetMethodRequest {
+    string method = 1;
 }
 
-message SetFanControlTempSourceProto {
+message SetTempSourceRequest {
+    string source = 1;
+}
+
+message FanControlRequest {
     string name = 1;
-    string source = 2;
+    oneof request {
+        SetMethodRequest set_method = 2;
+        SetTempSourceRequest set_temp_source = 3;
+
+        nuvoton.FanControlRequest nuvoton = 100;
+    }
 }

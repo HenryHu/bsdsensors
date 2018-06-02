@@ -95,8 +95,9 @@ int main(int argc, char** argv) {
                 Status status = chip->ProcessRequest(request);
                 if (!status.ok()) {
                     LOG(ERROR) << "Process error: " << status.error_message();
+                } else {
+                    LOG(INFO) << "Request processed";
                 }
-                LOG(INFO) << "Request processed";
             } else {
                 SensorsProto sensors;
                 Status status = chip->GetSensorValues(&sensors);

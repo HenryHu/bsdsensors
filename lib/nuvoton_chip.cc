@@ -345,28 +345,16 @@ class NuvotonChipImpl : public NuvotonChip {
 
     Status ProcessRequest(const Request& request) override {
         switch (request.request_case()) {
-            case Request::kSetFanControlMethod: {
-                const SetFanControlMethodProto& req =
-                    request.set_fan_control_method();
+            case Request::kFanControl: {
                 NuvotonFanControl* fan_control =
-                    GetFanControlByName(req.name());
+                    GetFanControlByName(request.fan_control().name());
+
                 if (fan_control == nullptr) {
-                    return Status(EINVAL, "Unknown fan " + req.name());
+                    return Status(
+                        EINVAL, "Unknown fan " + request.fan_control().name());
                 }
-                LOG(INFO) << "Setting fan control method to " << req.method();
-                return fan_control->SetControlMode(req.method());
-            }
-            case Request::kSetFanControlTempSource: {
-                const SetFanControlTempSourceProto& req =
-                    request.set_fan_control_temp_source();
-                NuvotonFanControl* fan_control =
-                    GetFanControlByName(req.name());
-                if (fan_control == nullptr) {
-                    return Status(EINVAL, "Unknown fan " + req.name());
-                }
-                LOG(INFO) << "Setting fan " << req.name()
-                          << "'s temp source to " << req.source();
-                return fan_control->SetTempSource(req.source());
+
+                return fan_control->HandleRequest(request.fan_control());
             }
             default: { return Status(ENOSYS, "Request not supported"); }
         }

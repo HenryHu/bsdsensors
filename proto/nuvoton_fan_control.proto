@@ -21,3 +21,13 @@ message FanControlMethod {
         SmartFanIVParams smart_fan_iv_params = 3;
     }
 }
+
+message ManualChangePercentRequest {
+    double percent = 1;
+}
+
+message FanControlRequest {
+    oneof request {
+        ManualChangePercentRequest manual_change_percent = 1;
+    }
+}

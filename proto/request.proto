@@ -6,7 +6,6 @@ import "fan_control.proto";
 
 message Request {
     oneof request {
-        SetFanControlMethodProto set_fan_control_method = 1;
-        SetFanControlTempSourceProto set_fan_control_temp_source = 2;
+        FanControlRequest fan_control = 1;
     }
 }

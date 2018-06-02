@@ -32,7 +32,10 @@ class NuvotonFanControlManualImpl : public NuvotonFanControlManual {
     Status Observe() override { return chip_->ReadByte(control_addr_, &power); }
     Status Apply() override { return chip_->WriteByte(control_addr_, power); }
     void DumpInfo(std::ostream& out) override {}
-    void SetPower(int percent) override { power = PercentToPower(percent); }
+    Status SetPower(int percent) override {
+        power = PercentToPower(percent);
+        return Apply();
+    }
 
     void FillState(FanControlMethodProto* proto) override {
         proto->mutable_nuvoton_method()->mutable_manual_params()->set_percent(
@@ -262,6 +265,35 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
             FanControlMethodProto* method = proto->add_methods();
             method->set_name(iv_->name());
             iv_->FillState(method);
+        }
+    }
+
+    Status HandleRequest(const FanControlRequest& request) override {
+        switch (request.request_case()) {
+            case FanControlRequest::kSetMethod: {
+                const SetMethodRequest& req = request.set_method();
+                LOG(INFO) << "Setting fan " << request.name()
+                          << "'s control method to " << req.method();
+                return SetControlMode(req.method());
+            }
+            case FanControlRequest::kSetTempSource: {
+                const SetTempSourceRequest& req = request.set_temp_source();
+                LOG(INFO) << "Setting fan " << request.name()
+                          << "'s temp source to " << req.source();
+                return SetTempSource(req.source());
+            }
+            case FanControlRequest::kNuvoton: {
+                const nuvoton::FanControlRequest& req = request.nuvoton();
+
+                switch (req.request_case()) {
+                    case nuvoton::FanControlRequest::kManualChangePercent: {
+                        return manual_->SetPower(
+                            req.manual_change_percent().percent());
+                    }
+                    default: { return Status(ENOSYS, "Request not supported"); }
+                }
+            }
+            default: { return Status(ENOSYS, "Request not supported"); }
         }
     }
 
