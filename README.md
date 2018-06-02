@@ -43,3 +43,11 @@ Getting sensor values on FreeBSD
 
 ## Microchip
 
+# Features
+
+* Read from temperature sensor
+* Set temperature sensor's source
+* Read fan speed
+* Set fan speed control method
+* Set fan speed control parameters
+* Read from voltage sensor
