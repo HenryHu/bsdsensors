@@ -24,6 +24,8 @@ class NuvotonTempSensor : public TempSensor {
     virtual bool HasSource() = 0;
     virtual NuvotonTempSource GetSource() = 0;
     virtual Status SetSource(NuvotonTempSource target) = 0;
+
+    virtual Status HandleRequest(const TemperatureRequest& request) = 0;
 };
 
 std::unique_ptr<NuvotonTempSensor> CreateNuvotonTempSensor(

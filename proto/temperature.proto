@@ -9,3 +9,14 @@ message TemperatureProto {
     // Temperature source.
     string source = 3;
 }
+
+message SetSourceRequest {
+    string source = 1;
+}
+
+message TemperatureRequest {
+    string name = 1;
+    oneof request {
+        SetSourceRequest set_source = 2;
+    }
+}

@@ -270,7 +270,8 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     Status SetTempSource(const string& name) override {
-        NuvotonTempSource source = GetNuvotonSourceByName(name);
+        NuvotonTempSource source;
+        RETURN_IF_ERROR(GetNuvotonSourceByName(name, &source));
         if (source == kSourceUnknown) {
             return Status(EINVAL, "Invalid temp source name " + name);
         } else {

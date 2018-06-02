@@ -53,13 +53,15 @@ std::string GetNuvotonSourceName(NuvotonTempSource source) {
     return "Unknown";
 }
 
-NuvotonTempSource GetNuvotonSourceByName(const std::string& name) {
+Status GetNuvotonSourceByName(const std::string& name,
+                              NuvotonTempSource* source) {
     for (const auto& entry : kNuvotonTempSourceName) {
         if (entry.second == name) {
-            return entry.first;
+            *source = entry.first;
+            return OkStatus();
         }
     }
-    return kSourceUnknown;
+    return Status(EINVAL, "Unknown source");
 }
 
 }  // namespace bsdsensors

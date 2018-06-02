@@ -343,6 +343,15 @@ class NuvotonChipImpl : public NuvotonChip {
         return nullptr;
     }
 
+    NuvotonTempSensor* GetTempSensorByName(const string& name) {
+        for (auto& temp_sensor : temp_sensors_) {
+            if (temp_sensor->name() == name) {
+                return temp_sensor.get();
+            }
+        }
+        return nullptr;
+    }
+
     Status ProcessRequest(const Request& request) override {
         switch (request.request_case()) {
             case Request::kFanControl: {
@@ -355,6 +364,16 @@ class NuvotonChipImpl : public NuvotonChip {
                 }
 
                 return fan_control->HandleRequest(request.fan_control());
+            }
+            case Request::kTemp: {
+                NuvotonTempSensor* temp_sensor =
+                    GetTempSensorByName(request.temp().name());
+                if (temp_sensor == nullptr) {
+                    return Status(
+                        EINVAL, "Unknown temp sensor " + request.temp().name());
+                }
+
+                return temp_sensor->HandleRequest(request.temp());
             }
             default: { return Status(ENOSYS, "Request not supported"); }
         }

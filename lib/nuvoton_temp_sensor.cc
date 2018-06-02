@@ -59,6 +59,9 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
     }
 
     Status SetSource(NuvotonTempSource target) override {
+        if (!HasSource()) {
+            return Status(EINVAL, "This temp sensor has fixed source.");
+        }
         auto entry = table_.find(target);
         if (entry != table_.end()) {
             return chip_->WriteByte(info_.select, entry->second);
@@ -81,7 +84,22 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
         }
     }
 
+    Status HandleRequest(const TemperatureRequest& request) override {
+        switch (request.request_case()) {
+            case TemperatureRequest::kSetSource: {
+                return SetSource(request.set_source().source());
+            }
+            default: { return Status(ENOSYS, "Unsupported request"); }
+        }
+    }
+
    private:
+    Status SetSource(const string& source) {
+        NuvotonTempSource target;
+        RETURN_IF_ERROR(GetNuvotonSourceByName(source, &target));
+        return SetSource(target);
+    }
+
     const NuvotonTempInfo& info_;
     const NuvotonTempSourceTable& table_;
     NuvotonChip* chip_;

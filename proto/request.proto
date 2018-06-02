@@ -3,9 +3,11 @@ syntax = 'proto3';
 package bsdsensors;
 
 import "fan_control.proto";
+import "temperature.proto";
 
 message Request {
     oneof request {
         FanControlRequest fan_control = 1;
+        TemperatureRequest temp = 2;
     }
 }
