@@ -39,7 +39,7 @@ using google::protobuf::util::JsonPrintOptions;
 const std::function<std::unique_ptr<Chip>()> kCreateChips[] = {
     CreateNuvotonChip, CreateITEChip, CreateFintekChip, CreateMicrochipChip};
 
-const char* kUsageMessage = "bsdsensors - Tool to get hardware sensor values";
+const char* kUsageMessage = "Tool to get hardware sensor values";
 
 void PrintAllSensors(const SensorsProto& sensors, bool in_proto, bool in_json) {
     if (in_proto) {
