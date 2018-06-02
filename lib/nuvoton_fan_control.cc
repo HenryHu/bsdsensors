@@ -10,7 +10,10 @@
 
 namespace bsdsensors {
 
+using nuvoton::SmartFanIVRequest;
 using std::string;
+
+const uint8_t kInvalidControlTemp = 128;
 
 static double PowerToPercent(int power) { return 1.0 * power / 255 * 100.0; }
 
@@ -110,7 +113,76 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
         }
     }
 
+    Status HandleRequest(const SmartFanIVRequest& request) override {
+        switch (request.request_case()) {
+            case SmartFanIVRequest::kAddControlPoint: {
+                return AddControlPoint(request.add_control_point().temp(),
+                                       request.add_control_point().percent());
+            }
+            case SmartFanIVRequest::kDelControlPoint: {
+                return DelControlPoint(request.del_control_point().temp());
+            }
+            default: { return Status(ENOSYS, "Unknown request"); }
+        }
+    }
+
    private:
+    Status AddControlPoint(double temp, double percent) {
+        LOG(INFO) << "Adding control point at " << temp << ": " << percent
+                  << "%";
+
+        Observe();
+        for (auto& control_point : control_points_) {
+            if ((uint8_t)temp == control_point.temp) {
+                LOG(INFO) << "Found an existing control point.";
+                control_point.power = PercentToPower(percent);
+                return Apply();
+            }
+        }
+
+        // No existing point, create a new one
+        int free_count = 0;
+        for (const auto& control_point : control_points_) {
+            if (control_point.temp == kInvalidControlTemp) {
+                free_count++;
+            }
+        }
+        if (free_count == 0) {
+            return Status(ENOSPC, "No free slot. Delete control points first.");
+        }
+
+        for (int i = 0; i < control_points_.size(); i++) {
+            if (control_points_[i].temp > temp) {
+                for (int j = control_points_.size() - 1; j > i; j--) {
+                    control_points_[j] = control_points_[j - 1];
+                }
+                control_points_[i].temp = temp;
+                control_points_[i].power = PercentToPower(percent);
+                return Apply();
+            }
+        }
+        control_points_.rbegin()->temp = temp;
+        control_points_.rbegin()->power = PercentToPower(percent);
+
+        return Apply();
+    }
+
+    Status DelControlPoint(double temp) {
+        LOG(INFO) << "Deleting control point at " << temp;
+        RETURN_IF_ERROR(Observe());
+        for (int i = 0; i < control_points_.size(); i++) {
+            LOG(INFO) << (int)control_points_[i].temp;
+            if ((uint8_t)temp == control_points_[i].temp) {
+                for (int j = i + 1; j < info_.control_points.size(); j++) {
+                    control_points_[j - 1] = control_points_[j];
+                }
+                control_points_.rbegin()->temp = kInvalidControlTemp;
+                return Apply();
+            }
+        }
+        return Status(ENOENT, "Control point not found");
+    }
+
     std::vector<NuvotonFanControlSmartFan4ControlPoint> control_points_;
     NuvotonSmartFan4Info info_;
     NuvotonChip* chip_;
@@ -289,6 +361,9 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
                     case nuvoton::FanControlRequest::kManualChangePercent: {
                         return manual_->SetPower(
                             req.manual_change_percent().percent());
+                    }
+                    case nuvoton::FanControlRequest::kSmartFanIv: {
+                        return iv_->HandleRequest(req.smart_fan_iv());
                     }
                     default: { return Status(ENOSYS, "Request not supported"); }
                 }

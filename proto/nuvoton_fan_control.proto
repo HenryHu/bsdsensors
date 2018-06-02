@@ -26,8 +26,25 @@ message ManualChangePercentRequest {
     double percent = 1;
 }
 
+message AddControlPointRequest {
+    double temp = 1;
+    double percent = 2;
+}
+
+message DelControlPointRequest {
+    double temp = 1;
+}
+
+message SmartFanIVRequest {
+    oneof request {
+        AddControlPointRequest add_control_point = 1;
+        DelControlPointRequest del_control_point = 2;
+    }
+}
+
 message FanControlRequest {
     oneof request {
         ManualChangePercentRequest manual_change_percent = 1;
+        SmartFanIVRequest smart_fan_iv = 2;
     }
 }

@@ -34,7 +34,10 @@ class NuvotonFanControlManual : public FanControlMethod {
 };
 class NuvotonFanControlThermalCruise : public FanControlMethod {};
 class NuvotonFanControlSpeedCruise : public FanControlMethod {};
-class NuvotonFanControlSmartFan4 : public FanControlMethod {};
+class NuvotonFanControlSmartFan4 : public FanControlMethod {
+   public:
+    virtual Status HandleRequest(const nuvoton::SmartFanIVRequest& request) = 0;
+};
 
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip);
