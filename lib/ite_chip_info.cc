@@ -9,6 +9,4 @@
 
 namespace bsdsensors {
 
-KnownChips<ITEChipInfo> ITEChips;
-
 }  // namespace bsdsensors

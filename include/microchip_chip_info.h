@@ -19,8 +19,6 @@ struct MicrochipChipInfo {
     std::string name;
 };
 
-extern KnownChips<MicrochipChipInfo> MicrochipChips;
-
 }  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_MICROCHIP_CHIP_INFO_H__

@@ -9,6 +9,4 @@
 
 namespace bsdsensors {
 
-KnownChips<FintekChipInfo> FintekChips;
-
 }  // namespace bsdsensors

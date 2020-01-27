@@ -122,8 +122,6 @@ struct NuvotonChipInfo {
     std::vector<NuvotonVoltInfo> volts;
 };
 
-extern KnownChips<NuvotonChipInfo> NuvotonChips;
-
 }  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_NUVOTON_CHIP_INFO_H__

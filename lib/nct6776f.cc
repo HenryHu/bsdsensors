@@ -149,6 +149,6 @@ NuvotonChipInfo kNCT6776F{
         {"Vin3", {0, 0x26}},
     }};
 
-RegisterChip<NuvotonChipInfo> kRegisterNCT6776F(kNCT6776F, &NuvotonChips);
+RegisterChip<NuvotonChipInfo> kRegisterNCT6776F(kNCT6776F);
 
 }  // namespace bsdsensors

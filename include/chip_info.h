@@ -37,16 +37,21 @@ class KnownChips {
 };
 
 template <typename ChipInfo>
+KnownChips<ChipInfo>* GetKnownChips() {
+    static KnownChips<ChipInfo> known_chips;
+    return &known_chips;
+}
+
+template <typename ChipInfo>
 class RegisterChip {
    public:
-    RegisterChip(const ChipInfo& info, KnownChips<ChipInfo>* chips) {
-        chips->RegisterChipInfo(info);
+    RegisterChip(const ChipInfo& info) {
+        GetKnownChips<ChipInfo>()->RegisterChipInfo(info);
     }
 
     // Override device id
-    RegisterChip(const ChipInfo& info, KnownChips<ChipInfo>* chips,
-                 uint16_t device_id) {
-        chips->RegisterChipInfo(info, device_id);
+    RegisterChip(const ChipInfo& info, uint16_t device_id) {
+        GetKnownChips<ChipInfo>()->RegisterChipInfo(info, device_id);
     }
 };
 

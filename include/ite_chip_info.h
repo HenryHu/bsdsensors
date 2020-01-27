@@ -19,8 +19,6 @@ struct ITEChipInfo {
     std::string name;
 };
 
-extern KnownChips<ITEChipInfo> ITEChips;
-
 }  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_ITE_CHIP_INFO_H__

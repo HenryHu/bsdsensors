@@ -14,6 +14,6 @@ ITEChipInfo kIT8772E{
     "IT8772E",
 };
 
-RegisterChip<ITEChipInfo> kRegisterIT8772E(kIT8772E, &ITEChips);
+RegisterChip<ITEChipInfo> kRegisterIT8772E(kIT8772E);
 
 }  // namespace bsdsensors

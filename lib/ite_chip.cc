@@ -101,7 +101,7 @@ class ITEChipImpl : public ITEChip {
 
                     GetBaseAddress();
 
-                    info_ = ITEChips.Find(id);
+                    info_ = GetKnownChips<ITEChipInfo>()->Find(id);
                     if (info_ != nullptr) {
                         std::cout << "Known ITE Chip: " << info_->name
                                   << std::endl;

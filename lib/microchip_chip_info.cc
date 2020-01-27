@@ -9,6 +9,4 @@
 
 namespace bsdsensors {
 
-KnownChips<MicrochipChipInfo> MicrochipChips;
-
 }  // namespace bsdsensors

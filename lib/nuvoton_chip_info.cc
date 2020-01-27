@@ -9,8 +9,6 @@
 
 namespace bsdsensors {
 
-KnownChips<NuvotonChipInfo> NuvotonChips;
-
 const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
     {kSourceSYSTIN, "SYSTIN"},
     {kSourceCPUTIN, "CPUTIN"},

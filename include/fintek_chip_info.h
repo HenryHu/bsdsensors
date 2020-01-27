@@ -43,8 +43,6 @@ struct FintekChipInfo {
     std::vector<FintekVoltInfo> volts;
 };
 
-extern KnownChips<FintekChipInfo> FintekChips;
-
 }  // namespace bsdsensors
 
 #endif  // __BSDSENSORS_FINTEK_CHIP_INFO_H__

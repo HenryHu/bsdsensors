@@ -93,7 +93,7 @@ class MicrochipChipImpl : public MicrochipChip {
 
                     GetBaseAddress();
 
-                    info_ = MicrochipChips.Find(id);
+                    info_ = GetKnownChips<MicrochipChipInfo>()->Find(id);
                     if (info_ != nullptr) {
                         std::cout << "Known Microchip Chip: " << info_->name
                                   << std::endl;

@@ -180,6 +180,6 @@ NuvotonChipInfo kNCT6779D{
         {"Vin8", {4, 0x85}},
     }};
 
-RegisterChip<NuvotonChipInfo> kRegisterNCT6779D(kNCT6779D, &NuvotonChips);
+RegisterChip<NuvotonChipInfo> kRegisterNCT6779D(kNCT6779D);
 
 }  // namespace bsdsensors

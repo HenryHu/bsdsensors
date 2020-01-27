@@ -104,7 +104,7 @@ class NuvotonChipImpl : public NuvotonChip {
                     LOG(INFO) << "Found Nuvoton chip, ID: " << hex << "0x" << id
                               << " at 0x" << port;
 
-                    info_ = NuvotonChips.Find(id);
+                    info_ = GetKnownChips<NuvotonChipInfo>()->Find(id);
                     if (info_ != nullptr) {
                         LOG(INFO) << "Known Nuvoton Chip: " << info_->name;
                         LoadSensors();

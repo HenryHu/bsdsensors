@@ -97,7 +97,7 @@ class FintekChipImpl : public FintekChip {
                     std::cout << "Found Fintek chip, ID: " << std::hex << "0x"
                               << id << " at 0x" << port << std::endl;
 
-                    info_ = FintekChips.Find(id);
+                    info_ = GetKnownChips<FintekChipInfo>()->Find(id);
                     if (info_ != nullptr) {
                         std::cout << "Known Fintek Chip: " << info_->name
                                   << std::endl;

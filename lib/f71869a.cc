@@ -57,6 +57,6 @@ FintekChipInfo kF71869A{
     },
 };
 
-RegisterChip<FintekChipInfo> kRegisterF71869A(kF71869A, &FintekChips);
+RegisterChip<FintekChipInfo> kRegisterF71869A(kF71869A);
 
 }  // namespace bsdsensors

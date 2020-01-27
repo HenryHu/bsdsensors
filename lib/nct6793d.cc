@@ -202,6 +202,6 @@ const NuvotonChipInfo kNCT6793D = {
         {"Vin8", {4, 0x85}},
     }};
 
-RegisterChip<NuvotonChipInfo> kRegisterNCT6793D(kNCT6793D, &NuvotonChips);
+RegisterChip<NuvotonChipInfo> kRegisterNCT6793D(kNCT6793D);
 
 }  // namespace bsdsensors
