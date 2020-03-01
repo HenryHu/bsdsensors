@@ -63,6 +63,11 @@ int main(int argc, char** argv) {
     gflags::SetUsageMessage(kUsageMessage);
     gflags::ParseCommandLineFlags(&argc, &argv, true);
     google::InitGoogleLogging(argv[0]);
+    if (FLAGS_debug) {
+        FLAGS_minloglevel = 0; // INFO
+    } else {
+        FLAGS_minloglevel = 1; // WARNING
+    }
 
     if (!FLAGS_quiet) {
         FLAGS_logtostderr = true;

@@ -110,7 +110,7 @@ class NuvotonChipImpl : public NuvotonChip {
                         LoadSensors();
                         return true;
                     } else {
-                        LOG(INFO) << "Unknown Nuvoton Chip";
+                        LOG(ERROR) << "Unknown Nuvoton Chip";
                         return false;
                     }
                 }
