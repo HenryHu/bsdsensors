@@ -15,6 +15,8 @@ namespace bsdsensors {
 
 class TempSensor : public DumpAble {
    public:
+    virtual ~TempSensor() {}
+
     // Temperature in Celsius
     virtual double value() = 0;
     virtual std::string name() = 0;

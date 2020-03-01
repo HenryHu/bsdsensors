@@ -14,6 +14,8 @@
 class DeviceDb {
    public:
     virtual std::string Register(const std::string& name, int* assigned_no) = 0;
+
+    virtual ~DeviceDb() {}
 };
 
 std::unique_ptr<DeviceDb> CreateDeviceDb();

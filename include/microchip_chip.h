@@ -18,8 +18,10 @@ namespace bsdsensors {
 using MicrochipAddress = BasicAddress;
 
 class MicrochipChip : public Chip {
-   public:
+  public:
     using AddressType = MicrochipAddress;
+
+    virtual ~MicrochipChip() {}
 
     virtual Status Enter() = 0;
     virtual Status Exit() = 0;

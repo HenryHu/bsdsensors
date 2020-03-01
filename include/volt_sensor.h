@@ -15,7 +15,9 @@
 namespace bsdsensors {
 
 class VoltSensor : public DumpAble {
-   public:
+  public:
+    virtual ~VoltSensor() {}
+
     virtual std::string name() = 0;
     virtual double value() = 0;
 };

@@ -21,7 +21,9 @@
 namespace bsdsensors {
 
 class DumpAble {
-   public:
+  public:
+    virtual ~DumpAble() {}
+
     virtual void DumpInfo(std::ostream& out) = 0;
 };
 

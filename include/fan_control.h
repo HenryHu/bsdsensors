@@ -18,12 +18,15 @@
 namespace bsdsensors {
 
 class FanControl : public DumpAble {
-   public:
+  public:
+    virtual ~FanControl() {}
     virtual double current_percent() const = 0;
 };
 
 class FanControlMethod : public DumpAble {
-   public:
+  public:
+    virtual ~FanControlMethod() {}
+
     virtual std::string name() const = 0;
     virtual Status Observe() = 0;
     virtual Status Apply() = 0;

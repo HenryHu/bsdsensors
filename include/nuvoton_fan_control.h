@@ -17,7 +17,9 @@
 namespace bsdsensors {
 
 class NuvotonFanControl : public FanControl {
-   public:
+  public:
+    virtual ~NuvotonFanControl() {}
+
     virtual Status SetControlMode(NuvotonFanControlMode target) = 0;
     virtual Status SetControlMode(const std::string& target) = 0;
     virtual Status GetCurrentMethod(FanControlMethod** method) = 0;

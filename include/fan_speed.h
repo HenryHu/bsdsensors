@@ -14,7 +14,9 @@
 namespace bsdsensors {
 
 class FanSpeed : public DumpAble {
-   public:
+  public:
+    virtual ~FanSpeed() {}
+
     virtual double value() const = 0;
     virtual std::string name() const = 0;
 };

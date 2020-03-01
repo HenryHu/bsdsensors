@@ -18,6 +18,8 @@ namespace bsdsensors {
 
 class NuvotonTempSensor : public TempSensor {
    public:
+    virtual ~NuvotonTempSensor() {}
+
     double value() override = 0;
     std::string name() override = 0;
 

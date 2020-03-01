@@ -18,8 +18,10 @@ namespace bsdsensors {
 using FintekAddress = BasicAddress;
 
 class FintekChip : public Chip {
-   public:
+  public:
     using AddressType = BasicAddress;
+
+    virtual ~FintekChip() {}
 
     virtual Status Enter() = 0;
     virtual Status Exit() = 0;

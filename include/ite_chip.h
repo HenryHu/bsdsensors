@@ -18,8 +18,10 @@ namespace bsdsensors {
 using ITEAddress = BasicAddress;
 
 class ITEChip : public Chip {
-   public:
+  public:
     using AddressType = ITEAddress;
+
+    virtual ~ITEChip() {}
 
     virtual Status Enter() = 0;
     virtual Status Exit() = 0;
