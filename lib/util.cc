@@ -8,6 +8,7 @@
 #include "util.h"
 
 #include <iostream>
+#include <cassert>
 
 namespace bsdsensors {
 
