@@ -245,7 +245,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
                 *method = iv_.get();
                 break;
             }
-            default: { return Status(EINVAL, "Unknown fan control mode"); }
+            default: { return Status(EINVAL, "Unknown fan control mode: " + std::to_string(mode)); }
         }
         return OkStatus();
     }
