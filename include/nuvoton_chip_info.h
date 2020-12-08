@@ -51,6 +51,9 @@ enum NuvotonTempSource {
     kSource29 = 29,
     kSource30 = 30,
     kSource31 = 31,
+    kSourceVirtualTemp1 = 32,
+    kSourceVirtualTemp2 = 33,
+    kSourceVirtualTemp3 = 34,
 };
 
 using NuvotonTempSourceTable = std::map<NuvotonTempSource, uint8_t>;
@@ -58,6 +61,8 @@ using NuvotonTempSourceTable = std::map<NuvotonTempSource, uint8_t>;
 extern std::string GetNuvotonSourceName(NuvotonTempSource source);
 extern Status GetNuvotonSourceByName(const std::string& name,
                                      NuvotonTempSource* source);
+
+constexpr int kFastAccessBank = -1;
 
 struct NuvotonSmartFanInfo {
     bool available;

@@ -17,6 +17,7 @@
 
 #include <unistd.h>
 #include <iomanip>
+#include <optional>
 using namespace std;
 
 namespace bsdsensors {
@@ -36,6 +37,8 @@ const SuperIO::AddressType kLogicalDeviceEnabled = 0x30;
 const SuperIO::AddressType kPortBaseAddress = 0x60;
 const PortAddress kAddrPortOffset = 0x05;
 const PortAddress kDataPortOffset = 0x06;
+
+const SuperIO::AddressType kFastAccessControlRegister = 0x64;
 
 // const NuvotonChip::AddressType kConfigRegister = {0, 0x40};
 const NuvotonChip::AddressType kBankSelect = {0, 0x4E};
@@ -381,6 +384,26 @@ class NuvotonChipImpl : public NuvotonChip {
     }
 
    private:
+    Status ReadFastAccessByte(const NuvotonChip::AddressType& addr,
+            uint8_t* data) {
+        if (!fast_access_addr_.has_value()) {
+            RETURN_IF_ERROR(GetFastAccessAddress());
+        }
+        return port_io_->ReadByte(fast_access_addr_.value() + addr.addr, data);
+    }
+
+    Status GetFastAccessAddress() {
+        uint8_t base_high, base_low;
+        RETURN_IF_ERROR(io_->ReadByte(kFastAccessControlRegister, &base_high));
+        RETURN_IF_ERROR(io_->ReadByte(kFastAccessControlRegister + 1, &base_low));
+
+        const PortAddress port_base = Combine(base_high, base_low);
+        if (port_base == 0xffff) return Status(EINVAL, "Can't get fast access register");
+
+        fast_access_addr_ = port_base;
+        return OkStatus();
+    }
+
     std::unique_ptr<PortIO> port_io_;
     std::unique_ptr<SuperIO> io_;
 
@@ -388,6 +411,7 @@ class NuvotonChipImpl : public NuvotonChip {
     bool entered_;
     const NuvotonChipInfo* info_;
     std::string name_;
+    std::optional<PortAddress> fast_access_addr_;
 
     std::vector<std::unique_ptr<NuvotonFanSpeed>> fan_speeds_;
     std::vector<std::unique_ptr<NuvotonFanControl>> fan_controls_;
