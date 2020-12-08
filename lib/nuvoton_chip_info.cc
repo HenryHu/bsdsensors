@@ -41,6 +41,7 @@ const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
     {kSource29, "Source29"},
     {kSource30, "Source30"},
     {kSource31, "Source31"},
+    {kSourceVirtualTemp1, "VirtualTemp1"},
 };
 
 std::string GetNuvotonSourceName(NuvotonTempSource source) {
