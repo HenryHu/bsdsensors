@@ -28,6 +28,7 @@ DEFINE_bool(proto, false, "print raw proto");
 DEFINE_bool(json, false, "print proto in json");
 DEFINE_string(request, "", "request configuration change");
 DEFINE_string(chip, "", "specify which chip to print");
+DEFINE_bool(dump, false, "dump everything (can be dangerous)");
 
 using namespace std;
 using namespace bsdsensors;
@@ -86,6 +87,10 @@ int main(int argc, char** argv) {
 
             if (FLAGS_debug) {
                 chip->DumpInfo(cerr);
+            }
+
+            if (FLAGS_dump) {
+                chip->DumpAll(cerr);
             }
 
             if (!FLAGS_request.empty()) {

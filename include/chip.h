@@ -29,6 +29,8 @@ class Chip : public DumpAble {
     virtual void set_name(const std::string& name) = 0;
 
     virtual Status ProcessRequest(const Request& request) { return OkStatus(); }
+
+    virtual void DumpAll(std::ostream& out) {}
 };
 
 }  // namespace bsdsensors

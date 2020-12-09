@@ -271,17 +271,24 @@ class NuvotonChipImpl : public NuvotonChip {
         }
     }
 
-    void DumpAll(ostream& out) {
+    void DumpAll(ostream& out) override {
+        bool empty = true;
         for (uint8_t bank = 0; bank < 11; bank++) {
+            out << "Bank " << (int)bank << endl;
             for (int i = 0; i < 256; i++) {
                 uint8_t data;
                 CHECK(ReadByte({bank, i}, &data), "Fail to read byte");
                 if (data != 255 && data != 0) {
                     out << hex << (int)bank << "/" << setw(2) << i << ":" << dec
-                        << setw(3) << (int)data << " ";
+                        << setw(4) << (int)data << "  ";
+                    empty = false;
                 }
-                if ((i + 1) % 16 == 0) out << endl;
+                if ((i + 1) % 16 == 0 && !empty) {
+                    out << endl;
+                    empty = true;
+                }
             }
+            out << endl;
         }
     }
 
