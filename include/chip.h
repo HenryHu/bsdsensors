@@ -30,7 +30,9 @@ class Chip : public DumpAble {
 
     virtual Status ProcessRequest(const Request& request) { return OkStatus(); }
 
-    virtual void DumpAll(std::ostream& out) {}
+    virtual void DumpAll(std::ostream& out) {
+        out << "DumpAll not implemented." << std::endl;
+    }
 };
 
 }  // namespace bsdsensors
