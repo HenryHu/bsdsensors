@@ -54,6 +54,8 @@ enum NuvotonTempSource {
     kSourceVirtualTemp1 = 32,
     kSourceVirtualTemp2 = 33,
     kSourceVirtualTemp3 = 34,
+    kSourcePECI0Calib = 35,
+    kSourcePECI1Calib = 36,
 };
 
 using NuvotonTempSourceTable = std::map<NuvotonTempSource, uint8_t>;

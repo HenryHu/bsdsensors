@@ -42,6 +42,10 @@ const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
     {kSource30, "Source30"},
     {kSource31, "Source31"},
     {kSourceVirtualTemp1, "VirtualTemp1"},
+    {kSourceVirtualTemp2, "VirtualTemp2"},
+    {kSourceVirtualTemp3, "VirtualTemp3"},
+    {kSourcePECI0Calib, "PECI0Calibration"},
+    {kSourcePECI1Calib, "PECI1Calibration"},
 };
 
 std::string GetNuvotonSourceName(NuvotonTempSource source) {
