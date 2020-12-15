@@ -188,6 +188,39 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
     NuvotonChip* chip_;
 };
 
+class DummyNuvotonFanControlImpl : public NuvotonFanControl {
+  public:
+    Status SetControlMode(NuvotonFanControlMode target) override {
+        return Status(EINVAL, "No fan control");
+    }
+    Status SetControlMode(const std::string& target) override {
+        return Status(EINVAL, "No fan control");
+    }
+    Status SetTempSource(const std::string& name) override {
+        return Status(EINVAL, "No fan control");
+    }
+    Status GetCurrentMethod(FanControlMethod** method) override {
+        *method = &dummy_method_;
+        return OkStatus();
+    }
+    void FillState(FanControlProto* proto) override {}
+    Status HandleRequest(const FanControlRequest& request) override {
+        return Status(EINVAL, "No fan control");
+    }
+    void DumpInfo(std::ostream& out) override {}
+    double current_percent() const override { return 1.0; }
+
+  private:
+    class DummyNuvotonFanControlMethod : public FanControlMethod {
+        std::string name() const override { return "Dummy"; }
+        Status Observe() override { return OkStatus(); }
+        Status Apply() override { return OkStatus(); }
+        void DumpInfo(std::ostream& out) override {}
+        void FillState(FanControlMethodProto* proto) override {}
+    };
+    DummyNuvotonFanControlMethod dummy_method_;
+};
+
 class NuvotonFanControlImpl : public NuvotonFanControl {
    public:
     NuvotonFanControlImpl(const NuvotonFanControlInfo& info, NuvotonChip* chip)
@@ -385,6 +418,10 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip) {
     return std::make_unique<NuvotonFanControlImpl>(info, chip);
+}
+
+std::unique_ptr<NuvotonFanControl> CreateDummyNuvotonFanControl() {
+    return std::make_unique<DummyNuvotonFanControlImpl>();
 }
 
 std::ostream& operator<<(std::ostream& out,

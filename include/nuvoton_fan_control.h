@@ -44,6 +44,8 @@ class NuvotonFanControlSmartFan4 : public FanControlMethod {
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
     const NuvotonFanControlInfo& info, NuvotonChip* chip);
 
+std::unique_ptr<NuvotonFanControl> CreateDummyNuvotonFanControl();
+
 std::ostream& operator<<(std::ostream& out,
                          const nuvoton::FanControlMethod& method);
 

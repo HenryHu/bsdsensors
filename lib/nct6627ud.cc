@@ -20,18 +20,18 @@ const NuvotonChipInfo kNCT6627UD{
       {0, 0x28},
       {0, 0x5D, {6}, {0, 0x47, {7, 6}}},
       // Fan Control
-      {{0, 0x04, {5, 4}},
-       {0, 0x03},
-       true,
-       {0, 0x04, {1}},
-       {0, 0x03},
-       {0, 0x49, {2, 0}},
-       {1, 0x50},
-       {1, 0x51, {7}},
-       // Smart Fan I
-       {false},
-       // Smart Fan IV
-       {false}}},
+      NuvotonFanControlInfo{{0, 0x04, {5, 4}},
+                            {0, 0x03},
+                            true,
+                            {0, 0x04, {1}},
+                            {0, 0x03},
+                            {0, 0x49, {2, 0}},
+                            {1, 0x50},
+                            {1, 0x51, {7}},
+                            // Smart Fan I
+                            {false},
+                            // Smart Fan IV
+                            {false}}},
      {"SYSFAN",
       // RPM
       {},
@@ -39,18 +39,18 @@ const NuvotonChipInfo kNCT6627UD{
       {0, 0x29},
       {0, 0x5D, {5}, {0, 0x47, {5, 4}}},
       // Fan Control
-      {{0, 0x04, {3, 2}},
-       {0, 0x01},
-       true,
-       {0, 0x04, {0}},
-       {0, 0x01},
-       {0, 0x4A, {7, 5}},
-       {2, 0x50},
-       {2, 0x51, {7}},
-       // Smart Fan I
-       {false},
-       // Smart Fan IV
-       {false}}}},
+      NuvotonFanControlInfo{{0, 0x04, {3, 2}},
+                            {0, 0x01},
+                            true,
+                            {0, 0x04, {0}},
+                            {0, 0x01},
+                            {0, 0x4A, {7, 5}},
+                            {2, 0x50},
+                            {2, 0x51, {7}},
+                            // Smart Fan I
+                            {false},
+                            // Smart Fan IV
+                            {false}}}},
     // Temp sensors
     // Not used, different mapping for different sources
     {},

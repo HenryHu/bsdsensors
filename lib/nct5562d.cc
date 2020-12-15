@@ -37,69 +37,72 @@ const NuvotonChipInfo kNCT5562D = {
          /*count=*/{},
          /*divisor=*/{},
          // Fan Control
-         {/*mode_select=*/{1, 0x02, {7, 4}},   // documented
-          /*output_value_write=*/{1, 0x09},    // documented
-          /*support_dc=*/true,                 // documented
-          /*output_type=*/{0, 0x04, {0}},      // documented
-          /*output_value_read=*/{0, 0x01},     // documented
-          /*temp_source=*/{1, 0x00, {4, 0}},   // documented
-          /*temp_value_int=*/{0, 0x73},        // documented
-          /*temp_value_frac=*/{0, 0x74, {7}},  // documented
-          // Smart Fan I
-          {false},
-          // Smart Fan IV
-          {true,
-           // Control points
-           {{/*temp=*/{1, 0x21}, /*power=*/{1, 0x27}},      // documented
-            {/*temp=*/{1, 0x22}, /*power=*/{1, 0x28}},      // documented
-            {/*temp=*/{1, 0x23}, /*power=*/{1, 0x29}},      // documented
-            {/*temp=*/{1, 0x24}, /*power=*/{1, 0x2A}}}}}},  // documented
+         NuvotonFanControlInfo{
+             /*mode_select=*/{1, 0x02, {7, 4}},   // documented
+             /*output_value_write=*/{1, 0x09},    // documented
+             /*support_dc=*/true,                 // documented
+             /*output_type=*/{0, 0x04, {0}},      // documented
+             /*output_value_read=*/{0, 0x01},     // documented
+             /*temp_source=*/{1, 0x00, {4, 0}},   // documented
+             /*temp_value_int=*/{0, 0x73},        // documented
+             /*temp_value_frac=*/{0, 0x74, {7}},  // documented
+             // Smart Fan I
+             {false},
+             // Smart Fan IV
+             {true,
+              // Control points
+              {{/*temp=*/{1, 0x21}, /*power=*/{1, 0x27}},      // documented
+               {/*temp=*/{1, 0x22}, /*power=*/{1, 0x28}},      // documented
+               {/*temp=*/{1, 0x23}, /*power=*/{1, 0x29}},      // documented
+               {/*temp=*/{1, 0x24}, /*power=*/{1, 0x2A}}}}}},  // documented
         {"CPUFAN",
          /*rpm_high=*/{4, 0xC2},  // documented
          /*rpm_low=*/{4, 0xC3},   // documented
          /*count=*/{},
          /*divisor=*/{},
          // Fan Control
-         {/*mode_select=*/{2, 0x02, {7, 4}},  // documented
-          /*output_value_write=*/{2, 0x09},   // documented
-          /*support_dc=*/false,
-          /*output_type=*/{},
-          /*output_value_read=*/{0, 0x03},     // documented
-          /*temp_source=*/{2, 0x00, {4, 0}},   // documented
-          /*temp_value_int=*/{0, 0x75},        // documented
-          /*temp_value_frac=*/{0, 0x76, {7}},  // documented
-          // Smart Fan I
-          {false},
-          // Smart Fan IV
-          {true,
-           // Control points
-           {{/*temp=*/{2, 0x21}, /*power=*/{2, 0x27}},      // documented
-            {/*temp=*/{2, 0x22}, /*power=*/{2, 0x28}},      // documented
-            {/*temp=*/{2, 0x23}, /*power=*/{2, 0x29}},      // documented
-            {/*temp=*/{2, 0x24}, /*power=*/{2, 0x2A}}}}}},  // documented
+         NuvotonFanControlInfo{
+             /*mode_select=*/{2, 0x02, {7, 4}},  // documented
+             /*output_value_write=*/{2, 0x09},   // documented
+             /*support_dc=*/false,
+             /*output_type=*/{},
+             /*output_value_read=*/{0, 0x03},     // documented
+             /*temp_source=*/{2, 0x00, {4, 0}},   // documented
+             /*temp_value_int=*/{0, 0x75},        // documented
+             /*temp_value_frac=*/{0, 0x76, {7}},  // documented
+             // Smart Fan I
+             {false},
+             // Smart Fan IV
+             {true,
+              // Control points
+              {{/*temp=*/{2, 0x21}, /*power=*/{2, 0x27}},      // documented
+               {/*temp=*/{2, 0x22}, /*power=*/{2, 0x28}},      // documented
+               {/*temp=*/{2, 0x23}, /*power=*/{2, 0x29}},      // documented
+               {/*temp=*/{2, 0x24}, /*power=*/{2, 0x2A}}}}}},  // documented
         {"AUXFAN0",
          /*rpm_high=*/{4, 0xC4},  // documented
          /*rpm_low=*/{4, 0xC5},   // documented
          /*count=*/{},
          /*divisor=*/{},
          // Fan Control
-         {/*mode_select=*/{3, 0x02, {7, 4}},  // documented
-          /*output_value_write=*/{3, 0x09},   // documented
-          /*support_dc=*/false,
-          /*output_type=*/{},
-          /*output_value_read=*/{0, 0x11},     // documented
-          /*temp_source=*/{3, 0x00, {4, 0}},   // documented
-          /*temp_value_int=*/{0, 0x77},        // documented
-          /*temp_value_frac=*/{0, 0x78, {7}},  // documented
-          // Smart Fan I
-          {false},
-          // Smart Fan IV
-          {true,
-           // Control points
-           {{/*temp=*/{3, 0x21}, /*power=*/{3, 0x27}},      // documented
-            {/*temp=*/{3, 0x22}, /*power=*/{3, 0x28}},      // documented
-            {/*temp=*/{3, 0x23}, /*power=*/{3, 0x29}},      // documented
-            {/*temp=*/{3, 0x24}, /*power=*/{3, 0x2A}}}}}},  // documented
+         NuvotonFanControlInfo{
+             /*mode_select=*/{3, 0x02, {7, 4}},  // documented
+             /*output_value_write=*/{3, 0x09},   // documented
+             /*support_dc=*/false,
+             /*output_type=*/{},
+             /*output_value_read=*/{0, 0x11},     // documented
+             /*temp_source=*/{3, 0x00, {4, 0}},   // documented
+             /*temp_value_int=*/{0, 0x77},        // documented
+             /*temp_value_frac=*/{0, 0x78, {7}},  // documented
+             // Smart Fan I
+             {false},
+             // Smart Fan IV
+             {true,
+              // Control points
+              {{/*temp=*/{3, 0x21}, /*power=*/{3, 0x27}},      // documented
+               {/*temp=*/{3, 0x22}, /*power=*/{3, 0x28}},      // documented
+               {/*temp=*/{3, 0x23}, /*power=*/{3, 0x29}},      // documented
+               {/*temp=*/{3, 0x24}, /*power=*/{3, 0x2A}}}}}},  // documented
         {
             "AUXFAN1",
             /*rpm_high=*/{4, 0xC6},  // documented
@@ -107,20 +110,7 @@ const NuvotonChipInfo kNCT5562D = {
             /*count=*/{},
             /*divisor=*/{},
             // Fan Control
-            {
-                /*mode_select=*/{},
-                /*output_value_write=*/{},
-                /*support_dc=*/false,
-                /*output_type=*/{},
-                /*output_value_read=*/{},
-                /*temp_source=*/{},
-                /*temp_value_int=*/{},
-                /*temp_value_frac=*/{},
-                // Smart Fan I
-                {false},
-                // Smart Fan IV
-                {false},
-            },
+            std::nullopt,
         },
     },
     // Temp sensors

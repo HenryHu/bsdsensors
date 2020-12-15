@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
+#include <optional>
 
 #include "chip_info.h"
 #include "nuvoton_chip.h"
@@ -101,7 +102,7 @@ struct NuvotonFanInfo {
     std::string name;
     NuvotonChip::AddressType rpm_high, rpm_low;
     NuvotonChip::AddressType count, divisor;
-    NuvotonFanControlInfo control;
+    std::optional<NuvotonFanControlInfo> control;
 };
 
 struct NuvotonTempInfo {

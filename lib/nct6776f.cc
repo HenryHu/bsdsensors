@@ -38,72 +38,72 @@ NuvotonChipInfo kNCT6776F{
          {},
          // Fan Control
          // mode
-         {{1, 0x02, {7, 4}},
-          // out/w
-          {1, 0x09},
-          true,
-          // out/type
-          {0, 0x04, {0}},
-          // duty
-          {0, 0x01},
-          // temp
-          {1, 0x00, {4, 0}},
-          {0, 0x73},
-          {0, 0x74, {7}},
-          // Smart Fan I
-          {false},
-          // Smart Fan IV
-          {true,
-           // Control points
-           {{{1, 0x21}, {1, 0x27}},
-            {{1, 0x22}, {1, 0x28}},
-            {{1, 0x23}, {1, 0x29}},
-            {{1, 0x24}, {1, 0x2A}}}}}},
+         NuvotonFanControlInfo{{1, 0x02, {7, 4}},
+                               // out/w
+                               {1, 0x09},
+                               true,
+                               // out/type
+                               {0, 0x04, {0}},
+                               // duty
+                               {0, 0x01},
+                               // temp
+                               {1, 0x00, {4, 0}},
+                               {0, 0x73},
+                               {0, 0x74, {7}},
+                               // Smart Fan I
+                               {false},
+                               // Smart Fan IV
+                               {true,
+                                // Control points
+                                {{{1, 0x21}, {1, 0x27}},
+                                 {{1, 0x22}, {1, 0x28}},
+                                 {{1, 0x23}, {1, 0x29}},
+                                 {{1, 0x24}, {1, 0x2A}}}}}},
         {"CPUFAN",
          {6, 0x58},
          {6, 0x59},
          {},
          {},
          // Fan Control
-         {{2, 0x02, {7, 4}},
-          {2, 0x09},
-          false,
-          {0, 0x04, {1}},
-          {0, 0x03},
-          {2, 0x00, {4, 0}},
-          {0, 0x75},
-          {0, 0x76, {7}},
-          // Smart Fan I
-          {false},
-          // Smart Fan IV
-          {true,
-           // Control points
-           {{{2, 0x21}, {2, 0x27}},
-            {{2, 0x22}, {2, 0x28}},
-            {{2, 0x23}, {2, 0x29}},
-            {{2, 0x24}, {2, 0x2A}}}}}},
+         NuvotonFanControlInfo{{2, 0x02, {7, 4}},
+                               {2, 0x09},
+                               false,
+                               {0, 0x04, {1}},
+                               {0, 0x03},
+                               {2, 0x00, {4, 0}},
+                               {0, 0x75},
+                               {0, 0x76, {7}},
+                               // Smart Fan I
+                               {false},
+                               // Smart Fan IV
+                               {true,
+                                // Control points
+                                {{{2, 0x21}, {2, 0x27}},
+                                 {{2, 0x22}, {2, 0x28}},
+                                 {{2, 0x23}, {2, 0x29}},
+                                 {{2, 0x24}, {2, 0x2A}}}}}},
         {"AUXFAN",
          {6, 0x5A},
          {6, 0x5B},
          {},
          {},
-         {{3, 0x02, {7, 4}},
-          {3, 0x09},
-          false,
-          {0, 0x04, {2}},
-          {0, 0x11},
-          {3, 0x00, {4, 0}},
-          {0, 0x77},
-          {0, 0x78, {7}},
-          // Smart Fan I
-          {false},
-          // Smart Fan IV
-          {true,
-           // Control points
-           {{{3, 0x21}, {3, 0x27}},
-            {{3, 0x22}, {3, 0x28}},
-            {{3, 0x23}, {3, 0x29}},
-            {{3, 0x24}, {3, 0x2A}}}}}},
+         NuvotonFanControlInfo{{3, 0x02, {7, 4}},
+                               {3, 0x09},
+                               false,
+                               {0, 0x04, {2}},
+                               {0, 0x11},
+                               {3, 0x00, {4, 0}},
+                               {0, 0x77},
+                               {0, 0x78, {7}},
+                               // Smart Fan I
+                               {false},
+                               // Smart Fan IV
+                               {true,
+                                // Control points
+                                {{{3, 0x21}, {3, 0x27}},
+                                 {{3, 0x22}, {3, 0x28}},
+                                 {{3, 0x23}, {3, 0x29}},
+                                 {{3, 0x24}, {3, 0x2A}}}}}},
     },
     // Temp sensors
     kNCT6776FTempSource,

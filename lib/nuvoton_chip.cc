@@ -295,7 +295,11 @@ class NuvotonChipImpl : public NuvotonChip {
     void LoadSensors() {
         for (const auto& fan : info_->fans) {
             fan_speeds_.push_back(CreateNuvotonFanSpeed(fan, this));
-            fan_controls_.push_back(CreateNuvotonFanControl(fan.control, this));
+            if (fan.control.has_value()) {
+                fan_controls_.push_back(CreateNuvotonFanControl(*fan.control, this));
+            } else {
+                fan_controls_.push_back(CreateDummyNuvotonFanControl());
+            }
         }
         for (const auto& temp : info_->temps) {
             temp_sensors_.push_back(
