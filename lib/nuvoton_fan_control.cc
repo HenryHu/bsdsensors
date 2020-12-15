@@ -95,7 +95,18 @@ class NuvotonFanControlThermalCruiseImpl
 
     void FillState(FanControlMethodProto* proto) override {
         Observe();
-        // TODO: fill this.
+        nuvoton::FanControlMethod* method = proto->mutable_nuvoton_method();
+        nuvoton::ThermalCruiseParams* params =
+            method->mutable_thermal_cruise_params();
+        params->set_target_temp(target_temp);
+        params->set_tolerance(tolerance);
+        params->set_start_value(start_value);
+        params->set_stop_value(stop_value);
+        params->set_keep_min_output(keep_min_output);
+        params->set_stop_time(stop_time);
+        params->set_step_up_time(step_up_time);
+        params->set_step_down_time(step_down_time);
+        params->set_critical_temp(critical_temp);
     }
 
    private:
@@ -104,6 +115,18 @@ class NuvotonFanControlThermalCruiseImpl
     NuvotonThermalCruiseInfo info_;
     NuvotonChip* chip_;
 };
+
+std::ostream& operator<<(std::ostream& out,
+                         const nuvoton::ThermalCruiseParams& params) {
+    out << "    Target temp: " << params.target_temp() << "C" << " "
+        << "Tolerance: " << params.tolerance() << "C" << " "
+        << "Start value: " << params.start_value() << " Stop value: " << params.stop_value() << " "
+        << "Keep min output: " << params.keep_min_output() << std::endl;
+    out << "    Stop time: " << params.stop_time()
+        << " Step up time: " << params.step_up_time() << " " << "Step down time: " << params.step_down_time()
+        << " Critical temp: " << params.critical_temp() << "C" << std::endl;
+    return out;
+}
 
 class NuvotonFanControlSpeedCruiseImpl : public NuvotonFanControlSpeedCruise {
    public:
@@ -437,9 +460,9 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
             << " value: " << GetTempValue() << std::endl;
         out << "    control:";
         out << " Manual";
-        if (iv_) {
-            out << " SmartFanIV";
-        }
+        if (thermal_) out << " ThermalCruise";
+        if (speed_) out << " SpeedCruise";
+        if (iv_) out << " SmartFanIV";
         out << std::endl;
         if (iv_) {
             iv_->DumpInfo(out);
@@ -453,14 +476,17 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         if (manual_) {
             FanControlMethodProto* method = proto->add_methods();
             method->set_name(manual_->name());
+            manual_->FillState(method);
         }
         if (thermal_) {
             FanControlMethodProto* method = proto->add_methods();
             method->set_name(thermal_->name());
+            thermal_->FillState(method);
         }
         if (speed_) {
             FanControlMethodProto* method = proto->add_methods();
             method->set_name(speed_->name());
+            speed_->FillState(method);
         }
         if (iv_) {
             FanControlMethodProto* method = proto->add_methods();
@@ -521,11 +547,6 @@ std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
 
 std::unique_ptr<NuvotonFanControl> CreateDummyNuvotonFanControl() {
     return std::make_unique<DummyNuvotonFanControlImpl>();
-}
-
-std::ostream& operator<<(std::ostream& out,
-                         const nuvoton::ThermalCruiseParams& params) {
-    return out;
 }
 
 std::ostream& operator<<(std::ostream& out,
