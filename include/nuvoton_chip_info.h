@@ -67,8 +67,33 @@ extern Status GetNuvotonSourceByName(const std::string& name,
 
 constexpr int kFastAccessBank = -1;
 
+struct NuvotonThermalCruiseInfo {
+    NuvotonChip::AddressType target_temp;
+    NuvotonChip::AddressType tolerance;
+    NuvotonChip::AddressType start_value;
+    NuvotonChip::AddressType stop_value;
+    NuvotonChip::AddressType keep_min_output;
+    NuvotonChip::AddressType stop_time;
+    NuvotonChip::AddressType step_up_time;
+    NuvotonChip::AddressType step_down_time;
+    NuvotonChip::AddressType critical_temp;
+};
+
+struct NuvotonSpeedCruiseInfo {
+    NuvotonChip::AddressType target_speed_count_low;
+    NuvotonChip::AddressType target_speed_count_high;
+    NuvotonChip::AddressType tolerance_low;
+    NuvotonChip::AddressType tolerance_high;
+    NuvotonChip::AddressType step_up_time;
+    NuvotonChip::AddressType step_down_time;
+    NuvotonChip::AddressType step_up_value;
+    NuvotonChip::AddressType step_down_value;
+};
+
 struct NuvotonSmartFanInfo {
     bool available;
+    NuvotonThermalCruiseInfo thermal_cruise;
+    NuvotonSpeedCruiseInfo speed_cruise;
 };
 
 struct NuvotonSmartFan4ControlPointInfo {

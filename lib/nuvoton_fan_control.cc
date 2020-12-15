@@ -6,6 +6,7 @@
  */
 
 #include "nuvoton_fan_control.h"
+
 #include <iostream>
 
 namespace bsdsensors {
@@ -49,6 +50,91 @@ class NuvotonFanControlManualImpl : public NuvotonFanControlManual {
     uint8_t power;
 
     NuvotonChip::AddressType control_addr_;
+    NuvotonChip* chip_;
+};
+
+class NuvotonFanControlThermalCruiseImpl
+    : public NuvotonFanControlThermalCruise {
+   public:
+    NuvotonFanControlThermalCruiseImpl(const NuvotonThermalCruiseInfo& info,
+                                       NuvotonChip* chip)
+        : info_(info), chip_(chip) {}
+    string name() const override { return "Thermal Cruise"; };
+
+    Status Observe() override {
+        RETURN_IF_ERROR(chip_->ReadByte(info_.target_temp, &target_temp));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.tolerance, &tolerance));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.start_value, &start_value));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.stop_value, &stop_value));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.keep_min_output, &keep_min_output));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.stop_time, &stop_time));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.step_up_time, &step_up_time));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.step_down_time, &step_down_time));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.critical_temp, &critical_temp));
+        return OkStatus();
+    }
+
+    Status Apply() override {
+        RETURN_IF_ERROR(chip_->WriteByte(info_.target_temp, target_temp));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.tolerance, tolerance));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.start_value, start_value));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.stop_value, stop_value));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.keep_min_output, keep_min_output));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.stop_time, stop_time));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.step_up_time, step_up_time));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.step_down_time, step_down_time));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.critical_temp, critical_temp));
+        return OkStatus();
+    }
+
+    void DumpInfo(std::ostream& out) override {
+        Observe();
+        out << "      Thermal Cruise: ";
+        out << "Target: " << target_temp << " C";
+    }
+
+    void FillState(FanControlMethodProto* proto) override {
+        Observe();
+        // TODO: fill this.
+    }
+
+   private:
+    uint8_t target_temp, tolerance, start_value, stop_value;
+    uint8_t keep_min_output, stop_time, step_up_time, step_down_time, critical_temp;
+    NuvotonThermalCruiseInfo info_;
+    NuvotonChip* chip_;
+};
+
+class NuvotonFanControlSpeedCruiseImpl : public NuvotonFanControlSpeedCruise {
+   public:
+    NuvotonFanControlSpeedCruiseImpl(const NuvotonSpeedCruiseInfo& info,
+                                       NuvotonChip* chip)
+        : info_(info), chip_(chip) {}
+    string name() const override { return "Speed Cruise"; };
+
+    Status Observe() override {
+        // TODO: fill this.
+        return OkStatus();
+    }
+
+    Status Apply() override {
+        // TODO: fill this.
+        return OkStatus();
+    }
+
+    void DumpInfo(std::ostream& out) override {
+        Observe();
+        out << "      Speed Cruise: ";
+        // TODO: fill this.
+    }
+
+    void FillState(FanControlMethodProto* proto) override {
+        Observe();
+        // TODO: fill this.
+    }
+
+   private:
+    NuvotonSpeedCruiseInfo info_;
     NuvotonChip* chip_;
 };
 
@@ -122,7 +208,9 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
             case SmartFanIVRequest::kDelControlPoint: {
                 return DelControlPoint(request.del_control_point().temp());
             }
-            default: { return Status(ENOSYS, "Unknown request"); }
+            default: {
+                return Status(ENOSYS, "Unknown request");
+            }
         }
     }
 
@@ -189,7 +277,7 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
 };
 
 class DummyNuvotonFanControlImpl : public NuvotonFanControl {
-  public:
+   public:
     Status SetControlMode(NuvotonFanControlMode target) override {
         return Status(EINVAL, "No fan control");
     }
@@ -210,7 +298,7 @@ class DummyNuvotonFanControlImpl : public NuvotonFanControl {
     void DumpInfo(std::ostream& out) override {}
     double current_percent() const override { return 1.0; }
 
-  private:
+   private:
     class DummyNuvotonFanControlMethod : public FanControlMethod {
         std::string name() const override { return "Dummy"; }
         Status Observe() override { return OkStatus(); }
@@ -228,6 +316,10 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         manual_ = std::make_unique<NuvotonFanControlManualImpl>(
             info.output_value_write, chip);
         if (info.smart_fan.available) {
+            thermal_ = std::make_unique<NuvotonFanControlThermalCruiseImpl>(
+                info.smart_fan.thermal_cruise, chip);
+            speed_ = std::make_unique<NuvotonFanControlSpeedCruiseImpl>(
+                info.smart_fan.speed_cruise, chip);
         }
         if (info.smart_fan4.available) {
             iv_ = std::make_unique<NuvotonFanControlSmartFan4Impl>(
@@ -278,7 +370,10 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
                 *method = iv_.get();
                 break;
             }
-            default: { return Status(EINVAL, "Unknown fan control mode: " + std::to_string(mode)); }
+            default: {
+                return Status(EINVAL, "Unknown fan control mode: " +
+                                          std::to_string(mode));
+            }
         }
         return OkStatus();
     }
@@ -399,10 +494,14 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
                     case nuvoton::FanControlRequest::kSmartFanIv: {
                         return iv_->HandleRequest(req.smart_fan_iv());
                     }
-                    default: { return Status(ENOSYS, "Request not supported"); }
+                    default: {
+                        return Status(ENOSYS, "Request not supported");
+                    }
                 }
             }
-            default: { return Status(ENOSYS, "Request not supported"); }
+            default: {
+                return Status(ENOSYS, "Request not supported");
+            }
         }
     }
 

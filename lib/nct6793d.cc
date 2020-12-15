@@ -41,23 +41,47 @@ const NuvotonChipInfo kNCT6793D = {
          {},
          {},
          // Fan Control
-         NuvotonFanControlInfo{{1, 0x02, {7, 4}},
-                               {1, 0x09},
-                               true,
-                               {0, 0x04, {0}},
-                               {0, 0x01},
-                               {1, 0x00, {4, 0}},
-                               {0, 0x73},
-                               {0, 0x74, {7}},
-                               // Smart Fan I
-                               {false},
-                               // Smart Fan IV
-                               {true,
-                                // Control points
-                                {{{1, 0x21}, {1, 0x27}},
-                                 {{1, 0x22}, {1, 0x28}},
-                                 {{1, 0x23}, {1, 0x29}},
-                                 {{1, 0x24}, {1, 0x2A}}}}}},
+         NuvotonFanControlInfo{
+             {1, 0x02, {7, 4}},
+             {1, 0x09},
+             true,
+             {0, 0x04, {0}},
+             {0, 0x01},
+             {1, 0x00, {4, 0}},
+             {0, 0x73},
+             {0, 0x74, {7}},
+             // Smart Fan I
+             {true,
+              /*thermal_cruise=*/
+              {
+                  .target_temp = {1, 0x01},
+                  .tolerance = {1, 0x02, {2, 0}},
+                  .start_value = {1, 0x06},
+                  .stop_value = {1, 0x05},
+                  .keep_min_output = {1, 0x00, {7}},
+                  .stop_time = {1, 0x07},
+                  .step_up_time = {1, 0x03},
+                  .step_down_time = {1, 0x04},
+                  .critical_temp = {1, 0x35},
+              },
+              /*speed_cruise=*/
+              {
+                  .target_speed_count_low = {1, 0x01},
+                  .target_speed_count_high = {1, 0x0C, {3, 0}},
+                  .tolerance_low = {1, 0x02, {2, 0}},
+                  .tolerance_high = {1, 0x0C, {6, 4}},
+                  .step_up_time = {1, 0x03},
+                  .step_down_time = {1, 0x04},
+                  .step_up_value = {1, 0x66, {7, 4}},
+                  .step_down_value = {1, 0x66, {3, 0}},
+              }},
+             // Smart Fan IV
+             {true,
+              // Control points
+              {{{1, 0x21}, {1, 0x27}},
+               {{1, 0x22}, {1, 0x28}},
+               {{1, 0x23}, {1, 0x29}},
+               {{1, 0x24}, {1, 0x2A}}}}}},
         {"CPUFAN",
          {4, 0xC2},
          {4, 0xC3},
