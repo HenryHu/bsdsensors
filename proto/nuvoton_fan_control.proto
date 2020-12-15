@@ -6,6 +6,29 @@ message ManualParams {
     double percent = 1;
 }
 
+message ThermalCruiseParams {
+    double target_temp = 1;
+    double tolerance = 2;
+    double start_value = 3;
+    double stop_value = 4;
+    bool keep_min_output = 5;
+    double stop_time = 6;
+    double step_up_time = 7;
+    double step_down_time = 8;
+    double critical_temp = 9;
+};
+
+message SpeedCruiseParams {
+    double target_speed_count_low = 1;
+    double target_speed_count_high = 2;
+    double tolerance_low = 3;
+    double tolerance_high = 4;
+    double step_up_time = 5;
+    double step_down_time = 6;
+    double step_up_value = 7;
+    double step_down_value = 8;
+};
+
 message ControlPoint {
     double temp = 1;
     double percent = 2;
@@ -18,7 +41,9 @@ message SmartFanIVParams {
 message FanControlMethod {
     oneof params {
         ManualParams manual_params = 1;
-        SmartFanIVParams smart_fan_iv_params = 3;
+        ThermalCruiseParams thermal_cruise_params = 2;
+        SpeedCruiseParams speed_cruise_params = 3;
+        SmartFanIVParams smart_fan_iv_params = 4;
     }
 }
 

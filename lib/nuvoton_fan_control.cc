@@ -524,6 +524,16 @@ std::unique_ptr<NuvotonFanControl> CreateDummyNuvotonFanControl() {
 }
 
 std::ostream& operator<<(std::ostream& out,
+                         const nuvoton::ThermalCruiseParams& params) {
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out,
+                         const nuvoton::SpeedCruiseParams& params) {
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out,
                          const nuvoton::SmartFanIVParams& params) {
     bool first = true;
     out << "    ";
@@ -541,6 +551,14 @@ std::ostream& operator<<(std::ostream& out,
                          const nuvoton::FanControlMethod& method) {
     switch (method.params_case()) {
         case nuvoton::FanControlMethod::kManualParams: {
+            break;
+        }
+        case nuvoton::FanControlMethod::kThermalCruiseParams: {
+            out << method.thermal_cruise_params();
+            break;
+        }
+        case nuvoton::FanControlMethod::kSpeedCruiseParams: {
+            out << method.speed_cruise_params();
             break;
         }
         case nuvoton::FanControlMethod::kSmartFanIvParams: {
