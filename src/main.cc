@@ -50,10 +50,9 @@ void PrintAllSensors(const SensorsProto& sensors, bool in_proto, bool in_json) {
 
         google::protobuf::util::JsonPrintOptions options;
         options.add_whitespace = true;
-        options.always_print_primitive_fields = true;
         options.preserve_proto_field_names = true;
 
-        MessageToJsonString(sensors, &json_string, options);
+        ABSL_QCHECK_OK(MessageToJsonString(sensors, &json_string, options));
         cout << json_string << endl;
     } else {
         PrintSensorValues(sensors, cout);

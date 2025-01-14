@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.16)
 
 # metadata
 
@@ -9,9 +9,9 @@ set (bsdsensors_VERSION_MINOR 1)
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-find_package(Protobuf REQUIRED)
+find_package(protobuf CONFIG REQUIRED)
 find_package(gflags REQUIRED)
-find_package(Glog REQUIRED)
+find_package(glog REQUIRED)
 
 # config
 
@@ -44,9 +44,9 @@ set_target_properties(${PROJECT_NAME}-bin
 target_link_libraries(${PROJECT_NAME}-bin
     ${PROJECT_NAME}
     ${PROJECT_NAME}-protos
-    ${PROTOBUF_LIBRARIES}
+    protobuf::libprotobuf
     gflags
-    Glog::Glog
+    glog::glog
     )
 
 # install
