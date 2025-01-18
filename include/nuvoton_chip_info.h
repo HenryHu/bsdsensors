@@ -47,8 +47,6 @@ enum class NuvotonTempSource {
     kSourceDIM2 = 24,
     kSourceDIM3 = 25,
     kSourceBYTE = 26,
-    kSourceBYTE0 = 26,
-    kSourceBYTE1 = 27,
     kSource27 = 27,
     kSource28 = 28,
     kSource29 = 29,
@@ -60,6 +58,8 @@ enum class NuvotonTempSource {
     kSourcePECI0Calib = 35,
     kSourcePECI1Calib = 36,
     kSourceAUXTIN4 = 37,
+    kSourceBYTE0 = 38,
+    kSourceBYTE1 = 39,
 };
 
 constexpr int kMaxSource = 37;

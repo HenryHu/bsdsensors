@@ -36,6 +36,8 @@ const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
     {NuvotonTempSource::kSourceDIM2, "DIMM2"},
     {NuvotonTempSource::kSourceDIM3, "DIMM3"},
     {NuvotonTempSource::kSourceBYTE, "TSI_BYTE"},
+    {NuvotonTempSource::kSourceBYTE0, "TSI_BYTE0"},
+    {NuvotonTempSource::kSourceBYTE1, "TSI_BYTE1"},
     {NuvotonTempSource::kSource27, "Source27"},
     {NuvotonTempSource::kSource28, "Source28"},
     {NuvotonTempSource::kSource29, "Source29"},
