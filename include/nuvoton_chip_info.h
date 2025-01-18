@@ -19,7 +19,7 @@
 
 namespace bsdsensors {
 
-enum NuvotonTempSource {
+enum class NuvotonTempSource {
     kSourceUnknown = 0,
     kSourceSYSTIN = 1,
     kSourceCPUTIN = 2,
@@ -27,7 +27,6 @@ enum NuvotonTempSource {
     kSourceAUXTIN1 = 4,
     kSourceAUXTIN2 = 5,
     kSourceAUXTIN3 = 6,
-    kSourceAUXTIN4 = 7,
     kSourceReserved = 7,
     kSourceSMBUSMASTER0 = 8,
     kSourceSMBUSMASTER1 = 9,
@@ -60,7 +59,10 @@ enum NuvotonTempSource {
     kSourceVirtualTemp3 = 34,
     kSourcePECI0Calib = 35,
     kSourcePECI1Calib = 36,
+    kSourceAUXTIN4 = 37,
 };
+
+constexpr int kMaxSource = 37;
 
 using NuvotonTempSourceTable = std::map<NuvotonTempSource, uint8_t>;
 

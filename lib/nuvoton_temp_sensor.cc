@@ -55,6 +55,7 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
                 return entry.first;
             }
         }
+        LOG(WARNING) << "Temp source unknown: " << (int)source;
         return (NuvotonTempSource)source;
     }
 

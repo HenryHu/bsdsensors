@@ -281,8 +281,8 @@ class NuvotonChipImpl : public NuvotonChip {
         }
         if (!temp_sensors_.empty()) {
             NuvotonTempSource orig = temp_sensors_[0]->GetSource();
-            for (int i = 8; i < 32; i++) {
-                if (i == orig) continue;
+            for (int i = 8; i < kMaxSource; i++) {
+                if (i == (int)orig) continue;
                 temp_sensors_[0]->SetSource((NuvotonTempSource)i);
                 temp_sensors_[0]->DumpInfo(out);
             }
@@ -318,7 +318,8 @@ class NuvotonChipImpl : public NuvotonChip {
         for (const auto& fan : info_->fans) {
             fan_speeds_.push_back(CreateNuvotonFanSpeed(fan, this));
             if (fan.control.has_value()) {
-                fan_controls_.push_back(CreateNuvotonFanControl(*fan.control, this));
+                fan_controls_.push_back(CreateNuvotonFanControl(*fan.control,
+                            info_->temp_table, this));
             } else {
                 fan_controls_.push_back(CreateDummyNuvotonFanControl());
             }

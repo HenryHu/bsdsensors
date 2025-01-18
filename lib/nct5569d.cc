@@ -10,11 +10,11 @@
 namespace bsdsensors {
 
 std::map<NuvotonTempSource, uint8_t> kNCT5569DTempSource{
-    {kSourceCPUTIN, 1},       {kSourceAUXTIN2, 2},
-    {kSourceAUXTIN0, 3},      {kSourceAUXTIN1, 4},
-    {kSourcePECI0, 5},        {kSourcePECI1, 6},
-    {kSourceVirtualTemp1, 7}, {kSourceVirtualTemp2, 7},
-    {kSourceVirtualTemp3, 7},
+    {NuvotonTempSource::kSourceCPUTIN, 1},       {NuvotonTempSource::kSourceAUXTIN2, 2},
+    {NuvotonTempSource::kSourceAUXTIN0, 3},      {NuvotonTempSource::kSourceAUXTIN1, 4},
+    {NuvotonTempSource::kSourcePECI0, 5},        {NuvotonTempSource::kSourcePECI1, 6},
+    {NuvotonTempSource::kSourceVirtualTemp1, 7}, {NuvotonTempSource::kSourceVirtualTemp2, 7},
+    {NuvotonTempSource::kSourceVirtualTemp3, 7},
 };
 
 const NuvotonChipInfo kNCT5569D = {

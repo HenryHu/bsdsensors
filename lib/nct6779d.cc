@@ -10,22 +10,22 @@
 namespace bsdsensors {
 
 std::map<NuvotonTempSource, uint8_t> kNCT6779DTempSource{
-    {kSourceSYSTIN, 1},        {kSourceCPUTIN, 2},
-    {kSourceAUXTIN0, 3},       {kSourceAUXTIN1, 4},
-    {kSourceAUXTIN2, 5},       {kSourceAUXTIN3, 6},
-    {kSourceReserved, 7},      {kSourceSMBUSMASTER0, 8},
-    {kSourceSMBUSMASTER1, 9},  {kSourceSMBUSMASTER2, 10},
-    {kSourceSMBUSMASTER3, 11}, {kSourceSMBUSMASTER4, 12},
-    {kSourceSMBUSMASTER5, 13}, {kSourceSMBUSMASTER6, 14},
-    {kSourceSMBUSMASTER7, 15}, {kSourcePECI0, 16},
-    {kSourcePECI1, 17},        {kSourcePCHCPUMAX, 18},
-    {kSourcePCH, 19},          {kSourcePCHCPU, 20},
-    {kSourcePCHMCH, 21},       {kSourceDIM0, 22},
-    {kSourceDIM1, 23},         {kSourceDIM2, 24},
-    {kSourceDIM3, 25},         {kSourceBYTE, 26},
-    {kSource27, 27},           {kSource28, 28},
-    {kSource29, 29},           {kSource30, 30},
-    {kSource31, 31},
+    {NuvotonTempSource::kSourceSYSTIN, 1},        {NuvotonTempSource::kSourceCPUTIN, 2},
+    {NuvotonTempSource::kSourceAUXTIN0, 3},       {NuvotonTempSource::kSourceAUXTIN1, 4},
+    {NuvotonTempSource::kSourceAUXTIN2, 5},       {NuvotonTempSource::kSourceAUXTIN3, 6},
+    {NuvotonTempSource::kSourceReserved, 7},      {NuvotonTempSource::kSourceSMBUSMASTER0, 8},
+    {NuvotonTempSource::kSourceSMBUSMASTER1, 9},  {NuvotonTempSource::kSourceSMBUSMASTER2, 10},
+    {NuvotonTempSource::kSourceSMBUSMASTER3, 11}, {NuvotonTempSource::kSourceSMBUSMASTER4, 12},
+    {NuvotonTempSource::kSourceSMBUSMASTER5, 13}, {NuvotonTempSource::kSourceSMBUSMASTER6, 14},
+    {NuvotonTempSource::kSourceSMBUSMASTER7, 15}, {NuvotonTempSource::kSourcePECI0, 16},
+    {NuvotonTempSource::kSourcePECI1, 17},        {NuvotonTempSource::kSourcePCHCPUMAX, 18},
+    {NuvotonTempSource::kSourcePCH, 19},          {NuvotonTempSource::kSourcePCHCPU, 20},
+    {NuvotonTempSource::kSourcePCHMCH, 21},       {NuvotonTempSource::kSourceDIM0, 22},
+    {NuvotonTempSource::kSourceDIM1, 23},         {NuvotonTempSource::kSourceDIM2, 24},
+    {NuvotonTempSource::kSourceDIM3, 25},         {NuvotonTempSource::kSourceBYTE, 26},
+    {NuvotonTempSource::kSource27, 27},           {NuvotonTempSource::kSource28, 28},
+    {NuvotonTempSource::kSource29, 29},           {NuvotonTempSource::kSource30, 30},
+    {NuvotonTempSource::kSource31, 31},
 };
 
 NuvotonChipInfo kNCT6779D{

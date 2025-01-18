@@ -10,18 +10,18 @@
 namespace bsdsensors {
 
 std::map<NuvotonTempSource, uint8_t> kNCT5562DTempSource{
-    {kSourceCPUTIN, 2},        {kSourceAUXTIN0, 3},
-    {kSourceSMBUSMASTER0, 8},  {kSourceSMBUSMASTER1, 9},
-    {kSourceSMBUSMASTER2, 10}, {kSourceSMBUSMASTER3, 11},
-    {kSourceSMBUSMASTER4, 12}, {kSourceSMBUSMASTER5, 13},
-    {kSourceSMBUSMASTER6, 14}, {kSourceSMBUSMASTER7, 15},
-    {kSourcePECI0, 16},        {kSourcePECI1, 17},
-    {kSourcePCHCPUMAX, 18},    {kSourcePCH, 19},
-    {kSourcePCHCPU, 20},       {kSourcePCHMCH, 21},
-    {kSourceDIM0, 22},         {kSourceDIM1, 23},
-    {kSourceDIM2, 24},         {kSourceDIM3, 25},
-    {kSourceBYTE, 26},         {kSourcePECI0Calib, 27},
-    {kSourcePECI1Calib, 28},   {kSourceVirtualTemp1, 29},
+    {NuvotonTempSource::kSourceCPUTIN, 2},        {NuvotonTempSource::kSourceAUXTIN0, 3},
+    {NuvotonTempSource::kSourceSMBUSMASTER0, 8},  {NuvotonTempSource::kSourceSMBUSMASTER1, 9},
+    {NuvotonTempSource::kSourceSMBUSMASTER2, 10}, {NuvotonTempSource::kSourceSMBUSMASTER3, 11},
+    {NuvotonTempSource::kSourceSMBUSMASTER4, 12}, {NuvotonTempSource::kSourceSMBUSMASTER5, 13},
+    {NuvotonTempSource::kSourceSMBUSMASTER6, 14}, {NuvotonTempSource::kSourceSMBUSMASTER7, 15},
+    {NuvotonTempSource::kSourcePECI0, 16},        {NuvotonTempSource::kSourcePECI1, 17},
+    {NuvotonTempSource::kSourcePCHCPUMAX, 18},    {NuvotonTempSource::kSourcePCH, 19},
+    {NuvotonTempSource::kSourcePCHCPU, 20},       {NuvotonTempSource::kSourcePCHMCH, 21},
+    {NuvotonTempSource::kSourceDIM0, 22},         {NuvotonTempSource::kSourceDIM1, 23},
+    {NuvotonTempSource::kSourceDIM2, 24},         {NuvotonTempSource::kSourceDIM3, 25},
+    {NuvotonTempSource::kSourceBYTE, 26},         {NuvotonTempSource::kSourcePECI0Calib, 27},
+    {NuvotonTempSource::kSourcePECI1Calib, 28},   {NuvotonTempSource::kSourceVirtualTemp1, 29},
 };
 
 const NuvotonChipInfo kNCT5562D = {

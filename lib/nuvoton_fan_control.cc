@@ -334,8 +334,9 @@ class DummyNuvotonFanControlImpl : public NuvotonFanControl {
 
 class NuvotonFanControlImpl : public NuvotonFanControl {
    public:
-    NuvotonFanControlImpl(const NuvotonFanControlInfo& info, NuvotonChip* chip)
-        : info_(info), chip_(chip) {
+    NuvotonFanControlImpl(const NuvotonFanControlInfo& info,
+            const NuvotonTempSourceTable& temp_source_table, NuvotonChip* chip)
+        : info_(info), temp_source_table_(temp_source_table), chip_(chip) {
         manual_ = std::make_unique<NuvotonFanControlManualImpl>(
             info.output_value_write, chip);
         if (info.smart_fan.available) {
@@ -401,14 +402,32 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         return OkStatus();
     }
 
+    NuvotonTempSource GetTempSourceById(const uint8_t source_id) {
+        for (const auto& [source, id] : temp_source_table_) {
+            if (id == source_id) return source;
+        }
+        LOG(ERROR) << "Can't find temp source with ID: " << (int)source_id;
+        return (NuvotonTempSource)source_id;
+    }
+
+    uint8_t GetTempSourceId(const NuvotonTempSource source) {
+        const auto id_iter = temp_source_table_.find(source);
+        if (id_iter == temp_source_table_.end()) {
+            LOG(ERROR) << "Temp source " << GetNuvotonSourceName(source)
+                << " does not exist for this chip.";
+            return (uint8_t)source;
+        }
+        return id_iter->second;
+    }
+
     NuvotonTempSource GetTempSource() {
         uint8_t source;
         chip_->ReadByte(info_.temp_source, &source);
-        return (NuvotonTempSource)source;
+        return GetTempSourceById(source);
     }
 
     Status SetTempSource(NuvotonTempSource source) {
-        return chip_->WriteByte(info_.temp_source, source);
+        return chip_->WriteByte(info_.temp_source, GetTempSourceId(source));
     }
 
     double GetTempValue() {
@@ -423,7 +442,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     Status SetTempSource(const string& name) override {
         NuvotonTempSource source;
         RETURN_IF_ERROR(GetNuvotonSourceByName(name, &source));
-        if (source == kSourceUnknown) {
+        if (source == NuvotonTempSource::kSourceUnknown) {
             return Status(EINVAL, "Invalid temp source name " + name);
         } else {
             return SetTempSource(source);
@@ -533,6 +552,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
 
    private:
     NuvotonFanControlInfo info_;
+    NuvotonTempSourceTable temp_source_table_;
     NuvotonChip* chip_;
     std::unique_ptr<NuvotonFanControlManual> manual_;
     std::unique_ptr<NuvotonFanControlThermalCruise> thermal_;
@@ -541,8 +561,9 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
 };
 
 std::unique_ptr<NuvotonFanControl> CreateNuvotonFanControl(
-    const NuvotonFanControlInfo& info, NuvotonChip* chip) {
-    return std::make_unique<NuvotonFanControlImpl>(info, chip);
+    const NuvotonFanControlInfo& info, const NuvotonTempSourceTable& table,
+    NuvotonChip* chip) {
+    return std::make_unique<NuvotonFanControlImpl>(info, table, chip);
 }
 
 std::unique_ptr<NuvotonFanControl> CreateDummyNuvotonFanControl() {
