@@ -136,29 +136,77 @@ class NuvotonFanControlSpeedCruiseImpl : public NuvotonFanControlSpeedCruise {
     string name() const override { return "Speed Cruise"; };
 
     Status Observe() override {
-        // TODO: fill this.
+        RETURN_IF_ERROR(chip_->ReadByte(info_.target_speed_count_low,
+                    &target_speed_count_low_));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.target_speed_count_high,
+                    &target_speed_count_high_));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.tolerance_low,
+                    &tolerance_low_));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.tolerance_high,
+                    &tolerance_high_));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.step_up_time,
+                    &step_up_time_));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.step_down_time,
+                    &step_down_time_));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.step_up_value,
+                    &step_up_value_));
+        RETURN_IF_ERROR(chip_->ReadByte(info_.step_down_value,
+                    &step_down_value_));
         return OkStatus();
     }
 
     Status Apply() override {
-        // TODO: fill this.
+        RETURN_IF_ERROR(chip_->WriteByte(info_.target_speed_count_low,
+                    target_speed_count_low_));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.target_speed_count_high,
+                    target_speed_count_high_));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.tolerance_low,
+                    tolerance_low_));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.tolerance_high,
+                    tolerance_high_));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.step_up_time,
+                    step_up_time_));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.step_down_time,
+                    step_down_time_));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.step_up_value,
+                    step_up_value_));
+        RETURN_IF_ERROR(chip_->WriteByte(info_.step_down_value,
+                    step_down_value_));
         return OkStatus();
     }
 
     void DumpInfo(std::ostream& out) override {
         Observe();
-        out << "      Speed Cruise: ";
-        // TODO: fill this.
+        out << "      Speed Cruise: " << std::endl;
+        out << "Target speed count: " << Combine(target_speed_count_high_, target_speed_count_low_) << std::endl;
+        out << "Tolerance: " << Combine(tolerance_high_, tolerance_low_) << std::endl;
+        out << "Step up - time: " << step_up_time_ << " value: " << step_up_value_ << std::endl;
+        out << "Step down - time: " << step_down_time_ << " value: " << step_down_value_ << std::endl;
     }
 
     void FillState(FanControlMethodProto* proto) override {
         Observe();
-        // TODO: fill this.
+        nuvoton::FanControlMethod* method = proto->mutable_nuvoton_method();
+        nuvoton::SpeedCruiseParams& params =
+            *method->mutable_speed_cruise_params();
+        params.set_target_speed_count_high(target_speed_count_high_);
+        params.set_target_speed_count_low(target_speed_count_low_);
+        params.set_tolerance_high(tolerance_high_);
+        params.set_tolerance_low(tolerance_low_);
+        params.set_step_up_time(step_up_time_);
+        params.set_step_down_time(step_down_time_);
+        params.set_step_up_value(step_up_value_);
+        params.set_step_down_value(step_down_value_);
     }
 
    private:
     NuvotonSpeedCruiseInfo info_;
     NuvotonChip* chip_;
+
+    uint8_t target_speed_count_low_, target_speed_count_high_;
+    uint8_t tolerance_low_, tolerance_high_;
+    uint8_t step_up_time_, step_down_time_;
+    uint8_t step_up_value_, step_down_value_;
 };
 
 struct NuvotonFanControlSmartFan4ControlPoint {
@@ -572,6 +620,10 @@ std::unique_ptr<NuvotonFanControl> CreateDummyNuvotonFanControl() {
 
 std::ostream& operator<<(std::ostream& out,
                          const nuvoton::SpeedCruiseParams& params) {
+    out << "    Target speed count: " << Combine(params.target_speed_count_high(), params.target_speed_count_low()) << std::endl;
+    out << "    Tolerance: " << Combine(params.tolerance_high(), params.tolerance_low()) << std::endl;
+    out << "    Step up - time: " << params.step_up_time() << " value: " << params.step_up_value() << std::endl;
+    out << "    Step down - time: " << params.step_down_time() << " value: " << params.step_down_value() << std::endl;
     return out;
 }
 
