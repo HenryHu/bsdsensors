@@ -183,6 +183,7 @@ class NuvotonChipImpl : public NuvotonChip {
         } else {
             *data = my_part;
         }
+        VLOG(1) << "read from " << addr << " result " << (int)*data;
         return OkStatus();
     }
 

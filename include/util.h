@@ -62,6 +62,11 @@ struct Bits {
     int total_width() const { return width() + other_parts_len; }
 };
 
+inline std::ostream& operator<<(std::ostream& os, const Bits& bits) {
+    os << "{" << bits.first << ":" << bits.last << "}";
+    return os;
+}
+
 extern uint8_t BitsFromByte(const Bits& bits, uint8_t byte);
 extern uint8_t BitsToByte(const Bits& bits, uint8_t byte, uint8_t value);
 

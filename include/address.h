@@ -44,6 +44,18 @@ struct BankedAddress {
     }
 };
 
+inline std::ostream& operator<< (std::ostream& os, const BankedAddress& addr) {
+    os << "{" << addr.bank << ", " << std::hex << "0x" << addr.addr << std::dec;
+    if (!addr.bits.full()) {
+        os << ", " << addr.bits;
+    }
+    if (addr.next != nullptr) {
+        os << ", " << *addr.next;
+    }
+    os << "}";
+    return os;
+}
+
 struct BasicAddress {
     int addr;
     Bits bits;
