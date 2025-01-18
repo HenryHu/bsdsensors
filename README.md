@@ -28,6 +28,11 @@ Getting sensor values on FreeBSD
     Document not available. Based on NCT6779D.
     Tested on ASUS Z270-A PRIME
 
+* NCT6796D
+
+    Document available.
+    Tested on ASUS PRIME Z790-A WIFI
+
 ## ITE
 
 * IT8772E (WIP)
