@@ -16,7 +16,7 @@ const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
     {kSourceAUXTIN1, "AUXTIN1"},
     {kSourceAUXTIN2, "AUXTIN2"},
     {kSourceAUXTIN3, "AUXTIN3"},
-    {kSourceReserved, "Reserved"},
+    {kSourceAUXTIN4, "AUXTIN4"},
     {kSourceSMBUSMASTER0, "SMBUS0"},
     {kSourceSMBUSMASTER1, "SMBUS1"},
     {kSourceSMBUSMASTER2, "SMBUS2"},
