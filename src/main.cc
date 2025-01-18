@@ -75,54 +75,60 @@ int main(int argc, char** argv) {
 
     std::unique_ptr<DeviceDb> dev_db = CreateDeviceDb();
 
+    bool detected = false;
     for (const auto& CreateChip : kCreateChips) {
         auto chip = CreateChip();
-        if (chip->Detect()) {
-            chip->set_name(dev_db->Register(chip->name(), nullptr));
+        if (!chip->Detect()) continue;
+        detected = true;
+        chip->set_name(dev_db->Register(chip->name(), nullptr));
 
-            if (!FLAGS_chip.empty() && FLAGS_chip != chip->name()) {
+        if (!FLAGS_chip.empty() && FLAGS_chip != chip->name()) {
+            continue;
+        }
+
+        if (FLAGS_debug) {
+            chip->DumpInfo(cerr);
+        }
+
+        if (FLAGS_dump) {
+            chip->DumpAll(cerr);
+        }
+
+        if (!FLAGS_request.empty()) {
+            Request request;
+            if (!JsonStringToMessage(FLAGS_request, &request,
+                        JsonParseOptions())
+                    .ok() &&
+                    !TextFormat::ParseFromString(FLAGS_request, &request)) {
+                LOG(ERROR) << "Malformed request " << FLAGS_request;
                 continue;
             }
 
-            if (FLAGS_debug) {
-                chip->DumpInfo(cerr);
-            }
-
-            if (FLAGS_dump) {
-                chip->DumpAll(cerr);
-            }
-
-            if (!FLAGS_request.empty()) {
-                Request request;
-                if (!JsonStringToMessage(FLAGS_request, &request,
-                                         JsonParseOptions())
-                         .ok() &&
-                    !TextFormat::ParseFromString(FLAGS_request, &request)) {
-                    LOG(ERROR) << "Malformed request " << FLAGS_request;
-                    continue;
-                }
-
-                Status status = chip->ProcessRequest(request);
-                if (!status.ok()) {
-                    LOG(ERROR) << "Process error: " << status.error_message();
-                } else {
-                    LOG(INFO) << "Request processed";
-                }
+            Status status = chip->ProcessRequest(request);
+            if (!status.ok()) {
+                LOG(ERROR) << "Process error: " << status.error_message();
             } else {
-                SensorsProto sensors;
-                Status status = chip->GetSensorValues(&sensors);
-                if (!status.ok()) {
-                    LOG(ERROR)
-                        << "Error reading sensors: " << status.error_message();
-                    continue;
-                }
-                if (FLAGS_sensors.empty()) {
-                    PrintAllSensors(sensors, FLAGS_proto, FLAGS_json);
-                } else {
-                    PrintSelectedSensors(sensors, FLAGS_sensors, FLAGS_value,
-                                         cout);
-                }
+                LOG(INFO) << "Request processed";
+            }
+        } else {
+            SensorsProto sensors;
+            Status status = chip->GetSensorValues(&sensors);
+            if (!status.ok()) {
+                LOG(ERROR)
+                    << "Error reading sensors: " << status.error_message();
+                continue;
+            }
+            if (FLAGS_sensors.empty()) {
+                PrintAllSensors(sensors, FLAGS_proto, FLAGS_json);
+            } else {
+                PrintSelectedSensors(sensors, FLAGS_sensors, FLAGS_value,
+                        cout);
             }
         }
+    }
+
+    if (!detected) {
+        LOG(ERROR) << "No chip detected. Make sure you're running with root privilege.";
+        LOG(ERROR) << "You can also try to run with --debug.";
     }
 }
