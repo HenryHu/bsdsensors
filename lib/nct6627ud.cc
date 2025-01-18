@@ -22,6 +22,7 @@ const NuvotonChipInfo kNCT6627UD{
       // Fan Control
       NuvotonFanControlInfo{{0, 0x04, {5, 4}},
                             {0, 0x03},
+                            {},
                             true,
                             {0, 0x04, {1}},
                             {0, 0x03},
@@ -41,6 +42,7 @@ const NuvotonChipInfo kNCT6627UD{
       // Fan Control
       NuvotonFanControlInfo{{0, 0x04, {3, 2}},
                             {0, 0x01},
+                            {},
                             true,
                             {0, 0x04, {0}},
                             {0, 0x01},

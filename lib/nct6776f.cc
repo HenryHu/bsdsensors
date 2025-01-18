@@ -41,6 +41,7 @@ NuvotonChipInfo kNCT6776F{
          NuvotonFanControlInfo{{1, 0x02, {7, 4}},
                                // out/w
                                {1, 0x09},
+                               {},
                                true,
                                // out/type
                                {0, 0x04, {0}},
@@ -67,6 +68,7 @@ NuvotonChipInfo kNCT6776F{
          // Fan Control
          NuvotonFanControlInfo{{2, 0x02, {7, 4}},
                                {2, 0x09},
+                               {},
                                false,
                                {0, 0x04, {1}},
                                {0, 0x03},
@@ -89,6 +91,7 @@ NuvotonChipInfo kNCT6776F{
          {},
          NuvotonFanControlInfo{{3, 0x02, {7, 4}},
                                {3, 0x09},
+                               {},
                                false,
                                {0, 0x04, {2}},
                                {0, 0x11},

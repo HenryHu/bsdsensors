@@ -32,6 +32,7 @@ const NuvotonChipInfo kNCT5569D = {
          // Fan Control
          NuvotonFanControlInfo{/*mode_select=*/{1, 0x02, {7, 4}},
                                /*output_value_write=*/{1, 0x09},
+                               /*output_value_write_dc=*/{},
                                /*support_dc=*/false,
                                /*output_type=*/{},
                                /*output_value_read=*/{kFastAccessBank, 0x4C},
@@ -55,6 +56,7 @@ const NuvotonChipInfo kNCT5569D = {
          // Fan Control
          NuvotonFanControlInfo{/*mode_select=*/{2, 0x02, {7, 4}},
                                /*output_value_write=*/{2, 0x09},
+                               /*output_value_write_dc=*/{},
                                /*support_dc=*/false,
                                /*output_type=*/{},
                                /*output_value_read=*/{kFastAccessBank, 0x4D},
@@ -78,6 +80,7 @@ const NuvotonChipInfo kNCT5569D = {
          // Fan Control
          NuvotonFanControlInfo{/*mode_select=*/{3, 0x02, {7, 4}},
                                /*output_value_write=*/{3, 0x09},
+                               /*output_value_write_dc=*/{},
                                /*support_dc=*/false,
                                /*output_type=*/{},
                                /*output_value_read=*/{kFastAccessBank, 0x4E},

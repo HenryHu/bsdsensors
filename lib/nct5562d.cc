@@ -40,6 +40,7 @@ const NuvotonChipInfo kNCT5562D = {
          NuvotonFanControlInfo{
              /*mode_select=*/{1, 0x02, {7, 4}},   // documented
              /*output_value_write=*/{1, 0x09},    // documented
+             /*output_value_write_dc=*/{},
              /*support_dc=*/true,                 // documented
              /*output_type=*/{0, 0x04, {0}},      // documented
              /*output_value_read=*/{0, 0x01},     // documented
@@ -64,6 +65,7 @@ const NuvotonChipInfo kNCT5562D = {
          NuvotonFanControlInfo{
              /*mode_select=*/{2, 0x02, {7, 4}},  // documented
              /*output_value_write=*/{2, 0x09},   // documented
+             /*output_value_write_dc=*/{},
              /*support_dc=*/false,
              /*output_type=*/{},
              /*output_value_read=*/{0, 0x03},     // documented
@@ -88,6 +90,7 @@ const NuvotonChipInfo kNCT5562D = {
          NuvotonFanControlInfo{
              /*mode_select=*/{3, 0x02, {7, 4}},  // documented
              /*output_value_write=*/{3, 0x09},   // documented
+             /*output_value_write_dc=*/{},
              /*support_dc=*/false,
              /*output_type=*/{},
              /*output_value_read=*/{0, 0x11},     // documented

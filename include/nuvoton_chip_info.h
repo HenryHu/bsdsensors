@@ -117,7 +117,7 @@ enum NuvotonFanControlMode {
 };
 
 struct NuvotonFanControlInfo {
-    NuvotonChip::AddressType mode_select, output_value_write;
+    NuvotonChip::AddressType mode_select, output_value_write, output_value_write_dc;
     bool support_dc;
     // If support_dc = false, then output_type is invalid
     NuvotonChip::AddressType output_type, output_value_read;

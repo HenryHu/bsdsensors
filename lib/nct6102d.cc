@@ -38,6 +38,7 @@ const NuvotonChipInfo kNCT6102D = {
          // Fan Control
          NuvotonFanControlInfo{{1, 0x13, {7, 4}},
                                {1, 0x19},
+                               {},
                                true,
                                {0, 0xF3, {0}},
                                {0, 0x4A},
@@ -61,6 +62,7 @@ const NuvotonChipInfo kNCT6102D = {
          // Fan Control
          NuvotonFanControlInfo{{1, 0x23, {7, 4}},
                                {1, 0x29},
+                               {},
                                true,
                                {0, 0xF3, {1}},
                                {0, 0x4B},
@@ -83,6 +85,7 @@ const NuvotonChipInfo kNCT6102D = {
          {},
          NuvotonFanControlInfo{{1, 0x33, {7, 4}},
                                {1, 0x39},
+                               {},
                                true,
                                {0, 0xF3, {2}},
                                {0, 0x4C},
