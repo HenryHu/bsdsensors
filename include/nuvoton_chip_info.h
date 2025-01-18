@@ -111,7 +111,7 @@ struct NuvotonSmartFan4Info {
     std::vector<NuvotonSmartFan4ControlPointInfo> control_points;
 };
 
-enum NuvotonFanControlMode {
+enum class NuvotonFanControlMode {
     kManualMode = 0,
     kThermalCruise = 1,
     kSpeedCruise = 2,

@@ -10,21 +10,33 @@
 #include <iostream>
 
 namespace bsdsensors {
+namespace {
 
 using nuvoton::SmartFanIVRequest;
 using std::string;
 
 const uint8_t kInvalidControlTemp = 128;
 
-static double PowerToPercent(int power) { return 1.0 * power / 255 * 100.0; }
+double PowerToPercent(int power) { return 1.0 * power / 255 * 100.0; }
 
-static uint8_t PercentToPower(int percent) {
+uint8_t PercentToPower(int percent) {
     int power = percent / 100.0 * 255;
     if (power >= 255) {
         return 255;
     } else {
         return power;
     }
+}
+
+std::string GetControlModeName(const NuvotonFanControlMode mode) {
+    switch (mode) {
+        case NuvotonFanControlMode::kManualMode: return "Manual";
+        case NuvotonFanControlMode::kThermalCruise: return "Thermal Cruise";
+        case NuvotonFanControlMode::kSpeedCruise: return "Speed Cruise";
+        case NuvotonFanControlMode::kSmartFan4: return "SmartFanIV";
+    }
+    return "Unknown: " + std::to_string((int)mode);
+}
 }
 
 class NuvotonFanControlManualImpl : public NuvotonFanControlManual {
@@ -414,7 +426,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     Status SetControlMode(NuvotonFanControlMode target) override {
-        return chip_->WriteByte(info_.mode_select, target);
+        return chip_->WriteByte(info_.mode_select, (int)target);
     }
 
     Status SetControlMode(const std::string& target) override {
@@ -426,25 +438,25 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     Status GetCurrentMethod(FanControlMethod** method) override {
         NuvotonFanControlMode mode = GetControlMode();
         switch (mode) {
-            case kManualMode: {
+            case NuvotonFanControlMode::kManualMode: {
                 *method = manual_.get();
                 break;
             }
-            case kThermalCruise: {
+            case NuvotonFanControlMode::kThermalCruise: {
                 *method = thermal_.get();
                 break;
             }
-            case kSpeedCruise: {
+            case NuvotonFanControlMode::kSpeedCruise: {
                 *method = speed_.get();
                 break;
             }
-            case kSmartFan4: {
+            case NuvotonFanControlMode::kSmartFan4: {
                 *method = iv_.get();
                 break;
             }
             default: {
                 return Status(EINVAL, "Unknown fan control mode: " +
-                                          std::to_string(mode));
+                                          std::to_string(int(mode)));
             }
         }
         return OkStatus();
@@ -500,29 +512,7 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     void DumpInfo(std::ostream& out) override {
         out << "    at " << std::dec << (int)(current_percent() * 100) << "%"
             << " with ";
-        switch (GetControlMode()) {
-            case kManualMode: {
-                out << "Manual";
-                break;
-            }
-            case kThermalCruise: {
-                out << "ThermalCruise";
-                break;
-            }
-            case kSpeedCruise: {
-                out << "SpeedCruise";
-                break;
-            }
-            case kSmartFan4: {
-                out << "SmartFanIV";
-                break;
-            }
-            default: {
-                out << "Unknown: " << (int)GetControlMode();
-                break;
-            }
-        }
-        out << std::endl;
+        out << GetControlModeName(GetControlMode()) << std::endl;
         out << "    temp source: " << GetNuvotonSourceName(GetTempSource())
             << " value: " << GetTempValue() << std::endl;
         out << "    control:";
@@ -669,11 +659,11 @@ std::ostream& operator<<(std::ostream& out,
 Status ParseNuvotonFanControlMode(const std::string& str_mode,
                                   NuvotonFanControlMode* mode) {
     if (str_mode == "Manual") {
-        *mode = kManualMode;
+        *mode = NuvotonFanControlMode::kManualMode;
         return OkStatus();
     }
     if (str_mode == "SmartFan IV") {
-        *mode = kSmartFan4;
+        *mode = NuvotonFanControlMode::kSmartFan4;
         return OkStatus();
     }
     return Status(EINVAL, "Unknown mode " + str_mode);
