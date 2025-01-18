@@ -42,7 +42,48 @@ const NuvotonChipInfo kNCT6796D = {
     /*vendor_id_addr=*/{0, 0x4F},
     // Fan speed info
     {
-
+        {
+            .name = "SYSFAN",
+            .rpm_high = {4, 0xC0},
+            .rpm_low = {4, 0xC1},
+            .count = {4, 0xB0, /*bits=*/{}, /*next=*/{4, 0xB1, /*bits=*/{4, 0}}},
+        },
+        {
+            .name = "CPUFAN",
+            .rpm_high = {4, 0xC2},
+            .rpm_low = {4, 0xC3},
+            .count = {4, 0xB2, /*bits=*/{}, /*next=*/{4, 0xB3, /*bits=*/{4, 0}}},
+        },
+        {
+            .name = "AUXFAN0",
+            .rpm_high = {4, 0xC4},
+            .rpm_low = {4, 0xC5},
+            .count = {4, 0xB4, /*bits=*/{}, /*next=*/{4, 0xB5, /*bits=*/{4, 0}}},
+        },
+        {
+            .name = "AUXFAN1",
+            .rpm_high = {4, 0xC6},
+            .rpm_low = {4, 0xC7},
+            .count = {4, 0xB6, /*bits=*/{}, /*next=*/{4, 0xB7, /*bits=*/{4, 0}}},
+        },
+        {
+            .name = "AUXFAN2",
+            .rpm_high = {4, 0xC8},
+            .rpm_low = {4, 0xC9},
+            .count = {4, 0xB8, /*bits=*/{}, /*next=*/{4, 0xB9, /*bits=*/{4, 0}}},
+        },
+        {
+            .name = "AUXFAN3",
+            .rpm_high = {4, 0xCA},
+            .rpm_low = {4, 0xCB},
+            .count = {4, 0xBA, /*bits=*/{}, /*next=*/{4, 0xBB, /*bits=*/{4, 0}}},
+        },
+        {
+            .name = "AUXFAN4",
+            .rpm_high = {4, 0xCE},
+            .rpm_low = {4, 0xCF},
+            .count = {4, 0xCC, /*bits=*/{}, /*next=*/{4, 0xCD, /*bits=*/{4, 0}}},
+        },
     },
     // Temp sensors
     kNCT6796DTempSource,
