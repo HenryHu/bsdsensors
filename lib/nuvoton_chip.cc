@@ -179,7 +179,26 @@ class NuvotonChipImpl : public NuvotonChip {
         if (addr.next) {
             uint8_t other_part;
             RETURN_IF_ERROR(ReadByte(*addr.next.get(), &other_part));
-            *data = my_part << addr.other_parts_len | other_part;
+            *data = (my_part << addr.other_parts_len) | other_part;
+        } else {
+            *data = my_part;
+        }
+        VLOG(1) << "read from " << addr << " result " << (int)*data;
+        return OkStatus();
+    }
+
+    Status ReadWord2(const NuvotonChip::AddressType& addr,
+            uint16_t* data) override {
+        RETURN_IF_ERROR(SelectBank(addr.bank));
+        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
+        uint8_t value;
+        RETURN_IF_ERROR(port_io_->ReadByte(data_port_, &value));
+        // Extend to 16 bits
+        uint16_t my_part = BitsFromByte(addr.bits, value);
+        if (addr.next) {
+            uint8_t other_part;
+            RETURN_IF_ERROR(ReadByte(*addr.next.get(), &other_part));
+            *data = (my_part << addr.other_parts_len) | other_part;
         } else {
             *data = my_part;
         }

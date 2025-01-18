@@ -30,6 +30,9 @@ class NuvotonChip : public Chip {
 
     virtual Status ReadByte(const AddressType& addr, uint8_t* data) = 0;
     virtual Status WriteByte(const AddressType& addr, const uint8_t data) = 0;
+    // One way to read word for Nuvoton chip: split it between 2 bytes, which is
+    // represented as addr (high part) and addr.next (low part) here.
+    virtual Status ReadWord2(const AddressType& addr, uint16_t* data) = 0;
 };
 
 std::unique_ptr<NuvotonChip> CreateNuvotonChip();

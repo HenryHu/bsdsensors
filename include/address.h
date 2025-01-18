@@ -37,10 +37,18 @@ struct BankedAddress {
         : bank(another.bank),
           addr(another.addr),
           bits(another.bits),
-          valid(another.valid) {
+          valid(another.valid),
+          other_parts_len(another.other_parts_len) {
         if (another.next) {
             next = std::make_unique<BankedAddress>(*another.next.get());
         }
+    }
+
+    int width() const { return bits.total_width() + ((next == nullptr) ? 0 : next->width()); }
+
+    bool IsAllOnes(const uint16_t value) const {
+        uint32_t all_ones = (1 << width()) - 1;
+        return value == all_ones;
     }
 };
 

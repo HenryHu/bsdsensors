@@ -46,8 +46,12 @@ class NuvotonFanSpeedImpl : public NuvotonFanSpeed {
     }
 
     double value_by_count() const {
-        uint8_t count, divisor;
-        chip_->ReadByte(info_.count, &count);
+        uint16_t count;
+        uint8_t divisor;
+        chip_->ReadWord2(info_.count, &count);
+        if (info_.count.IsAllOnes(count)) {
+            return 0;
+        }
         if (info_.divisor.valid) {
             chip_->ReadByte(info_.divisor, &divisor);
         } else {
