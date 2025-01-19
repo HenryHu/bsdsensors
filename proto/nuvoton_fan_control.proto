@@ -15,18 +15,18 @@ message ThermalCruiseParams {
     double stop_time = 6;
     double step_up_time = 7;
     double step_down_time = 8;
-    double critical_temp = 9;
+    optional double critical_temp = 9;
 };
 
 message SpeedCruiseParams {
     double target_speed_count_low = 1;
-    double target_speed_count_high = 2;
+    optional double target_speed_count_high = 2;
     double tolerance_low = 3;
-    double tolerance_high = 4;
+    optional double tolerance_high = 4;
     double step_up_time = 5;
     double step_down_time = 6;
-    double step_up_value = 7;
-    double step_down_value = 8;
+    optional double step_up_value = 7;
+    optional double step_down_value = 8;
 };
 
 message ControlPoint {
