@@ -158,6 +158,7 @@ struct NuvotonChipInfo {
     NuvotonTempSourceTable temp_table;
     std::vector<NuvotonTempInfo> temps;
     std::vector<NuvotonVoltInfo> volts;
+    std::string notes;
 };
 
 }  // namespace bsdsensors
