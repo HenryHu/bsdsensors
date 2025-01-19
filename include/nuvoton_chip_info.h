@@ -161,6 +161,7 @@ struct NuvotonChipInfo {
     std::vector<NuvotonTempInfo> temps;
     std::vector<NuvotonVoltInfo> volts;
     std::string notes;
+    NuvotonChip::AddressType bank_select;
 };
 
 }  // namespace bsdsensors

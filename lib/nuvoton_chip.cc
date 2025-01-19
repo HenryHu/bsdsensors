@@ -217,8 +217,20 @@ class NuvotonChipImpl : public NuvotonChip {
     }
 
     Status SelectBank(uint8_t bank_no) {
-        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, kBankSelect.addr));
-        return port_io_->WriteByte(data_port_, bank_no);
+        if (info_->bank_select.valid) {
+            const NuvotonChip::AddressType addr = info_->bank_select;
+            uint8_t orig = 0;
+            if (!addr.bits.full()) {
+                RETURN_IF_ERROR(ReadByte(addr, &orig));
+            }
+            RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
+            uint8_t my_part = bank_no >> addr.other_parts_len;
+            return port_io_->WriteByte(
+                    data_port_, BitsToByte(addr.bits, orig, my_part));
+        } else {
+            RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, kBankSelect.addr));
+            return port_io_->WriteByte(data_port_, bank_no);
+        }
     }
 
     // Locked
