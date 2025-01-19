@@ -33,6 +33,7 @@ std::string GetControlModeName(const NuvotonFanControlMode mode) {
         case NuvotonFanControlMode::kManualMode: return "Manual";
         case NuvotonFanControlMode::kThermalCruise: return "Thermal Cruise";
         case NuvotonFanControlMode::kSpeedCruise: return "Speed Cruise";
+        case NuvotonFanControlMode::kSmartFan3: return "SmartFanIII";
         case NuvotonFanControlMode::kSmartFan4: return "SmartFanIV";
     }
     return "Unknown: " + std::to_string((int)mode);
@@ -737,6 +738,10 @@ Status ParseNuvotonFanControlMode(const std::string& str_mode,
                                   NuvotonFanControlMode* mode) {
     if (str_mode == "Manual") {
         *mode = NuvotonFanControlMode::kManualMode;
+        return OkStatus();
+    }
+    if (str_mode == "SmartFan III") {
+        *mode = NuvotonFanControlMode::kSmartFan3;
         return OkStatus();
     }
     if (str_mode == "SmartFan IV") {
