@@ -143,6 +143,8 @@ struct NuvotonTempInfo {
     bool has_peci_frac;
     bool can_select;
     NuvotonChip::AddressType select;
+    // This value is added to the monitoring value.
+    NuvotonChip::AddressType offset;
 };
 
 struct NuvotonVoltInfo {
@@ -150,6 +152,7 @@ struct NuvotonVoltInfo {
     NuvotonChip::AddressType addr;
     // Result = raw value * alpha + beta
     double alpha = 1.0, beta = 0.0;
+    NuvotonChip::AddressType enable;
 };
 
 struct NuvotonChipInfo {
