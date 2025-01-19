@@ -82,7 +82,9 @@ class NuvotonFanControlThermalCruiseImpl
         RETURN_IF_ERROR(chip_->ReadByte(info_.stop_time, &stop_time));
         RETURN_IF_ERROR(chip_->ReadByte(info_.step_up_time, &step_up_time));
         RETURN_IF_ERROR(chip_->ReadByte(info_.step_down_time, &step_down_time));
-        RETURN_IF_ERROR(chip_->ReadByte(info_.critical_temp, &critical_temp));
+        if (info_.critical_temp.valid) {
+            RETURN_IF_ERROR(chip_->ReadByte(info_.critical_temp, &critical_temp));
+        }
         return OkStatus();
     }
 
@@ -95,7 +97,9 @@ class NuvotonFanControlThermalCruiseImpl
         RETURN_IF_ERROR(chip_->WriteByte(info_.stop_time, stop_time));
         RETURN_IF_ERROR(chip_->WriteByte(info_.step_up_time, step_up_time));
         RETURN_IF_ERROR(chip_->WriteByte(info_.step_down_time, step_down_time));
-        RETURN_IF_ERROR(chip_->WriteByte(info_.critical_temp, critical_temp));
+        if (info_.critical_temp.valid) {
+            RETURN_IF_ERROR(chip_->WriteByte(info_.critical_temp, critical_temp));
+        }
         return OkStatus();
     }
 
@@ -118,7 +122,9 @@ class NuvotonFanControlThermalCruiseImpl
         params->set_stop_time(stop_time);
         params->set_step_up_time(step_up_time);
         params->set_step_down_time(step_down_time);
-        params->set_critical_temp(critical_temp);
+        if (info_.critical_temp.valid) {
+            params->set_critical_temp(critical_temp);
+        }
     }
 
    private:
@@ -135,8 +141,11 @@ std::ostream& operator<<(std::ostream& out,
         << "Start value: " << params.start_value() << " Stop value: " << params.stop_value() << " "
         << "Keep min output: " << params.keep_min_output() << std::endl;
     out << "    Stop time: " << params.stop_time()
-        << " Step up time: " << params.step_up_time() << " " << "Step down time: " << params.step_down_time()
-        << " Critical temp: " << params.critical_temp() << "C" << std::endl;
+        << " Step up time: " << params.step_up_time() << " " << "Step down time: " << params.step_down_time();
+    if (params.critical_temp() != 0) {
+        out << " Critical temp: " << params.critical_temp() << "C";
+    }
+    out  << std::endl;
     return out;
 }
 
@@ -150,12 +159,16 @@ class NuvotonFanControlSpeedCruiseImpl : public NuvotonFanControlSpeedCruise {
     Status Observe() override {
         RETURN_IF_ERROR(chip_->ReadByte(info_.target_speed_count_low,
                     &target_speed_count_low_));
-        RETURN_IF_ERROR(chip_->ReadByte(info_.target_speed_count_high,
-                    &target_speed_count_high_));
+        if (info_.target_speed_count_high.valid) {
+            RETURN_IF_ERROR(chip_->ReadByte(info_.target_speed_count_high,
+                        &target_speed_count_high_));
+        }
         RETURN_IF_ERROR(chip_->ReadByte(info_.tolerance_low,
                     &tolerance_low_));
-        RETURN_IF_ERROR(chip_->ReadByte(info_.tolerance_high,
-                    &tolerance_high_));
+        if (info_.tolerance_high.valid) {
+            RETURN_IF_ERROR(chip_->ReadByte(info_.tolerance_high,
+                        &tolerance_high_));
+        }
         RETURN_IF_ERROR(chip_->ReadByte(info_.step_up_time,
                     &step_up_time_));
         RETURN_IF_ERROR(chip_->ReadByte(info_.step_down_time,
@@ -170,12 +183,16 @@ class NuvotonFanControlSpeedCruiseImpl : public NuvotonFanControlSpeedCruise {
     Status Apply() override {
         RETURN_IF_ERROR(chip_->WriteByte(info_.target_speed_count_low,
                     target_speed_count_low_));
-        RETURN_IF_ERROR(chip_->WriteByte(info_.target_speed_count_high,
-                    target_speed_count_high_));
+        if (info_.target_speed_count_high.valid) {
+            RETURN_IF_ERROR(chip_->WriteByte(info_.target_speed_count_high,
+                        target_speed_count_high_));
+        }
         RETURN_IF_ERROR(chip_->WriteByte(info_.tolerance_low,
                     tolerance_low_));
-        RETURN_IF_ERROR(chip_->WriteByte(info_.tolerance_high,
-                    tolerance_high_));
+        if (info_.tolerance_high.valid) {
+            RETURN_IF_ERROR(chip_->WriteByte(info_.tolerance_high,
+                        tolerance_high_));
+        }
         RETURN_IF_ERROR(chip_->WriteByte(info_.step_up_time,
                     step_up_time_));
         RETURN_IF_ERROR(chip_->WriteByte(info_.step_down_time,
@@ -187,11 +204,27 @@ class NuvotonFanControlSpeedCruiseImpl : public NuvotonFanControlSpeedCruise {
         return OkStatus();
     }
 
+    uint16_t target_speed_count() const {
+        if (info_.target_speed_count_high.valid) {
+            return Combine(target_speed_count_high_, target_speed_count_low_);
+        } else {
+            return target_speed_count_low_;
+        }
+    }
+
+    uint16_t tolerance() const {
+        if (info_.tolerance_high.valid) {
+            return Combine(tolerance_high_, tolerance_low_);
+        } else {
+            return tolerance_low_;
+        }
+    }
+
     void DumpInfo(std::ostream& out) override {
         Observe();
         out << "      Speed Cruise: " << std::endl;
-        out << "Target speed count: " << Combine(target_speed_count_high_, target_speed_count_low_) << std::endl;
-        out << "Tolerance: " << Combine(tolerance_high_, tolerance_low_) << std::endl;
+        out << "Target speed count: " << target_speed_count() << std::endl;
+        out << "Tolerance: " << tolerance() << std::endl;
         out << "Step up - time: " << step_up_time_ << " value: " << step_up_value_ << std::endl;
         out << "Step down - time: " << step_down_time_ << " value: " << step_down_value_ << std::endl;
     }
