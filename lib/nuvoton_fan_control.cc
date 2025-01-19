@@ -548,6 +548,9 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     Status SetTempSource(NuvotonTempSource source) {
+        if (!info_.temp_source.valid) {
+            return Status(EINVAL, "Temp source is fixed");
+        }
         return chip_->WriteByte(info_.temp_source, GetTempSourceId(source));
     }
 
@@ -574,8 +577,11 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         out << "    at " << std::dec << (int)(current_percent() * 100) << "%"
             << " with ";
         out << GetControlModeName(GetControlMode()) << std::endl;
-        out << "    temp source: " << GetNuvotonSourceName(GetTempSource())
-            << " value: " << GetTempValue() << std::endl;
+        out << "    temp source: " << GetNuvotonSourceName(GetTempSource());
+        if (info_.temp_value_int.valid) {
+            out << " value: " << GetTempValue();
+        }
+        out << std::endl;
         out << "    control:";
         out << " Manual";
         if (thermal_) out << " ThermalCruise";
@@ -590,7 +596,9 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     void FillState(FanControlProto* proto) override {
         proto->set_current_percent(current_percent());
         proto->set_temp_source(GetNuvotonSourceName(GetTempSource()));
-        proto->set_temp_value(GetTempValue());
+        if (info_.temp_value_int.valid) {
+            proto->set_temp_value(GetTempValue());
+        }
         if (manual_) {
             FanControlMethodProto* method = proto->add_methods();
             method->set_name(manual_->name());
