@@ -115,6 +115,7 @@ enum class NuvotonFanControlMode {
     kManualMode = 0,
     kThermalCruise = 1,
     kSpeedCruise = 2,
+    kSmartFan3 = 3,
     kSmartFan4 = 4,
 };
 
