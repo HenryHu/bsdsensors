@@ -538,9 +538,13 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     NuvotonTempSource GetTempSource() {
-        uint8_t source;
-        chip_->ReadByte(info_.temp_source, &source);
-        return GetTempSourceById(source);
+        if (info_.temp_source.valid) {
+            uint8_t source;
+            chip_->ReadByte(info_.temp_source, &source);
+            return GetTempSourceById(source);
+        } else {
+           return info_.fixed_temp_source;
+        }
     }
 
     Status SetTempSource(NuvotonTempSource source) {

@@ -127,6 +127,7 @@ struct NuvotonFanControlInfo {
     NuvotonChip::AddressType temp_source, temp_value_int, temp_value_frac;
     NuvotonSmartFanInfo smart_fan;
     NuvotonSmartFan4Info smart_fan4;
+    NuvotonTempSource fixed_temp_source;
 };
 
 struct NuvotonFanInfo {
