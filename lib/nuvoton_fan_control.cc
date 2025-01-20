@@ -472,7 +472,11 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     double current_percent() const override {
         uint8_t value;
         double ret;
-        chip_->ReadByte(info_.output_value_read, &value);
+        if (info_.output_value_read.valid) {
+            chip_->ReadByte(info_.output_value_read, &value);
+        } else {
+            chip_->ReadByte(info_.output_value_write, &value);
+        }
         ret = value / 255.0;
         return ret;
     }
