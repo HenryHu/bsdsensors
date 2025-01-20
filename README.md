@@ -37,7 +37,7 @@ Getting sensor values on FreeBSD
 * W83627DHG
 
     Document available.
-    Not tested.
+    Tested on Supermicro X7SPA-HF (0xa025).
 
 * W83627DHG-P / W83627DHG-PT
 
