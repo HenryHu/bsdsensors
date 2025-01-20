@@ -27,8 +27,8 @@ const NuvotonChipInfo kW83627EHFG = {
             .divisor = {0, 0x5D, {5, 5}, {0, 0x47, {5, 4}}},
             .control = NuvotonFanControlInfo{
                 .mode_select = {0, 0x04, {3, 2}},
-                .output_value_write = {1, 0x01},
-                .output_value_write_dc = {1, 0x01, {7, 2}},
+                .output_value_write = {0, 0x01},
+                .output_value_write_dc = {0, 0x01, {7, 2}},
                 .support_dc = true,
                 .output_type = {0, 0x04, {0}},
                 .output_value_read = {0, 0x01},
@@ -47,8 +47,8 @@ const NuvotonChipInfo kW83627EHFG = {
                     .speed_cruise = {
                         .target_speed_count_low = {0, 0x05},
                         .tolerance_low = {0, 0x07, {3, 0}},
+                        .step_up_time = {0, 0x0F},
                         .step_down_time = {0, 0x0E},
-                        .step_down_value = {0, 0x0F},
                     },
                 },
                 .fixed_temp_source = NuvotonTempSource::kSourceSYSTIN,
@@ -60,8 +60,8 @@ const NuvotonChipInfo kW83627EHFG = {
             .divisor = {0, 0x5D, {6, 6}, {0, 0x47, {7, 6}}},
             .control = NuvotonFanControlInfo{
                 .mode_select = {0, 0x04, {5, 4}},
-                .output_value_write = {1, 0x03},
-                .output_value_write_dc = {1, 0x03, {7, 2}},
+                .output_value_write = {0, 0x03},
+                .output_value_write_dc = {0, 0x03, {7, 2}},
                 .support_dc = true,
                 .output_type = {0, 0x04, {1}},
                 .output_value_read = {0, 0x03},
@@ -80,8 +80,8 @@ const NuvotonChipInfo kW83627EHFG = {
                     .speed_cruise = {
                         .target_speed_count_low = {0, 0x06},
                         .tolerance_low = {0, 0x07, {7, 4}},
+                        .step_up_time = {0, 0x0F},
                         .step_down_time = {0, 0x0E},
-                        .step_down_value = {0, 0x0F},
                     },
                 },
                 .fixed_temp_source = NuvotonTempSource::kSourceCPUTIN,
@@ -114,8 +114,8 @@ const NuvotonChipInfo kW83627EHFG = {
                     .speed_cruise = {
                         .target_speed_count_low = {0, 0x13},
                         .tolerance_low = {0, 0x14, {3, 0}},
+                        .step_up_time = {0, 0x0F},
                         .step_down_time = {0, 0x0E},
-                        .step_down_value = {0, 0x0F},
                     },
                 },
                 .fixed_temp_source = NuvotonTempSource::kSourceAUXTIN0,
@@ -124,7 +124,7 @@ const NuvotonChipInfo kW83627EHFG = {
         {
             .name = "CPUFAN1",
             .count = {0, 0x3F},
-            .divisor = {0, 0x59, {1, 0}},
+            .divisor = {0, 0x4C, {7}, {0, 0x59, {1, 0}}},
             .control = NuvotonFanControlInfo{
                 .mode_select = {0, 0x62, {5, 4}},
                 .output_value_write = {0, 0x61},
