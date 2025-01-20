@@ -23,6 +23,7 @@ Getting sensor values on FreeBSD
 
     Document available.
     No hardware to test.
+
 * NCT6793D (partial)
 
     Document not available. Based on NCT6779D.
@@ -32,6 +33,16 @@ Getting sensor values on FreeBSD
 
     Document available.
     Tested on ASUS PRIME Z790-A WIFI
+
+* W83627DHG-P / W83627DHG-PT
+
+    Document available.
+    Not tested.
+
+* W83627EHF/EHG / W83627EF/EG
+
+    Document available.
+    Not tested.
 
 ## ITE
 
