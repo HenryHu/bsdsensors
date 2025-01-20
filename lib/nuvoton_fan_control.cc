@@ -508,6 +508,9 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
                 *method = speed_.get();
                 break;
             }
+            case NuvotonFanControlMode::kSmartFan3: {
+                break;
+            }
             case NuvotonFanControlMode::kSmartFan4: {
                 *method = iv_.get();
                 break;
