@@ -25,10 +25,10 @@ std::map<NuvotonTempSource, uint8_t> kNCT5562DTempSource{
 };
 
 const NuvotonChipInfo kNCT5562D = {
-    {{0xC911, "NCT5562D"}},
-    /*vendor_id_addr=*/{0, 0x4F},
+    .device_id_to_name = {{0xC911, "NCT5562D"}},
+    .vendor_id_addr = {0, 0x4F},
     // Fan speed info
-    {
+    .fans = {
         {"SYSFAN",
          // RPM
          /*rpm_high=*/{4, 0xC0},  // documented
@@ -116,8 +116,8 @@ const NuvotonChipInfo kNCT5562D = {
         },
     },
     // Temp sensors
-    kNCT5562DTempSource,
-    {
+    .temp_table = kNCT5562DTempSource,
+    .temps = {
         {"SMIOVT1", /*val_int=*/{0, 0x27}, /*val_frac=*/{},  // documented
          /*has_peci_frac=*/false, /*can_select=*/true,
          /*select=*/{6, 0x21, {4, 0}}},     // documented
@@ -149,7 +149,7 @@ const NuvotonChipInfo kNCT5562D = {
     // Volts
     // Notice that the multipliers depend on the actual resistances installed
     // on the motherboard, so it can be board-specific.
-    {
+    .volts = {
         {"Vcore", {4, 0x80}, 2.0},  // documented
         {"AVcc", {4, 0x82}, 2.0},   // documented
         {"3Vcc", {4, 0x83}, 2.0},   // documented
