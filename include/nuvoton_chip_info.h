@@ -19,6 +19,10 @@
 
 namespace bsdsensors {
 
+// Most boards can measure 0~2V, so unit = 2V / 255 = ~8mV.
+// Some boards can measure 0~4V, so unit would be 16mV instead.
+constexpr double kDefaultVoltUnit = 0.008;  // 1 = 8mV
+
 enum class NuvotonTempSource {
     kSourceUnknown = 0,
     kSourceSYSTIN = 1,
@@ -194,6 +198,7 @@ struct NuvotonChipInfo {
     std::vector<NuvotonVoltInfo> volts;
     std::string notes;
     NuvotonChip::AddressType bank_select;
+    double volt_unit = kDefaultVoltUnit;
 };
 
 }  // namespace bsdsensors

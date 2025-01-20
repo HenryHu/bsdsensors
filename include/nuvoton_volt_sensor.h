@@ -18,7 +18,7 @@ namespace bsdsensors {
 class NuvotonVoltSensor : public VoltSensor {};
 
 std::unique_ptr<NuvotonVoltSensor> CreateNuvotonVoltSensor(
-    const NuvotonVoltInfo& info, NuvotonChip* chip);
+    const NuvotonVoltInfo& info, const double volt_unit, NuvotonChip* chip);
 
 }  // namespace bsdsensors
 

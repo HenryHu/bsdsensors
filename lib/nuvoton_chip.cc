@@ -341,7 +341,8 @@ class NuvotonChipImpl : public NuvotonChip {
                 CreateNuvotonTempSensor(temp, info_->temp_table, this));
         }
         for (const auto& volt : info_->volts) {
-            volt_sensors_.push_back(CreateNuvotonVoltSensor(volt, this));
+            volt_sensors_.push_back(CreateNuvotonVoltSensor(volt,
+                        info_->volt_unit, this));
         }
     }
 

@@ -11,18 +11,17 @@ namespace bsdsensors {
 
 using std::string;
 
-const double kVoltUnit = 0.008;  // 1 = 8mV
-
 class NuvotonVoltSensorImpl : public NuvotonVoltSensor {
    public:
-    NuvotonVoltSensorImpl(const NuvotonVoltInfo& info, NuvotonChip* chip)
-        : info_(info), chip_(chip) {}
+    NuvotonVoltSensorImpl(const NuvotonVoltInfo& info, const double volt_unit,
+            NuvotonChip* chip)
+        : info_(info), volt_unit_(volt_unit), chip_(chip) {}
 
     double value() override {
         uint8_t value;
         chip_->ReadByte(info_.addr, &value);
         double ret;
-        ret = value * kVoltUnit;
+        ret = value * volt_unit_;
 
         ret = ret * info_.alpha + info_.beta;
         return ret;
@@ -36,12 +35,13 @@ class NuvotonVoltSensorImpl : public NuvotonVoltSensor {
 
    private:
     NuvotonVoltInfo info_;
+    const double volt_unit_;
     NuvotonChip* chip_;
 };
 
 std::unique_ptr<NuvotonVoltSensor> CreateNuvotonVoltSensor(
-    const NuvotonVoltInfo& info, NuvotonChip* chip) {
-    return std::make_unique<NuvotonVoltSensorImpl>(info, chip);
+    const NuvotonVoltInfo& info, const double volt_unit, NuvotonChip* chip) {
+    return std::make_unique<NuvotonVoltSensorImpl>(info, volt_unit, chip);
 }
 
 }  // namespace bsdsensors
