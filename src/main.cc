@@ -125,6 +125,7 @@ int main(int argc, char** argv) {
                         cout);
             }
         }
+        break;
     }
 
     if (!detected) {
