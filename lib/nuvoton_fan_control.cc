@@ -478,12 +478,18 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     NuvotonFanControlMode GetControlMode() {
+        if (!info_.mode_select.valid) {
+            return NuvotonFanControlMode::kManualMode;
+        }
         uint8_t mode;
         chip_->ReadByte(info_.mode_select, &mode);
         return (NuvotonFanControlMode)mode;
     }
 
     Status SetControlMode(NuvotonFanControlMode target) override {
+        if (!info_.mode_select.valid) {
+            return Status(ENODEV, "Setting control mode is not supported");
+        }
         return chip_->WriteByte(info_.mode_select, (int)target);
     }
 
