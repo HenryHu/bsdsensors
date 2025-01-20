@@ -1,3 +1,5 @@
-add_executable(nuvoton_test nuvoton_test.cc)
-target_link_libraries(nuvoton_test bsdsensors)
-add_test(NAME nuvotonTest COMMAND nuvoton_test)
+enable_testing()
+
+add_executable(w83627hgaw_test w83627hgaw_test.cc)
+target_link_libraries(w83627hgaw_test bsdsensors GTest::gtest_main)
+add_test(NAME w83627hgawTest COMMAND w83627hgaw_test)
