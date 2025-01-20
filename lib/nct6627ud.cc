@@ -10,8 +10,7 @@
 namespace bsdsensors {
 
 const NuvotonChipInfo kNCT6627UD{
-    0xA230,
-    "NCT6627UD/W83627UHG",
+    {{0xA230, "NCT6627UD/W83627UHG"}},
     {0, 0x4F},
     // Fan speed info
     {{"CPUFAN",

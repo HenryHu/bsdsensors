@@ -109,7 +109,7 @@ class NuvotonChipImpl : public NuvotonChip {
 
                     info_ = GetKnownChips<NuvotonChipInfo>()->Find(id);
                     if (info_ != nullptr) {
-                        LOG(INFO) << "Known Nuvoton Chip: " << info_->name;
+                        LOG(INFO) << "Known Nuvoton Chip: " << info_->device_id_to_name.at(id);
                         LoadSensors();
                         return true;
                     } else {

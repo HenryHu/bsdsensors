@@ -103,7 +103,7 @@ class ITEChipImpl : public ITEChip {
 
                     info_ = GetKnownChips<ITEChipInfo>()->Find(id);
                     if (info_ != nullptr) {
-                        std::cout << "Known ITE Chip: " << info_->name
+                        std::cout << "Known ITE Chip: " << info_->device_id_to_name.at(id)
                                   << std::endl;
                         return true;
                     } else {

@@ -156,8 +156,7 @@ struct NuvotonVoltInfo {
 };
 
 struct NuvotonChipInfo {
-    uint16_t device_id;
-    std::string name;
+    std::map<uint16_t, std::string> device_id_to_name;
     NuvotonChip::AddressType vendor_id_addr;
     std::vector<NuvotonFanInfo> fans;
     NuvotonTempSourceTable temp_table;

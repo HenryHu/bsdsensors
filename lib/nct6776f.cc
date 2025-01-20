@@ -25,8 +25,7 @@ std::map<NuvotonTempSource, uint8_t> kNCT6776FTempSource{
 };
 
 NuvotonChipInfo kNCT6776F{
-    0xC333,
-    "NCT6776F/NCT6776D",
+    {{0xC333, "NCT6776F/NCT6776D"}},
     {0, 0x4F},
     // Fan speed info
     {

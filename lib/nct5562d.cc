@@ -25,8 +25,7 @@ std::map<NuvotonTempSource, uint8_t> kNCT5562DTempSource{
 };
 
 const NuvotonChipInfo kNCT5562D = {
-    0xC911,
-    "NCT5562D",
+    {{0xC911, "NCT5562D"}},
     /*vendor_id_addr=*/{0, 0x4F},
     // Fan speed info
     {

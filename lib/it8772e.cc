@@ -10,8 +10,7 @@
 namespace bsdsensors {
 
 ITEChipInfo kIT8772E{
-    0x8772,
-    "IT8772E",
+    {{0x8772, "IT8772E"}},
 };
 
 RegisterChip<ITEChipInfo> kRegisterIT8772E(kIT8772E);

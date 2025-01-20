@@ -10,8 +10,7 @@
 namespace bsdsensors {
 
 FintekChipInfo kF71869A{
-    0x1007,
-    "F71869A",
+    {{0x1007, "F71869A"}},
     // Fans
     {
         {"FAN1",

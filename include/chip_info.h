@@ -16,7 +16,9 @@ template <typename ChipInfo>
 class KnownChips {
    public:
     void RegisterChipInfo(const ChipInfo& info) {
-        chips_.insert(std::make_pair(info.device_id, info));
+        for (const auto& [device_id, name] : info.device_id_to_name) {
+            chips_.insert({device_id, info});
+        }
     }
 
     void RegisterChipInfo(const ChipInfo& info, uint16_t device_id) {

@@ -99,7 +99,7 @@ class FintekChipImpl : public FintekChip {
 
                     info_ = GetKnownChips<FintekChipInfo>()->Find(id);
                     if (info_ != nullptr) {
-                        std::cout << "Known Fintek Chip: " << info_->name
+                        std::cout << "Known Fintek Chip: " << info_->device_id_to_name.at(id)
                                   << std::endl;
                         LoadSensors();
                         return true;
