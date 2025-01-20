@@ -142,7 +142,7 @@ struct NuvotonFanControlInfo {
     // FAN output for DC, output volt = AVcc * value / 64
     NuvotonChip::AddressType output_value_write_dc;
     // Whether DC output is supported for this FAN.
-    bool support_dc;
+    bool support_dc = false;
     // If support_dc = false, then output_type is invalid
     // selects DC output (1) or PWM output (0).
     NuvotonChip::AddressType output_type;
