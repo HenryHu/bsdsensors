@@ -280,7 +280,7 @@ class NuvotonChipImpl : public NuvotonChip {
 
         uint8_t chip_id;
         CHECK(ReadByte(kChipID, &chip_id), "fail to read chip id");
-        out << "Chip ID, 0xa1 for Winbond, or 0xc1 for nuvoTon: " << hex << (int)chip_id << endl;
+        out << "Chip ID, 0xa1/0x21 for Winbond, or 0xc1 for nuvoTon: " << hex << (int)chip_id << endl;
 
         for (int i = 0; i < fan_speeds_.size(); i++) {
             NuvotonFanSpeed& fan = *fan_speeds_[i];
