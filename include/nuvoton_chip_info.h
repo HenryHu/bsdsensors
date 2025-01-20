@@ -123,14 +123,32 @@ enum class NuvotonFanControlMode {
 };
 
 struct NuvotonFanControlInfo {
-    NuvotonChip::AddressType mode_select, output_value_write, output_value_write_dc;
+    // Selects control mode.
+    NuvotonChip::AddressType mode_select;
+    // FAN output for PWM, duty cycle = value / 255
+    NuvotonChip::AddressType output_value_write;
+    // FAN output for DC, output volt = AVcc * value / 64
+    NuvotonChip::AddressType output_value_write_dc;
+    // Whether DC output is supported for this FAN.
     bool support_dc;
     // If support_dc = false, then output_type is invalid
-    NuvotonChip::AddressType output_type, output_value_read;
-    NuvotonChip::AddressType temp_source, temp_value_int, temp_value_frac;
+    // selects DC output (1) or PWM output (0).
+    NuvotonChip::AddressType output_type;
+    // Reads the current FAN output value. No separate register for old chips.
+    NuvotonChip::AddressType output_value_read;
+
+    // Allows the temp source to be selected.
+    NuvotonChip::AddressType temp_source;
+    // Selected temp source's temp value, not supported on older chips.
+    NuvotonChip::AddressType temp_value_int, temp_value_frac;
+
+    // Fan control methods.
     NuvotonSmartFanInfo smart_fan;
     NuvotonSmartFan4Info smart_fan4;
+
+    // Fixed temp source.
     NuvotonTempSource fixed_temp_source;
+    // Overrides the global temp source table.
     std::map<uint8_t, NuvotonTempSource> source_select;
 };
 
