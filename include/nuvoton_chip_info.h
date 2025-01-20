@@ -214,6 +214,7 @@ struct NuvotonChipInfo {
     std::string notes;
     NuvotonChip::AddressType bank_select;
     double volt_unit = kDefaultVoltUnit;
+    std::optional<uint8_t> io_space_enable;
 };
 
 }  // namespace bsdsensors

@@ -253,12 +253,14 @@ class NuvotonChipImpl : public NuvotonChip {
         LOG(INFO) << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
                   << endl;
 
-        uint8_t value;
-        io_->ReadByte(kGlobalOption1, &value);
-        if (value & 0x10) {
-            LOG(INFO) << "Enable mapping";
-            value &= ~0x10;
-            io_->WriteByte(kGlobalOption1, value);
+        if (info_->io_space_enable.has_value()) {
+            uint8_t value;
+            io_->ReadByte(*info_->io_space_enable, &value);
+            if (value & 0x10) {
+                LOG(INFO) << "Enable mapping";
+                value &= ~0x10;
+                io_->WriteByte(*info_->io_space_enable, value);
+            }
         }
 
         return true;

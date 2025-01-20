@@ -159,7 +159,9 @@ const NuvotonChipInfo kNCT5562D = {
         {"Vtt", {4, 0x89}},         // documented
         {"Vin2", {4, 0x8C}},        // documented
         {"Vin3", {4, 0x8D}},        // documented
-    }};
+    },
+    .io_space_enable = 0x28,
+};
 
 RegisterChip<NuvotonChipInfo> kRegisterNCT5562D(kNCT5562D);
 
