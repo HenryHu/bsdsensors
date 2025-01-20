@@ -74,6 +74,11 @@ extern Status GetNuvotonSourceByName(const std::string& name,
 
 constexpr int kFastAccessBank = -1;
 
+enum NuvotonTempSensorType {
+    kThermistorSensor = 0,
+    kDiodeSensor = 1,
+};
+
 struct NuvotonThermalCruiseInfo {
     NuvotonChip::AddressType target_temp;
     NuvotonChip::AddressType tolerance;
@@ -167,6 +172,9 @@ struct NuvotonTempInfo {
     NuvotonChip::AddressType select;
     // This value is added to the monitoring value.
     NuvotonChip::AddressType offset;
+    // Sensor type: 1 for diode, 0 for thermistor.
+    // see NuvotonTempSensorType
+    NuvotonChip::AddressType sensor_type;
 };
 
 struct NuvotonVoltInfo {

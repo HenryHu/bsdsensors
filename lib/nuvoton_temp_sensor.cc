@@ -10,8 +10,19 @@
 #include <cmath>
 
 namespace bsdsensors {
+namespace {
 
 using std::string;
+
+std::string GetTempSensorTypeName(const NuvotonTempSensorType type) {
+    switch (type) {
+        case kThermistorSensor: return "Thermistor";
+        case kDiodeSensor: return "Diode";
+    }
+    LOG(ERROR) << "Unknown sensor type: " << type;
+    return "Unknown";
+}
+}
 
 class NuvotonTempSensorImpl : public NuvotonTempSensor {
    public:
@@ -72,6 +83,12 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
         }
     }
 
+    NuvotonTempSensorType GetType() {
+        uint8_t type;
+        chip_->ReadByte(info_.sensor_type, &type);
+        return (NuvotonTempSensorType)type;
+    }
+
     bool invalid() {
         return fabs(value()) < 1e-7 || fabs(value() - 255) < 1e-7;
     }
@@ -82,6 +99,9 @@ class NuvotonTempSensorImpl : public NuvotonTempSensor {
         if (info_.can_select) {
             out << "    source: " << GetNuvotonSourceName(GetSource())
                 << std::endl;
+        }
+        if (info_.sensor_type.valid) {
+            out << "    type: " << GetTempSensorTypeName(GetType()) << std::endl;
         }
     }
 
