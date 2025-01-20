@@ -12,6 +12,7 @@
 #include "status.h"
 #include "util.h"
 #include "address.h"
+#include "port_io.h"
 
 #include <memory>
 
@@ -35,7 +36,7 @@ class NuvotonChip : public Chip {
     virtual Status ReadWord2(const AddressType& addr, uint16_t* data) = 0;
 };
 
-std::unique_ptr<NuvotonChip> CreateNuvotonChip();
+std::unique_ptr<NuvotonChip> CreateNuvotonChip(std::unique_ptr<PortIO> port_io = CreatePortIO());
 
 }  // namespace bsdsensors
 

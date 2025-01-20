@@ -37,7 +37,7 @@ using google::protobuf::TextFormat;
 using google::protobuf::util::JsonParseOptions;
 using google::protobuf::util::JsonPrintOptions;
 
-const std::function<std::unique_ptr<Chip>()> kCreateChips[] = {
+const std::function<std::unique_ptr<Chip>(std::unique_ptr<PortIO>)> kCreateChips[] = {
     CreateNuvotonChip, CreateITEChip, CreateFintekChip, CreateMicrochipChip};
 
 const char* kUsageMessage = "Tool to get hardware sensor values";
@@ -77,7 +77,7 @@ int main(int argc, char** argv) {
 
     bool detected = false;
     for (const auto& CreateChip : kCreateChips) {
-        auto chip = CreateChip();
+        auto chip = CreateChip(CreatePortIO());
         if (!chip->Detect()) continue;
         detected = true;
         chip->set_name(dev_db->Register(chip->name(), nullptr));

@@ -13,7 +13,7 @@ namespace bsdsensors {
 class SuperIOImpl : public SuperIO {
    public:
     ~SuperIOImpl() override {}
-    SuperIOImpl(const uint32_t port) : port_io_(CreatePortIO()), port_(port) {}
+    SuperIOImpl(const uint32_t port, PortIO* port_io) : port_io_(port_io), port_(port) {}
 
     Status Init() override { return port_io_->Init(); }
 
@@ -38,12 +38,12 @@ class SuperIOImpl : public SuperIO {
     }
 
    private:
-    std::unique_ptr<PortIO> port_io_;
+    PortIO* port_io_;
     uint32_t port_;
 };
 
-std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port) {
-    return std::make_unique<SuperIOImpl>(port);
+std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port, PortIO* port_io) {
+    return std::make_unique<SuperIOImpl>(port, port_io);
 }
 
 }  // namespace bsdsensors

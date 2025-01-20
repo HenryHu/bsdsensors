@@ -41,8 +41,8 @@ class MicrochipLock {
 
 class MicrochipChipImpl : public MicrochipChip {
    public:
-    MicrochipChipImpl()
-        : port_io_(CreatePortIO()),
+    MicrochipChipImpl(std::unique_ptr<PortIO> port_io)
+        : port_io_(std::move(port_io)),
           entered_(false),
           info_(nullptr),
           name_("microchip") {}
@@ -69,7 +69,7 @@ class MicrochipChipImpl : public MicrochipChip {
         }
 
         for (const auto& port : kMicrochipPorts) {
-            io_ = CreateSuperIO(port);
+            io_ = CreateSuperIO(port, port_io_.get());
             if (!io_->Init().ok()) {
                 continue;
             }
@@ -194,8 +194,8 @@ class MicrochipChipImpl : public MicrochipChip {
     std::string name_;
 };
 
-std::unique_ptr<MicrochipChip> CreateMicrochipChip() {
-    return std::make_unique<MicrochipChipImpl>();
+std::unique_ptr<MicrochipChip> CreateMicrochipChip(std::unique_ptr<PortIO> port_io) {
+    return std::make_unique<MicrochipChipImpl>(std::move(port_io));
 }
 
 }  // namespace bsdsensors

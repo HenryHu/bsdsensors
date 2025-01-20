@@ -12,6 +12,7 @@
 #include "status.h"
 #include "util.h"
 #include "address.h"
+#include "port_io.h"
 
 namespace bsdsensors {
 
@@ -30,7 +31,7 @@ class MicrochipChip : public Chip {
     virtual Status WriteByte(const AddressType& addr, const uint8_t data) = 0;
 };
 
-std::unique_ptr<MicrochipChip> CreateMicrochipChip();
+std::unique_ptr<MicrochipChip> CreateMicrochipChip(std::unique_ptr<PortIO> port_io = CreatePortIO());
 
 }  // namespace bsdsensors
 

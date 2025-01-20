@@ -57,8 +57,8 @@ class NuvotonLock {
 
 class NuvotonChipImpl : public NuvotonChip {
    public:
-    NuvotonChipImpl()
-        : port_io_(CreatePortIO()),
+    NuvotonChipImpl(std::unique_ptr<PortIO> port_io)
+        : port_io_(std::move(port_io)),
           entered_(false),
           info_(nullptr),
           name_("nuvoton") {}
@@ -86,7 +86,7 @@ class NuvotonChipImpl : public NuvotonChip {
             return false;
         }
         for (const auto& port : kNuvotonPorts) {
-            io_ = CreateSuperIO(port);
+            io_ = CreateSuperIO(port, port_io_.get());
             if (!io_->Init().ok()) {
                 continue;
             }
@@ -468,8 +468,8 @@ class NuvotonChipImpl : public NuvotonChip {
     std::vector<std::unique_ptr<NuvotonVoltSensor>> volt_sensors_;
 };
 
-std::unique_ptr<NuvotonChip> CreateNuvotonChip() {
-    return std::make_unique<NuvotonChipImpl>();
+std::unique_ptr<NuvotonChip> CreateNuvotonChip(std::unique_ptr<PortIO> port_io) {
+    return std::make_unique<NuvotonChipImpl>(std::move(port_io));
 }
 
 }  // namespace bsdsensors

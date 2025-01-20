@@ -43,8 +43,8 @@ class ITELock {
 
 class ITEChipImpl : public ITEChip {
    public:
-    ITEChipImpl()
-        : port_io_(CreatePortIO()),
+    ITEChipImpl(std::unique_ptr<PortIO> port_io)
+        : port_io_(std::move(port_io)),
           entered_(false),
           info_(nullptr),
           name_("ite") {}
@@ -77,7 +77,7 @@ class ITEChipImpl : public ITEChip {
         }
 
         for (const auto& port : kITEPorts) {
-            io_ = CreateSuperIO(port);
+            io_ = CreateSuperIO(port, port_io_.get());
             if (!io_->Init().ok()) {
                 continue;
             }
@@ -202,8 +202,8 @@ class ITEChipImpl : public ITEChip {
     std::string name_;
 };
 
-std::unique_ptr<ITEChip> CreateITEChip() {
-    return std::make_unique<ITEChipImpl>();
+std::unique_ptr<ITEChip> CreateITEChip(std::unique_ptr<PortIO> port_io) {
+    return std::make_unique<ITEChipImpl>(std::move(port_io));
 }
 
 }  // namespace bsdsensors

@@ -44,8 +44,8 @@ class FintekLock {
 
 class FintekChipImpl : public FintekChip {
    public:
-    FintekChipImpl()
-        : port_io_(CreatePortIO()),
+    FintekChipImpl(std::unique_ptr<PortIO> port_io)
+        : port_io_(std::move(port_io)),
           entered_(false),
           info_(nullptr),
           name_("fintek") {}
@@ -75,7 +75,7 @@ class FintekChipImpl : public FintekChip {
         }
 
         for (const auto& port : kFintekPorts) {
-            io_ = CreateSuperIO(port);
+            io_ = CreateSuperIO(port, port_io_.get());
             if (!io_->Init().ok()) {
                 continue;
             }
@@ -243,8 +243,8 @@ class FintekChipImpl : public FintekChip {
     std::vector<std::unique_ptr<FintekTempSensor>> temp_sensors_;
 };
 
-std::unique_ptr<FintekChip> CreateFintekChip() {
-    return std::make_unique<FintekChipImpl>();
+std::unique_ptr<FintekChip> CreateFintekChip(std::unique_ptr<PortIO> port_io) {
+    return std::make_unique<FintekChipImpl>(std::move(port_io));
 }
 
 }  // namespace bsdsensors

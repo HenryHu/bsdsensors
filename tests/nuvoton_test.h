@@ -1,6 +1,6 @@
 /*
  * nuvoton_test.h
- * Copyright (C) 2018 Henry Hu
+ * Copyright (C) 2025 Henry Hu
  *
  * Distributed under terms of the 3-clause BSD license.
  */
@@ -9,5 +9,7 @@
 #define __BSDSENSORS_TEST_NUVOTON_TEST_H_
 
 #include <gtest/gtest.h>
+
+#include "fake_port_io.h"
 
 #endif // __BSDSENSORS_TEST_NUVOTON_TEST_H_

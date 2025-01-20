@@ -12,6 +12,7 @@
 #include <memory>
 
 #include "status.h"
+#include "port_io.h"
 
 namespace bsdsensors {
 
@@ -27,7 +28,7 @@ class SuperIO {
     virtual Status DirectWriteData(const uint8_t data) = 0;
 };
 
-std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port);
+std::unique_ptr<SuperIO> CreateSuperIO(const uint32_t port, PortIO* port_io);
 
 }  // namespace bsdsensors
 
