@@ -594,7 +594,10 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         out << "    at " << std::dec << (int)(current_percent() * 100) << "%"
             << " with ";
         out << GetControlModeName(GetControlMode()) << std::endl;
-        out << "    temp source: " << GetNuvotonSourceName(GetTempSource());
+        const NuvotonTempSource source = GetTempSource();
+        if (source != NuvotonTempSource::kSourceUnknown) {
+            out << "    temp source: " << GetNuvotonSourceName(GetTempSource());
+        }
         if (info_.temp_value_int.valid) {
             out << " value: " << GetTempValue();
         }
