@@ -34,6 +34,11 @@ Getting sensor values on FreeBSD
     Document available.
     Tested on ASUS PRIME Z790-A WIFI
 
+* W83627DHG
+
+    Document available.
+    Not tested.
+
 * W83627DHG-P / W83627DHG-PT
 
     Document available.

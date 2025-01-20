@@ -1,5 +1,5 @@
 /*
- * w83627dhgp.cc
+ * w83627dhg.cc
  * Copyright (C) 2025 Henry Hu
  *
  * Distributed under terms of the 3-clause BSD license.
@@ -10,7 +10,7 @@
 
 namespace bsdsensors {
 
-std::map<NuvotonTempSource, uint8_t> kW83627DHGPTempSource{
+std::map<NuvotonTempSource, uint8_t> kW83627DHGTempSource{
     {NuvotonTempSource::kSourceSYSTIN, 0},
     {NuvotonTempSource::kSourceCPUTIN, 1},
     {NuvotonTempSource::kSourceAUXTIN0, 2},
@@ -20,14 +20,12 @@ std::map<NuvotonTempSource, uint8_t> kW83627DHGPTempSource{
     {NuvotonTempSource::kSourcePECI3, 7},
 };
 
-const NuvotonChipInfo kW83627DHGP = {
-    .device_id_to_name = {{0xB070, "W83627DGH-P/DHG-PT"}},
+const NuvotonChipInfo kW83627DHG = {
+    .device_id_to_name = {{0xA025, "W83627DGH"}},
     .vendor_id_addr = {0, 0x4F},
     .fans = {
         {
             .name = "SYSFAN",
-            .rpm_high = {6, 0x50},
-            .rpm_low = {6, 0x51},
             .count = {0, 0x28},
             .divisor = {0, 0x5D, {5}, {0, 0x47, {5, 4}}},
             .control = NuvotonFanControlInfo{
@@ -63,8 +61,6 @@ const NuvotonChipInfo kW83627DHGP = {
         },
         {
             .name = "CPUFAN0",
-            .rpm_high = {6, 0x52},
-            .rpm_low = {6, 0x53},
             .count = {0, 0x29},
             .divisor = {0, 0x5D, {6}, {0, 0x47, {7, 6}}},
             .control = NuvotonFanControlInfo{
@@ -107,8 +103,6 @@ const NuvotonChipInfo kW83627DHGP = {
         },
         {
             .name = "AUXFAN0",
-            .rpm_high = {6, 0x54},
-            .rpm_low = {6, 0x55},
             .count = {0, 0x2A},
             .divisor = {0, 0x5D, {7}, {0, 0x4B, {7, 6}}},
             .control = NuvotonFanControlInfo{
@@ -152,8 +146,6 @@ const NuvotonChipInfo kW83627DHGP = {
         },
         {
             .name = "CPUFAN1",
-            .rpm_high = {6, 0x56},
-            .rpm_low = {6, 0x57},
             .count = {0, 0x3F},
             .divisor = {0, 0x4C, {7}, {0, 0x59, {1, 0}}},
             .control = NuvotonFanControlInfo{
@@ -198,21 +190,20 @@ const NuvotonChipInfo kW83627DHGP = {
         },
         {
             .name = "AUXFAN1",
-            .rpm_high = {6, 0x58},
-            .rpm_low = {6, 0x59},
             .count = {5, 0x53},
             .divisor = {0, 0x59, {7, 7, {3, 2}}},
         },
     },
-    .temp_table = kW83627DHGPTempSource,
+    .temp_table = kW83627DHGTempSource,
     .temps = {
         {.name = "TEMP", .val_int = {0, 0x7D}, .can_select = true,
             .select = {0, 0x7C, {2, 0}}},
-        {.name = "SYSTIN", .val_int = {0, 0x27}, .offset = {4, 0x54}},
+        {.name = "SYSTIN", .val_int = {0, 0x27}, .offset = {4, 0x54},
+         .sensor_type = {0, 0x5D, {1}}},
         {.name = "CPUTIN", .val_int = {1, 0x50}, .val_frac = {1, 0x51, {7}},
-         .offset = {4, 0x55}},
+         .offset = {4, 0x55}, .sensor_type = {0, 0x5D, {2}}},
         {.name = "AUXTIN", .val_int = {2, 0x50}, .val_frac = {2, 0x51, {7}},
-         .offset = {4, 0x56}},
+         .offset = {4, 0x56}, .sensor_type = {0, 0x5D, {3}}},
     },
     .volts = {
         {"Vcore", {0, 0x20}},
@@ -222,7 +213,7 @@ const NuvotonChipInfo kW83627DHGP = {
         {"Vin1", {0, 0x24}},
         {"Vin2", {0, 0x25}},
         {"Vin3", {0, 0x26}},
-        {"3Vsb", {5, 0x50}},
+        {"3Vsb", {5, 0x50}, 2.0},
         {.name = "Vbat", .addr = {5, 0x51}, .enable = {0, 0x5D, {0}}},
     },
     .notes = "Note: all fans in speed-cruise and thermal-cruise modes share the same"
@@ -230,7 +221,8 @@ const NuvotonChipInfo kW83627DHGP = {
     "Note: AUXFAN and SYSFAN does not support SmartFan3.",
 };
 
-RegisterChip<NuvotonChipInfo> kRegisterW83627DHGP(kW83627DHGP);
+RegisterChip<NuvotonChipInfo> kRegisterW83627DHG(kW83627DHG);
 
 }
+
 
