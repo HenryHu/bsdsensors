@@ -84,6 +84,7 @@ enum NuvotonTempSensorType {
 };
 
 struct NuvotonThermalCruiseInfo {
+    // Target temperature.
     NuvotonChip::AddressType target_temp;
     NuvotonChip::AddressType tolerance;
     NuvotonChip::AddressType start_value;
@@ -92,10 +93,12 @@ struct NuvotonThermalCruiseInfo {
     NuvotonChip::AddressType stop_time;
     NuvotonChip::AddressType step_up_time;
     NuvotonChip::AddressType step_down_time;
+    // If temperature reaches this, fan will run at 100%.
     NuvotonChip::AddressType critical_temp;
 };
 
 struct NuvotonSpeedCruiseInfo {
+    // Target fan speed.
     NuvotonChip::AddressType target_speed_count_low;
     NuvotonChip::AddressType target_speed_count_high;
     NuvotonChip::AddressType tolerance_low;
@@ -163,16 +166,24 @@ struct NuvotonFanControlInfo {
 
 struct NuvotonFanInfo {
     std::string name;
+    // RPM, only available on some chips.
     NuvotonChip::AddressType rpm_high, rpm_low;
+    // RPM by cycle count. RPM = 1.35e6 / count / 2^divisor.
     NuvotonChip::AddressType count, divisor;
     std::optional<NuvotonFanControlInfo> control;
 };
 
 struct NuvotonTempInfo {
     std::string name;
-    NuvotonChip::AddressType val_int, val_frac;
+    // Temperature, integer part.
+    NuvotonChip::AddressType val_int;
+    // Temperature, fraction part.
+    // Often there's only 1 bit, which means 0.5C.
+    NuvotonChip::AddressType val_frac;
     bool has_peci_frac;
+    // Whether the temperature source can be changed.
     bool can_select;
+    // Select a specific source, only works if can_select is true.
     NuvotonChip::AddressType select;
     // This value is added to the monitoring value.
     NuvotonChip::AddressType offset;
@@ -183,8 +194,12 @@ struct NuvotonTempInfo {
 
 struct NuvotonVoltInfo {
     std::string name;
+    // Voltage value. Typically voltage = 8mV * value; some older chips use 16mV.
     NuvotonChip::AddressType addr;
     // Result = raw value * alpha + beta
+    // Since the chip can only measure 0~2V, 3.3V needs to be scaled down with
+    // external resistors, and to get the real voltage, it needs to be scaled
+    // back up. As a result, we often set alpha = 2.0 for 3.3V.
     double alpha = 1.0, beta = 0.0;
     NuvotonChip::AddressType enable;
 };
