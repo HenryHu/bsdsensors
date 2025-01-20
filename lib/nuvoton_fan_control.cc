@@ -521,6 +521,10 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     NuvotonTempSource GetTempSourceById(const uint8_t source_id) {
+        const auto id_iter = info_.source_select.find(source_id);
+        if (id_iter != info_.source_select.end()) {
+            return id_iter->second;
+        }
         for (const auto& [source, id] : temp_source_table_) {
             if (id == source_id) return source;
         }
@@ -529,6 +533,9 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     uint8_t GetTempSourceId(const NuvotonTempSource source) {
+        for (const auto& [id, selected_source] : info_.source_select) {
+            if (selected_source == source) return id;
+        }
         const auto id_iter = temp_source_table_.find(source);
         if (id_iter == temp_source_table_.end()) {
             LOG(ERROR) << "Temp source " << GetNuvotonSourceName(source)

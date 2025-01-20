@@ -60,6 +60,8 @@ enum class NuvotonTempSource {
     kSourceAUXTIN4 = 37,
     kSourceBYTE0 = 38,
     kSourceBYTE1 = 39,
+    kSourcePECI2 = 40,
+    kSourcePECI3 = 41,
 };
 
 constexpr int kMaxSource = 37;
@@ -93,6 +95,7 @@ struct NuvotonSpeedCruiseInfo {
     NuvotonChip::AddressType step_down_time;
     NuvotonChip::AddressType step_up_value;
     NuvotonChip::AddressType step_down_value;
+    NuvotonChip::AddressType keep_min_output;
 };
 
 struct NuvotonSmartFanInfo {
@@ -128,6 +131,7 @@ struct NuvotonFanControlInfo {
     NuvotonSmartFanInfo smart_fan;
     NuvotonSmartFan4Info smart_fan4;
     NuvotonTempSource fixed_temp_source;
+    std::map<uint8_t, NuvotonTempSource> source_select;
 };
 
 struct NuvotonFanInfo {
