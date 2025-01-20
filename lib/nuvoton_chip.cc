@@ -31,7 +31,6 @@ const SuperIO::AddressType kLogicalDeviceSelect = 0x07;
 const LogicalDeviceNo kDeviceHM = 0x0B;
 
 const SuperIO::AddressType kDeviceID = 0x20;
-const SuperIO::AddressType kGlobalOption1 = 0x28;
 
 const SuperIO::AddressType kLogicalDeviceEnabled = 0x30;
 const SuperIO::AddressType kPortBaseAddress = 0x60;
