@@ -291,7 +291,7 @@ class NuvotonChipImpl : public NuvotonChip {
         for (const auto& temp : temp_sensors_) {
             temp->DumpInfo(out);
         }
-        if (!temp_sensors_.empty()) {
+        if (!temp_sensors_.empty() && temp_sensors_[0]->HasSource()) {
             NuvotonTempSource orig = temp_sensors_[0]->GetSource();
             for (int i = 8; i < kMaxSource; i++) {
                 if (i == (int)orig) continue;
