@@ -32,6 +32,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(lib)
 add_subdirectory(include)
 add_subdirectory(proto)
+add_subdirectory(tests)
 
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -64,3 +65,4 @@ set (CPACK_PACKAGE_VERSION_MAJOR "${bsdsensors_VERSION_MAJOR}")
 set (CPACK_PACKAGE_VERSION_MINOR "${bsdsensors_VERSION_MINOR}")
 include (CPack)
 
+enable_testing()
