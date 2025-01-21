@@ -101,7 +101,7 @@ const NuvotonChipInfo kW83697HF = {
         {"5Vsb", {5, 0x50}, (50.0+34.0)/50.0},
         {.name = "Vbat", .addr = {5, 0x51}, .enable = {0, 0x5D, {0}}},
     },
-    .notes = "Note: no smart fan support at all, only manual.",
+    .notes = "",
     // This chip has a range of 0~4V, so 1 unit = 16mV.
     .volt_unit = 0.016,
 };
