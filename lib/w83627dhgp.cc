@@ -21,7 +21,7 @@ std::map<NuvotonTempSource, uint8_t> kW83627DHGPTempSource{
 };
 
 const NuvotonChipInfo kW83627DHGP = {
-    .device_id_to_name = {{0xB070, "W83627DGH-P/DHG-PT"}},
+    .device_id_to_name = {{0xB070, "W83627DHG-P/DHG-PT"}},
     .vendor_id_addr = {0, 0x4F},
     .fans = {
         {
