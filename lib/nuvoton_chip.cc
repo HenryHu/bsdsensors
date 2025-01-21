@@ -318,7 +318,7 @@ class NuvotonChipImpl : public NuvotonChip {
             for (int i = 0; i < 256; i++) {
                 uint8_t data;
                 CHECK(ReadByte({bank, i}, &data), "Fail to read byte");
-                if (data != 255 && data != 0) {
+                if (data != 255) {
                     out << hex << (int)bank << "/" << setw(2) << i << ":" << dec
                         << setw(4) << (int)data << "  ";
                     empty = false;
