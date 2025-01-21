@@ -1,0 +1,629 @@
+fans {
+  name: "SYSFAN"
+  speed {
+  }
+  control {
+    current_method: "SmartFan IV"
+    current_percent: 0.6588235294117647
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          critical_temp: 125
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_high: 0
+          tolerance_high: 0
+          step_up_value: 0
+          step_down_value: 0
+        }
+      }
+    }
+    methods {
+      name: "SmartFan IV"
+      nuvoton_method {
+        smart_fan_iv_params {
+          control_points {
+            temp: 20
+            percent: 60
+          }
+          control_points {
+            temp: 45
+            percent: 69.803921568627445
+          }
+          control_points {
+            temp: 60
+            percent: 84.705882352941174
+          }
+          control_points {
+            temp: 70
+            percent: 100
+          }
+        }
+      }
+    }
+    temp_source: "PECI0Calibration"
+    temp_value: 35
+  }
+}
+fans {
+  name: "CPUFAN"
+  speed {
+    value: 711
+  }
+  control {
+    current_method: "SmartFan IV"
+    current_percent: 0.31764705882352939
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          target_temp: 50
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          critical_temp: 125
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_low: 50
+          target_speed_count_high: 0
+          tolerance_high: 0
+          step_up_value: 0
+          step_down_value: 0
+        }
+      }
+    }
+    methods {
+      name: "SmartFan IV"
+      nuvoton_method {
+        smart_fan_iv_params {
+          control_points {
+            temp: 20
+            percent: 20
+          }
+          control_points {
+            temp: 45
+            percent: 40
+          }
+          control_points {
+            temp: 65
+            percent: 69.803921568627445
+          }
+          control_points {
+            temp: 70
+            percent: 100
+          }
+        }
+      }
+    }
+    temp_source: "PECI0Calibration"
+    temp_value: 35
+  }
+}
+fans {
+  name: "AUXFAN0"
+  speed {
+    value: 700
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 0.6
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          step_up_time: 10
+          step_down_time: 10
+          critical_temp: 100
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_high: 0
+          tolerance_high: 0
+          step_up_time: 10
+          step_down_time: 10
+          step_up_value: 1
+          step_down_value: 1
+        }
+      }
+    }
+    methods {
+      name: "SmartFan IV"
+      nuvoton_method {
+        smart_fan_iv_params {
+          control_points {
+            temp: 25
+            percent: 54.901960784313729
+          }
+          control_points {
+            temp: 35
+            percent: 66.666666666666657
+          }
+          control_points {
+            temp: 45
+            percent: 78.431372549019613
+          }
+          control_points {
+            temp: 55
+            percent: 90.196078431372555
+          }
+        }
+      }
+    }
+    temp_source: "AUXTIN0"
+    temp_value: 39
+  }
+}
+fans {
+  name: "AUXFAN1"
+  speed {
+    value: 843
+  }
+  control {
+    current_method: "SmartFan IV"
+    current_percent: 0.6588235294117647
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          critical_temp: 125
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_high: 0
+          tolerance_high: 0
+          step_up_value: 0
+          step_down_value: 0
+        }
+      }
+    }
+    methods {
+      name: "SmartFan IV"
+      nuvoton_method {
+        smart_fan_iv_params {
+          control_points {
+            temp: 20
+            percent: 60
+          }
+          control_points {
+            temp: 45
+            percent: 69.803921568627445
+          }
+          control_points {
+            temp: 60
+            percent: 84.705882352941174
+          }
+          control_points {
+            temp: 70
+            percent: 100
+          }
+        }
+      }
+    }
+    temp_source: "PECI0Calibration"
+    temp_value: 35
+  }
+}
+fans {
+  name: "AUXFAN2"
+  speed {
+    value: 789
+  }
+  control {
+    current_method: "SmartFan IV"
+    current_percent: 0.31764705882352939
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          critical_temp: 125
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_high: 0
+          tolerance_high: 0
+          step_up_value: 0
+          step_down_value: 0
+        }
+      }
+    }
+    methods {
+      name: "SmartFan IV"
+      nuvoton_method {
+        smart_fan_iv_params {
+          control_points {
+            temp: 20
+            percent: 20
+          }
+          control_points {
+            temp: 45
+            percent: 40
+          }
+          control_points {
+            temp: 65
+            percent: 69.803921568627445
+          }
+          control_points {
+            temp: 70
+            percent: 100
+          }
+        }
+      }
+    }
+    temp_source: "PECI0Calibration"
+    temp_value: 35
+  }
+}
+fans {
+  name: "AUXFAN3"
+  speed {
+  }
+  control {
+    current_method: "SmartFan IV"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          critical_temp: 100
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_high: 0
+          tolerance_high: 0
+          step_up_value: 0
+          step_down_value: 0
+        }
+      }
+    }
+    methods {
+      name: "SmartFan IV"
+      nuvoton_method {
+        smart_fan_iv_params {
+          control_points {
+            percent: 100
+          }
+          control_points {
+            temp: 100
+            percent: 100
+          }
+          control_points {
+            temp: 100
+            percent: 100
+          }
+          control_points {
+            temp: 100
+            percent: 100
+          }
+        }
+      }
+    }
+    temp_source: "PECI0Calibration"
+    temp_value: 35
+  }
+}
+fans {
+  name: "AUXFAN4"
+  speed {
+    value: 544
+  }
+  control {
+    current_method: "SmartFan IV"
+    current_percent: 0.31764705882352939
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          critical_temp: 125
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_high: 0
+          tolerance_high: 0
+          step_up_value: 0
+          step_down_value: 0
+        }
+      }
+    }
+    methods {
+      name: "SmartFan IV"
+      nuvoton_method {
+        smart_fan_iv_params {
+          control_points {
+            temp: 20
+            percent: 20
+          }
+          control_points {
+            temp: 45
+            percent: 40
+          }
+          control_points {
+            temp: 65
+            percent: 69.803921568627445
+          }
+          control_points {
+            temp: 70
+            percent: 100
+          }
+        }
+      }
+    }
+    temp_source: "PECI0Calibration"
+    temp_value: 35.5
+  }
+}
+temperatures {
+  name: "SMIOVT1"
+  value: 27
+  source: "SYSTIN"
+}
+temperatures {
+  name: "SMIOVT2"
+  value: 35
+  source: "CPUTIN"
+}
+temperatures {
+  name: "SMIOVT3"
+  value: 39
+  source: "AUXTIN0"
+}
+temperatures {
+  name: "SMIOVT4"
+  value: 12
+  source: "AUXTIN1"
+}
+temperatures {
+  name: "SMIOVT5"
+  value: 31
+  source: "AUXTIN2"
+}
+temperatures {
+  name: "SMIOVT6"
+  value: 31
+  source: "AUXTIN3"
+}
+temperatures {
+  name: "SMIOVT7"
+  value: 31
+  source: "AUXTIN4"
+}
+temperatures {
+  name: "SMIOVT8"
+  value: 39
+  source: "PECI0"
+}
+temperatures {
+  name: "SYSTIN"
+  value: 27
+}
+temperatures {
+  name: "CPUTIN"
+  value: 35
+}
+temperatures {
+  name: "AUXTIN0"
+  value: 39
+}
+temperatures {
+  name: "AUXTIN1"
+  value: 12
+}
+temperatures {
+  name: "AUXTIN2"
+  value: 31
+}
+temperatures {
+  name: "AUXTIN3"
+  value: 31
+}
+temperatures {
+  name: "PECI0Calibration"
+  value: 35
+}
+temperatures {
+  name: "PECI1Calibration"
+}
+temperatures {
+  name: "PCH_CPU_MAX"
+}
+temperatures {
+  name: "PCH"
+}
+temperatures {
+  name: "PCH_CPU"
+}
+temperatures {
+  name: "MCH"
+}
+temperatures {
+  name: "DIM0"
+}
+temperatures {
+  name: "DIM1"
+}
+temperatures {
+  name: "DIM2"
+}
+temperatures {
+  name: "DIM3"
+}
+temperatures {
+  name: "TSI0"
+}
+temperatures {
+  name: "TSI1"
+}
+temperatures {
+  name: "BYTE0"
+}
+temperatures {
+  name: "BYTE1"
+}
+voltages {
+  name: "Vcore"
+  value: 0.856
+}
+voltages {
+  name: "Vin1"
+  value: 1.032
+}
+voltages {
+  name: "AVsb"
+  value: 3.424
+}
+voltages {
+  name: "3Vcc"
+  value: 3.36
+}
+voltages {
+  name: "Vin0"
+  value: 1.024
+}
+voltages {
+  name: "Vin8"
+  value: 0.904
+}
+voltages {
+  name: "Vin4"
+  value: 0.76
+}
+voltages {
+  name: "3Vsb"
+  value: 3.424
+}
+voltages {
+  name: "Vbat"
+}
+voltages {
+  name: "Vtt"
+  value: 0.544
+}
+voltages {
+  name: "Vin5"
+  value: 0.632
+}
+voltages {
+  name: "Vin6"
+  value: 0.52
+}
+voltages {
+  name: "Vin2"
+  value: 1.064
+}
+voltages {
+  name: "Vin3"
+  value: 0.57600000000000007
+}
+voltages {
+  name: "Vin7"
+  value: 0.912
+}
+voltages {
+  name: "Vin9"
+  value: 0.984
+}
+name: "nuvoton"
