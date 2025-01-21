@@ -54,6 +54,11 @@ Getting sensor values on FreeBSD
     Document available.
     Not tested.
 
+* W83697HF
+
+    Document available.
+    Not tested.
+
 ## ITE
 
 * IT8772E (WIP)
