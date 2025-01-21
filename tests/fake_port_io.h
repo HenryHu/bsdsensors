@@ -14,6 +14,9 @@
 
 namespace bsdsensors {
 
+using ControlRegisterTable = std::map<uint8_t, uint8_t>;
+using HmDataTable = std::map<uint8_t, std::map<uint8_t, uint8_t>>;
+
 class FakePortIO : public PortIO {
   public:
     virtual ~FakePortIO() {}
@@ -25,7 +28,7 @@ class FakePortIO : public PortIO {
 };
 
 std::unique_ptr<FakePortIO> CreateFakePortIO(
-        std::map<uint8_t, uint8_t> registers);
+        ControlRegisterTable registers, HmDataTable hm_data);
 
 }
 
