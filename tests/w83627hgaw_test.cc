@@ -1,6 +1,9 @@
 #include "nuvoton_chip.h"
 #include "nuvoton_test.h"
 
+#include <google/protobuf/text_format.h>
+#include <google/protobuf/util/message_differencer.h>
+
 namespace bsdsensors {
 namespace {
 
@@ -63,6 +66,115 @@ const HmDataTable kTestHmData = {
         } }
 };
 
+constexpr char kExpectedSensors[] = R"pb(
+fans {
+  name: "FAN1"
+  speed {
+    value: 5273
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    temp_source: "Unknown"
+  }
+}
+fans {
+  name: "FAN2"
+  speed {
+    value: 5232
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    temp_source: "Unknown"
+  }
+}
+fans {
+  name: "FAN3"
+  speed {
+    value: 5192
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    temp_source: "Unknown"
+  }
+}
+temperatures {
+  name: "VTIN1"
+  value: 49
+}
+temperatures {
+  name: "VTIN2"
+  value: 50
+}
+temperatures {
+  name: "VTIN3"
+  value: 51
+}
+voltages {
+  name: "VcoreA"
+  value: 0.512
+}
+voltages {
+  name: "VcoreB"
+  value: 0.528
+}
+voltages {
+  name: "3.3Vin"
+  value: 0.544
+}
+voltages {
+  name: "5Vin"
+  value: 0.94080000000000008
+}
+voltages {
+  name: "12Vin"
+  value: 2.1888
+}
+voltages {
+  name: "-12Vin"
+  value: -11.86712
+}
+voltages {
+  name: "-5Vin"
+  value: -5.80088
+}
+voltages {
+  name: "5Vsb"
+  value: 2.1504
+}
+voltages {
+  name: "Vbat"
+  value: 1.296
+}
+name: "nuvoton"
+)pb";
+
 struct W83627HGAWTest : public ::testing::Test {
   void SetUp() override {
       auto port_io = CreateFakePortIO(kTestRegisters, kTestHmData);
@@ -77,11 +189,23 @@ TEST_F(W83627HGAWTest, Detect) {
 }
 
 TEST_F(W83627HGAWTest, Dump) {
+    std::stringstream ss;
     ASSERT_TRUE(chip->Detect());
-    chip->DumpInfo(std::cerr);
+    chip->DumpInfo(ss);
 }
 
+TEST_F(W83627HGAWTest, Sensors) {
+    ASSERT_TRUE(chip->Detect());
+    SensorsProto sensors;
+    ASSERT_TRUE(chip->GetSensorValues(&sensors).ok());
 
+    SensorsProto expected_sensors;
+    ASSERT_TRUE(google::protobuf::TextFormat::ParseFromString(
+                kExpectedSensors, &expected_sensors));
+
+    EXPECT_TRUE(google::protobuf::util::MessageDifferencer::ApproximatelyEquals(
+                sensors, expected_sensors));
+}
 }
 }
 
