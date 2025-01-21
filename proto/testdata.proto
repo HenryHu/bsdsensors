@@ -1,0 +1,13 @@
+syntax = 'proto3';
+
+package bsdsensors;
+
+message HMBankData {
+  map<uint32, uint32> values = 1;
+}
+
+message TestData {
+  map<uint32, uint32> registers = 1;
+  // Maps from a bank to its data.
+  map<uint32, HMBankData> hm_data = 2;
+}

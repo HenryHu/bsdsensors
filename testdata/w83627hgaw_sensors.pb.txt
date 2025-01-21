@@ -1,0 +1,106 @@
+fans {
+  name: "FAN1"
+  speed {
+    value: 5273
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    temp_source: "Unknown"
+  }
+}
+fans {
+  name: "FAN2"
+  speed {
+    value: 5232
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    temp_source: "Unknown"
+  }
+}
+fans {
+  name: "FAN3"
+  speed {
+    value: 5192
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    temp_source: "Unknown"
+  }
+}
+temperatures {
+  name: "VTIN1"
+  value: 49
+}
+temperatures {
+  name: "VTIN2"
+  value: 50
+}
+temperatures {
+  name: "VTIN3"
+  value: 51
+}
+voltages {
+  name: "VcoreA"
+  value: 0.512
+}
+voltages {
+  name: "VcoreB"
+  value: 0.528
+}
+voltages {
+  name: "3.3Vin"
+  value: 0.544
+}
+voltages {
+  name: "5Vin"
+  value: 0.94080000000000008
+}
+voltages {
+  name: "12Vin"
+  value: 2.1888
+}
+voltages {
+  name: "-12Vin"
+  value: -11.86712
+}
+voltages {
+  name: "-5Vin"
+  value: -5.80088
+}
+voltages {
+  name: "5Vsb"
+  value: 2.1504
+}
+voltages {
+  name: "Vbat"
+  value: 1.296
+}
+name: "nuvoton"

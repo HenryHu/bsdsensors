@@ -1,0 +1,66 @@
+# Device ID
+registers { key: 0x20 value: 0x52 }
+registers { key: 0x21 value: 0x17 }
+# Activated
+registers { key: 0x30 value: 0x01 }
+# Access base address
+registers { key: 0x60 value: 0x01 }
+registers { key: 0x61 value: 0x00 }
+hm_data {
+    key: 0
+    value {
+        values { key: 0x4F value: 0xA3 }
+        values { key: 0x58 value: 0xC1 }
+        # FAN1
+        values { key: 0x28 value: 0x80 }
+        values { key: 0x5D value: 0x01 }
+        values { key: 0x47 value: 0x55 }
+        values { key: 0x5A value: 0xFF }
+        # FAN2
+        values { key: 0x29 value: 0x81 }
+        values { key: 0x5B value: 0xFF }
+        # FAN3
+        values { key: 0x2A value: 0x82 }
+        values { key: 0x11 value: 0xFF }
+        values { key: 0x4B value: 0x44 }
+        # VTIN1
+        values { key: 0x27 value: 0x31 }
+        values { key: 0x54 value: 0x00 }
+        # Volts
+        values { key: 0x20 value: 0x20 }
+        values { key: 0x21 value: 0x21 }
+        values { key: 0x22 value: 0x22 }
+        values { key: 0x23 value: 0x23 }
+        values { key: 0x24 value: 0x24 }
+        values { key: 0x25 value: 0x25 }
+        values { key: 0x26 value: 0x26 }
+    }
+}
+hm_data {
+    key: 1
+    value {
+        # VTIN2
+        values { key: 0x50 value: 0x32 }
+        values { key: 0x51 value: 0x00 }
+    }
+}
+hm_data {
+    key: 2
+    value {
+        values { key: 0x50 value: 0x33 }
+        values { key: 0x51 value: 0x00 }
+    }
+}
+hm_data {
+    key: 5
+    value {
+        values { key: 0x50 value: 0x50 }
+        values { key: 0x51 value: 0x51 }
+    }
+}
+hm_data {
+    key: 0x80
+    value {
+        values { key: 0x4F value: 0x5C }
+    }
+}
