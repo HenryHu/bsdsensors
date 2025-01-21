@@ -19,7 +19,7 @@ HmDataTable GetTestHmData(const TestData& test_data) {
     return result;
 }
 
-struct W83627HGAWTest : public ::testing::Test {
+struct NuvotonTest : public ::testing::Test {
   void SetUp() override {
       TestData test_data = LoadTestInput();
       auto port_io = CreateFakePortIO(
@@ -31,17 +31,17 @@ struct W83627HGAWTest : public ::testing::Test {
   std::unique_ptr<NuvotonChip> chip;
 };
 
-TEST_F(W83627HGAWTest, Detect) {
+TEST_F(NuvotonTest, Detect) {
     EXPECT_TRUE(chip->Detect());
 }
 
-TEST_F(W83627HGAWTest, Dump) {
+TEST_F(NuvotonTest, Dump) {
     std::stringstream ss;
     ASSERT_TRUE(chip->Detect());
     chip->DumpInfo(ss);
 }
 
-TEST_F(W83627HGAWTest, Sensors) {
+TEST_F(NuvotonTest, Sensors) {
     ASSERT_TRUE(chip->Detect());
     SensorsProto sensors;
     ASSERT_TRUE(chip->GetSensorValues(&sensors).ok());
