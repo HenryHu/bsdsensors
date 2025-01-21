@@ -12,6 +12,7 @@
 #include "status.h"
 #include "sensors.pb.h"
 #include "request.pb.h"
+#include "testdata.pb.h"
 
 #include <string>
 
@@ -33,6 +34,8 @@ class Chip : public DumpAble {
     virtual void DumpAll(std::ostream& out) {
         out << "DumpAll not implemented." << std::endl;
     }
+
+    virtual TestData DumpProto() { return {}; }
 };
 
 }  // namespace bsdsensors

@@ -29,6 +29,7 @@ DEFINE_bool(json, false, "print proto in json");
 DEFINE_string(request, "", "request configuration change");
 DEFINE_string(chip, "", "specify which chip to print");
 DEFINE_bool(dump, false, "dump everything (can be dangerous)");
+DEFINE_bool(dumpproto, false, "dump everything in proto format (can be dangerous)");
 
 using namespace std;
 using namespace bsdsensors;
@@ -92,6 +93,15 @@ int main(int argc, char** argv) {
 
         if (FLAGS_dump) {
             chip->DumpAll(cerr);
+            break;
+        }
+
+        if (FLAGS_dumpproto) {
+            TestData proto = chip->DumpProto();
+            std::string out;
+            google::protobuf::TextFormat::PrintToString(proto, &out);
+            std::cout << out << std::endl;
+            break;
         }
 
         if (!FLAGS_request.empty()) {

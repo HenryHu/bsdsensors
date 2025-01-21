@@ -14,6 +14,7 @@
 #include "nuvoton_temp_sensor.h"
 #include "nuvoton_volt_sensor.h"
 #include "util.h"
+#include "testdata.pb.h"
 
 #include <unistd.h>
 #include <iomanip>
@@ -106,6 +107,7 @@ class NuvotonChipImpl : public NuvotonChip {
                     LOG(INFO) << "Found Nuvoton chip, ID: " << hex << "0x" << id
                               << " at 0x" << port;
 
+                    id_ = id;
                     info_ = GetKnownChips<NuvotonChipInfo>()->Find(id);
                     if (info_ != nullptr) {
                         LOG(INFO) << "Known Nuvoton Chip: " << info_->device_id_to_name.at(id);
@@ -330,6 +332,28 @@ class NuvotonChipImpl : public NuvotonChip {
         }
     }
 
+    TestData DumpProto() override {
+        TestData result;
+
+        auto& registers = *result.mutable_registers();
+        registers[kDeviceID] = id_ >> 8;
+        registers[kDeviceID + 1] = id_ & 0xFF;
+        registers[kLogicalDeviceEnabled] = 0x01;
+        registers[kPortBaseAddress] = 0x01;
+        registers[kPortBaseAddress + 1] = 0x00;
+
+        for (uint8_t bank = 0; bank < 16; bank++) {
+            HMBankData& bank_data = (*result.mutable_hm_data())[bank];
+
+            for (int i = 0; i < 256; i++) {
+                uint8_t data;
+                CHECK(ReadByte({bank, i}, &data), "Fail to read byte");
+                (*bank_data.mutable_values())[i] = data;
+            }
+        }
+        return result;
+    }
+
     void LoadSensors() {
         for (const auto& fan : info_->fans) {
             fan_speeds_.push_back(CreateNuvotonFanSpeed(fan, this));
@@ -463,6 +487,7 @@ class NuvotonChipImpl : public NuvotonChip {
     const NuvotonChipInfo* info_;
     std::string name_;
     std::optional<PortAddress> fast_access_addr_;
+    uint16_t id_;
 
     std::vector<std::unique_ptr<NuvotonFanSpeed>> fan_speeds_;
     std::vector<std::unique_ptr<NuvotonFanControl>> fan_controls_;
