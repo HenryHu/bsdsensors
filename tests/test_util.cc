@@ -41,4 +41,16 @@ SensorsProto LoadTestOutputSensors() {
             FLAGS_testdata_path + "/" + FLAGS_testout_sensors_filename);
 }
 
+void SaveTestOutputSensors(const SensorsProto& proto) {
+    const std::string path = FLAGS_testdata_path + "/" + FLAGS_testout_sensors_filename;
+    int fout = open(path.c_str(), O_RDWR);
+    CHECK(fout != -1);
+    auto output = std::unique_ptr<google::protobuf::io::ZeroCopyOutputStream>(new google::protobuf::io::FileOutputStream(fout));
+
+    CHECK(google::protobuf::TextFormat::Print(proto, output.get()));
+
+    output.reset();
+    close(fout);
+}
+
 }

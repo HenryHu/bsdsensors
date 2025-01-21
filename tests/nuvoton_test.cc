@@ -8,6 +8,8 @@
 #include <google/protobuf/text_format.h>
 #include <google/protobuf/util/message_differencer.h>
 
+DEFINE_bool(dump, false, "if set, dump the output proto based on the test input instead");
+
 namespace bsdsensors {
 namespace {
 
@@ -46,8 +48,12 @@ TEST_F(NuvotonTest, Sensors) {
     SensorsProto sensors;
     ASSERT_TRUE(chip->GetSensorValues(&sensors).ok());
 
-    SensorsProto expected_sensors = LoadTestOutputSensors();
+    if (FLAGS_dump) {
+        SaveTestOutputSensors(sensors);
+        return;
+    }
 
+    SensorsProto expected_sensors = LoadTestOutputSensors();
     EXPECT_TRUE(google::protobuf::util::MessageDifferencer::ApproximatelyEquals(
                 sensors, expected_sensors));
 }
