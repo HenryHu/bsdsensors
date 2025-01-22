@@ -38,6 +38,14 @@ std::string GetControlModeName(const NuvotonFanControlMode mode) {
     }
     return "Unknown: " + std::to_string((int)mode);
 }
+
+std::string GetOutputTypeName(const NuvotonFanControlOutputType type) {
+    switch (type) {
+        case kPWM: return "PWM";
+        case kDC: return "DC";
+    }
+    return "Unknown: " + std::to_string(type);
+}
 }
 
 class NuvotonFanControlManualImpl : public NuvotonFanControlManual {
@@ -432,6 +440,13 @@ class DummyNuvotonFanControlImpl : public NuvotonFanControl {
         *method = &dummy_method_;
         return OkStatus();
     }
+    Status SetOutputType(const NuvotonFanControlOutputType output_type) override {
+        return Status(EINVAL, "No fan control");
+    }
+    Status GetOutputType(NuvotonFanControlOutputType& output_type) override {
+        output_type = kPWM;
+        return OkStatus();
+    }
     void FillState(FanControlProto* proto) override {}
     Status HandleRequest(const FanControlRequest& request) override {
         return Status(EINVAL, "No fan control");
@@ -481,13 +496,14 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         return ret;
     }
 
-    NuvotonFanControlMode GetControlMode() {
+    Status GetControlMode(NuvotonFanControlMode& mode) {
         if (!info_.mode_select.valid) {
-            return NuvotonFanControlMode::kManualMode;
+            mode = NuvotonFanControlMode::kManualMode;
         }
-        uint8_t mode;
-        chip_->ReadByte(info_.mode_select, &mode);
-        return (NuvotonFanControlMode)mode;
+        uint8_t result;
+        RETURN_IF_ERROR(chip_->ReadByte(info_.mode_select, &result));
+        mode = (NuvotonFanControlMode)result;
+        return OkStatus();
     }
 
     Status SetControlMode(NuvotonFanControlMode target) override {
@@ -504,7 +520,8 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     }
 
     Status GetCurrentMethod(FanControlMethod** method) override {
-        NuvotonFanControlMode mode = GetControlMode();
+        NuvotonFanControlMode mode;
+        RETURN_IF_ERROR(GetControlMode(mode));
         switch (mode) {
             case NuvotonFanControlMode::kManualMode: {
                 *method = manual_.get();
@@ -594,10 +611,33 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         }
     }
 
+    Status SetOutputType(const NuvotonFanControlOutputType output_type) override {
+        if (info_.support_dc && info_.output_type.valid) {
+            RETURN_IF_ERROR(chip_->WriteByte(info_.output_type, output_type));
+            return OkStatus();
+        } else {
+            return Status(ENODEV, "Cannot change output type");
+        }
+    }
+    Status GetOutputType(NuvotonFanControlOutputType& output_type) override {
+        if (info_.support_dc && info_.output_type.valid) {
+            uint8_t output;
+            RETURN_IF_ERROR(chip_->ReadByte(info_.output_type, &output));
+            output_type = NuvotonFanControlOutputType(output);
+        } else {
+            output_type = kPWM;
+        }
+        return OkStatus();
+    }
+
     void DumpInfo(std::ostream& out) override {
+        NuvotonFanControlOutputType output_type;
+        NuvotonFanControlMode mode;
+        CHECK(GetControlMode(mode), "fail to get control mode");
+        CHECK(GetOutputType(output_type), "fail to get output type");
         out << "    at " << std::dec << (int)(current_percent() * 100) << "%"
-            << " with ";
-        out << GetControlModeName(GetControlMode()) << std::endl;
+            << " with " << GetControlModeName(mode);
+        out << " type " << GetOutputTypeName(output_type) << std::endl;
         const NuvotonTempSource source = GetTempSource();
         if (source != NuvotonTempSource::kSourceUnknown) {
             out << "    temp source: " << GetNuvotonSourceName(GetTempSource());

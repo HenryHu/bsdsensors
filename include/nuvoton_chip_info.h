@@ -83,6 +83,11 @@ enum NuvotonTempSensorType {
     kDiodeSensor = 1,
 };
 
+enum NuvotonFanControlOutputType {
+    kPWM = 0,
+    kDC = 1,
+};
+
 struct NuvotonThermalCruiseInfo {
     // Target temperature.
     NuvotonChip::AddressType target_temp;
