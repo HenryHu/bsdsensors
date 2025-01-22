@@ -27,6 +27,8 @@ const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
     {NuvotonTempSource::kSourceSMBUSMASTER7, "SMBUS7"},
     {NuvotonTempSource::kSourcePECI0, "PECI0"},
     {NuvotonTempSource::kSourcePECI1, "PECI1"},
+    {NuvotonTempSource::kSourcePECI2, "PECI2"},
+    {NuvotonTempSource::kSourcePECI3, "PECI3"},
     {NuvotonTempSource::kSourcePCHCPUMAX, "PCH_CPU_MAX"},
     {NuvotonTempSource::kSourcePCH, "PCH"},
     {NuvotonTempSource::kSourcePCHCPU, "PCH_CPU"},
@@ -48,6 +50,7 @@ const std::map<NuvotonTempSource, std::string> kNuvotonTempSourceName{
     {NuvotonTempSource::kSourceVirtualTemp3, "VirtualTemp3"},
     {NuvotonTempSource::kSourcePECI0Calib, "PECI0Calibration"},
     {NuvotonTempSource::kSourcePECI1Calib, "PECI1Calibration"},
+    {NuvotonTempSource::kSourceAMDTSI, "AMDTSI"},
 };
 
 std::string GetNuvotonSourceName(NuvotonTempSource source) {

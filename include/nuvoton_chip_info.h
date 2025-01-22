@@ -66,6 +66,7 @@ enum class NuvotonTempSource {
     kSourceBYTE1 = 39,
     kSourcePECI2 = 40,
     kSourcePECI3 = 41,
+    kSourceAMDTSI = 42,
 };
 
 constexpr int kMaxSource = 37;
