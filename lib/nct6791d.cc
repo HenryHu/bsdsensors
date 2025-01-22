@@ -328,7 +328,8 @@ const NuvotonChipInfo kNCT6791D = {
         {"Vin2", {4, 0x8C}},
         {"Vin3", {4, 0x8D}},
         {"Vin7", {4, 0x8E}},
-    }
+    },
+    .io_space_enable = 0x28,
 };
 
 RegisterChip<NuvotonChipInfo> kRegisterNCT6791D(kNCT6791D);
