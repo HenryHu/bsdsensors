@@ -15,18 +15,25 @@ Getting sensor values on FreeBSD
 
     Document available.
     No hardware to test.
+
 * NCT6776F
 
     Document available.
     No hardware to test.
+
 * NCT6779D
 
     Document available.
     No hardware to test.
 
-* NCT6793D (partial)
+* NCT6791D
 
-    Document not available. Based on NCT6779D.
+    Document available.
+    No hardware to test.
+
+* NCT6793D
+
+    Document available.
     Tested on ASUS Z270-A PRIME
 
 * NCT6796D
