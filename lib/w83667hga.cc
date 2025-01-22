@@ -185,7 +185,7 @@ const NuvotonChipInfo kW83667HGA = {
         {"Vin1", {0, 0x24}},
         {"Vcore_refin", {0, 0x25}},
         {"Vin2", {0, 0x26}},
-        {"3Vsb", {5, 0x50}},
+        {"3Vsb", {5, 0x50}, 2.0},
         {.name = "Vbat", .addr = {5, 0x51}, .enable = {0, 0x5D, {0}}},
     },
     .notes = "Note: SYSTIN, CPUTIN, and AUXTIN are actually temp sensors selected"
