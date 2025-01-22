@@ -1,0 +1,201 @@
+fans {
+  name: "SYSFAN"
+  speed {
+    value: 1125
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 0.60784313725490191
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          keep_min_output: true
+          stop_time: 60
+          step_up_time: 4
+          step_down_time: 4
+          critical_temp: 55
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          step_up_time: 4
+          step_down_time: 4
+        }
+      }
+    }
+    temp_source: "CPUTIN"
+    temp_value: 37
+  }
+}
+fans {
+  name: "CPUFAN"
+  speed {
+    value: 2556
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 0.83921568627450982
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          target_temp: 50
+          tolerance: 2
+          start_value: 1
+          stop_value: 155
+          keep_min_output: true
+          stop_time: 60
+          step_up_time: 50
+          step_down_time: 50
+          critical_temp: 255
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          target_speed_count_low: 50
+          tolerance_low: 2
+          step_up_time: 50
+          step_down_time: 50
+        }
+      }
+    }
+    temp_source: "CPUTIN"
+    temp_value: 44.5
+  }
+}
+fans {
+  name: "AUXFAN"
+  speed {
+  }
+  control {
+    current_method: "Manual"
+    current_percent: 1
+    methods {
+      name: "Manual"
+      nuvoton_method {
+        manual_params {
+          percent: 64.705882352941174
+        }
+      }
+    }
+    methods {
+      name: "Thermal Cruise"
+      nuvoton_method {
+        thermal_cruise_params {
+          start_value: 1
+          stop_value: 1
+          stop_time: 60
+          step_up_time: 50
+          step_down_time: 50
+          critical_temp: 255
+        }
+      }
+    }
+    methods {
+      name: "Speed Cruise"
+      nuvoton_method {
+        speed_cruise_params {
+          step_up_time: 50
+          step_down_time: 50
+        }
+      }
+    }
+    temp_source: "AUXTIN0"
+    temp_value: 26.5
+  }
+}
+fans {
+  name: "AUXFAN1"
+  speed {
+  }
+  control {
+    current_method: "Dummy"
+  }
+}
+fans {
+  name: "AUXFAN2"
+  speed {
+  }
+  control {
+    current_method: "Dummy"
+  }
+}
+temperatures {
+  name: "TEMP"
+  value: 37
+  source: "SYSTIN"
+}
+temperatures {
+  name: "SYSTIN"
+  value: 37
+}
+temperatures {
+  name: "CPUTIN"
+  value: 44.5
+}
+temperatures {
+  name: "AUXTIN"
+  value: 26.5
+}
+voltages {
+  name: "Vcore"
+  value: 1.288
+}
+voltages {
+  name: "Vin0"
+  value: 1.728
+}
+voltages {
+  name: "AVcc"
+  value: 3.3120000000000003
+}
+voltages {
+  name: "3Vcc"
+  value: 3.2800000000000002
+}
+voltages {
+  name: "Vin1"
+  value: 1.712
+}
+voltages {
+  name: "Vcore_refin"
+  value: 2.04
+}
+voltages {
+  name: "Vin2"
+  value: 1.288
+}
+voltages {
+  name: "3Vsb"
+  value: 3.376
+}
+voltages {
+  name: "Vbat"
+  value: 0.192
+}
+name: "nuvoton"
