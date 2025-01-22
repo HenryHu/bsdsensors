@@ -6,6 +6,16 @@ Getting sensor values on FreeBSD
 
 ## nuvoTon
 
+* NCT5532D
+
+    Document available.
+    No hardware to test.
+
+* NCT5562D
+
+    Document available.
+    No hardware to test.
+
 * NCT6102D / NCT6106D
 
     Document available.
