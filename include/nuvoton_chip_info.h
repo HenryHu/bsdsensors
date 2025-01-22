@@ -91,8 +91,6 @@ struct NuvotonThermalCruiseInfo {
     NuvotonChip::AddressType stop_value;
     NuvotonChip::AddressType keep_min_output;
     NuvotonChip::AddressType stop_time;
-    NuvotonChip::AddressType step_up_time;
-    NuvotonChip::AddressType step_down_time;
     // If temperature reaches this, fan will run at 100%.
     NuvotonChip::AddressType critical_temp;
 };
@@ -103,8 +101,6 @@ struct NuvotonSpeedCruiseInfo {
     NuvotonChip::AddressType target_speed_count_high;
     NuvotonChip::AddressType tolerance_low;
     NuvotonChip::AddressType tolerance_high;
-    NuvotonChip::AddressType step_up_time;
-    NuvotonChip::AddressType step_down_time;
     NuvotonChip::AddressType step_up_value;
     NuvotonChip::AddressType step_down_value;
     NuvotonChip::AddressType keep_min_output;
@@ -114,6 +110,8 @@ struct NuvotonSmartFanInfo {
     bool available;
     NuvotonThermalCruiseInfo thermal_cruise;
     NuvotonSpeedCruiseInfo speed_cruise;
+    NuvotonChip::AddressType step_up_time;
+    NuvotonChip::AddressType step_down_time;
 };
 
 struct NuvotonSmartFan4ControlPointInfo {

@@ -35,15 +35,13 @@ const NuvotonChipInfo kW83697HF = {
                         .stop_value = {0, 0x08},
                         // unit is 0.1s
                         .stop_time = {0, 0x0C},
-                        .step_up_time = {0, 0x0F},
-                        .step_down_time = {0, 0x0E},
                     },
                     .speed_cruise = {
                         .target_speed_count_low = {0, 0x05},
                         .tolerance_low = {0, 0x07, {3, 0}},
-                        .step_up_time = {0, 0x0F},
-                        .step_down_time = {0, 0x0E},
-                    }
+                    },
+                    .step_up_time = {0, 0x0F},
+                    .step_down_time = {0, 0x0E},
                 },
                 // Actually it's VTIN1
                 .fixed_temp_source = NuvotonTempSource::kSourceCPUTIN,
@@ -64,15 +62,13 @@ const NuvotonChipInfo kW83697HF = {
                         .stop_value = {0, 0x09},
                         // unit is 0.1s
                         .stop_time = {0, 0x0D},
-                        .step_up_time = {0, 0x0F},
-                        .step_down_time = {0, 0x0E},
                     },
                     .speed_cruise = {
                         .target_speed_count_low = {0, 0x06},
                         .tolerance_low = {0, 0x07, {7, 4}},
-                        .step_up_time = {0, 0x0F},
-                        .step_down_time = {0, 0x0E},
-                    }
+                    },
+                    .step_up_time = {0, 0x0F},
+                    .step_down_time = {0, 0x0E},
                 },
                 // Actually it's VTIN2
                 .fixed_temp_source = NuvotonTempSource::kSourceSYSTIN,

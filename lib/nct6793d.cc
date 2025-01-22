@@ -50,30 +50,27 @@ const NuvotonChipInfo kNCT6793D = {
              .temp_value_int = {0, 0x73},
              .temp_value_frac = {0, 0x74, {7}},
              // Smart Fan I
-             .smart_fan = {true,
-                 /*thermal_cruise=*/
-                 {
+             .smart_fan = {.available = true,
+                 .thermal_cruise = {
                      .target_temp = {1, 0x01},
                      .tolerance = {1, 0x02, {2, 0}},
                      .start_value = {1, 0x06},
                      .stop_value = {1, 0x05},
                      .keep_min_output = {1, 0x00, {7}},
                      .stop_time = {1, 0x07},
-                     .step_up_time = {1, 0x03},
-                     .step_down_time = {1, 0x04},
                      .critical_temp = {1, 0x35},
                  },
-                 /*speed_cruise=*/
-                 {
+                 .speed_cruise = {
                      .target_speed_count_low = {1, 0x01},
                      .target_speed_count_high = {1, 0x0C, {3, 0}},
                      .tolerance_low = {1, 0x02, {2, 0}},
                      .tolerance_high = {1, 0x0C, {6, 4}},
-                     .step_up_time = {1, 0x03},
-                     .step_down_time = {1, 0x04},
                      .step_up_value = {1, 0x66, {7, 4}},
                      .step_down_value = {1, 0x66, {3, 0}},
-                 }},
+                 },
+                 .step_up_time = {1, 0x03},
+                 .step_down_time = {1, 0x04},
+             },
              // Smart Fan IV
              .smart_fan4 = {true,
                  // Control points
@@ -98,30 +95,27 @@ const NuvotonChipInfo kNCT6793D = {
              {0, 0x75},
              {0, 0x76, {7}},
              // Smart Fan I
-             {true,
-              /*thermal_cruise=*/
-              {
-                  .target_temp = {2, 0x01},
-                  .tolerance = {2, 0x02, {2, 0}},
-                  .start_value = {2, 0x06},
-                  .stop_value = {2, 0x05},
-                  .keep_min_output = {2, 0x00, {7}},
-                  .stop_time = {2, 0x07},
-                  .step_up_time = {2, 0x03},
-                  .step_down_time = {2, 0x04},
-                  .critical_temp = {2, 0x35},
-              },
-              /*speed_cruise=*/
-              {
-                  .target_speed_count_low = {2, 0x01},
-                  .target_speed_count_high = {2, 0x0C, {3, 0}},
-                  .tolerance_low = {2, 0x02, {2, 0}},
-                  .tolerance_high = {2, 0x0C, {6, 4}},
-                  .step_up_time = {2, 0x03},
-                  .step_down_time = {2, 0x04},
-                  .step_up_value = {2, 0x66, {7, 4}},
-                  .step_down_value = {2, 0x66, {3, 0}},
-              }},
+             {.available = true,
+                 .thermal_cruise = {
+                     .target_temp = {2, 0x01},
+                     .tolerance = {2, 0x02, {2, 0}},
+                     .start_value = {2, 0x06},
+                     .stop_value = {2, 0x05},
+                     .keep_min_output = {2, 0x00, {7}},
+                     .stop_time = {2, 0x07},
+                     .critical_temp = {2, 0x35},
+                 },
+                 .speed_cruise = {
+                     .target_speed_count_low = {2, 0x01},
+                     .target_speed_count_high = {2, 0x0C, {3, 0}},
+                     .tolerance_low = {2, 0x02, {2, 0}},
+                     .tolerance_high = {2, 0x0C, {6, 4}},
+                     .step_up_value = {2, 0x66, {7, 4}},
+                     .step_down_value = {2, 0x66, {3, 0}},
+                 },
+                 .step_up_time = {2, 0x03},
+                 .step_down_time = {2, 0x04},
+             },
              // Smart Fan IV
              {true,
               // Control points
@@ -145,30 +139,27 @@ const NuvotonChipInfo kNCT6793D = {
              {0, 0x77},
              {0, 0x78, {7}},
              // Smart Fan I
-             {true,
-              /*thermal_cruise=*/
-              {
-                  .target_temp = {3, 0x01},
-                  .tolerance = {3, 0x02, {2, 0}},
-                  .start_value = {3, 0x06},
-                  .stop_value = {3, 0x05},
-                  .keep_min_output = {3, 0x00, {7}},
-                  .stop_time = {3, 0x07},
-                  .step_up_time = {3, 0x03},
-                  .step_down_time = {3, 0x04},
-                  .critical_temp = {3, 0x35},
-              },
-              /*speed_cruise=*/
-              {
-                  .target_speed_count_low = {3, 0x01},
-                  .target_speed_count_high = {3, 0x0C, {3, 0}},
-                  .tolerance_low = {3, 0x02, {2, 0}},
-                  .tolerance_high = {3, 0x0C, {6, 4}},
-                  .step_up_time = {3, 0x03},
-                  .step_down_time = {3, 0x04},
-                  .step_up_value = {3, 0x66, {7, 4}},
-                  .step_down_value = {3, 0x66, {3, 0}},
-              }},
+             {.available = true,
+                 .thermal_cruise = {
+                     .target_temp = {3, 0x01},
+                     .tolerance = {3, 0x02, {2, 0}},
+                     .start_value = {3, 0x06},
+                     .stop_value = {3, 0x05},
+                     .keep_min_output = {3, 0x00, {7}},
+                     .stop_time = {3, 0x07},
+                     .critical_temp = {3, 0x35},
+                 },
+                 .speed_cruise = {
+                     .target_speed_count_low = {3, 0x01},
+                     .target_speed_count_high = {3, 0x0C, {3, 0}},
+                     .tolerance_low = {3, 0x02, {2, 0}},
+                     .tolerance_high = {3, 0x0C, {6, 4}},
+                     .step_up_value = {3, 0x66, {7, 4}},
+                     .step_down_value = {3, 0x66, {3, 0}},
+                 },
+                 .step_up_time = {3, 0x03},
+                 .step_down_time = {3, 0x04},
+             },
              // Smart Fan IV
              {true,
               // Control points
@@ -192,30 +183,27 @@ const NuvotonChipInfo kNCT6793D = {
              {0, 0x79},
              {0, 0x7A, {7}},
              // Smart Fan I
-             {true,
-              /*thermal_cruise=*/
-              {
-                  .target_temp = {8, 0x01},
-                  .tolerance = {8, 0x02, {2, 0}},
-                  .start_value = {8, 0x06},
-                  .stop_value = {8, 0x05},
-                  .keep_min_output = {8, 0x00, {7}},
-                  .stop_time = {8, 0x07},
-                  .step_up_time = {8, 0x03},
-                  .step_down_time = {8, 0x04},
-                  .critical_temp = {8, 0x35},
-              },
-              /*speed_cruise=*/
-              {
-                  .target_speed_count_low = {8, 0x01},
-                  .target_speed_count_high = {8, 0x0C, {3, 0}},
-                  .tolerance_low = {8, 0x02, {2, 0}},
-                  .tolerance_high = {8, 0x0C, {6, 4}},
-                  .step_up_time = {8, 0x03},
-                  .step_down_time = {8, 0x04},
-                  .step_up_value = {8, 0x66, {7, 4}},
-                  .step_down_value = {8, 0x66, {3, 0}},
-              }},
+             {.available = true,
+                 .thermal_cruise = {
+                     .target_temp = {8, 0x01},
+                     .tolerance = {8, 0x02, {2, 0}},
+                     .start_value = {8, 0x06},
+                     .stop_value = {8, 0x05},
+                     .keep_min_output = {8, 0x00, {7}},
+                     .stop_time = {8, 0x07},
+                     .critical_temp = {8, 0x35},
+                 },
+                 .speed_cruise = {
+                     .target_speed_count_low = {8, 0x01},
+                     .target_speed_count_high = {8, 0x0C, {3, 0}},
+                     .tolerance_low = {8, 0x02, {2, 0}},
+                     .tolerance_high = {8, 0x0C, {6, 4}},
+                     .step_up_value = {8, 0x66, {7, 4}},
+                     .step_down_value = {8, 0x66, {3, 0}},
+                 },
+                 .step_up_time = {8, 0x03},
+                 .step_down_time = {8, 0x04},
+             },
              // Smart Fan IV
              {true,
               // Control points
@@ -239,30 +227,27 @@ const NuvotonChipInfo kNCT6793D = {
              {0, 0x7B},
              {0, 0x7C, {7}},
              // Smart Fan I
-             {true,
-              /*thermal_cruise=*/
-              {
-                  .target_temp = {9, 0x01},
-                  .tolerance = {9, 0x02, {2, 0}},
-                  .start_value = {9, 0x06},
-                  .stop_value = {9, 0x05},
-                  .keep_min_output = {9, 0x00, {7}},
-                  .stop_time = {9, 0x07},
-                  .step_up_time = {9, 0x03},
-                  .step_down_time = {9, 0x04},
-                  .critical_temp = {9, 0x35},
-              },
-              /*speed_cruise=*/
-              {
-                  .target_speed_count_low = {9, 0x01},
-                  .target_speed_count_high = {9, 0x0C, {3, 0}},
-                  .tolerance_low = {9, 0x02, {2, 0}},
-                  .tolerance_high = {9, 0x0C, {6, 4}},
-                  .step_up_time = {9, 0x03},
-                  .step_down_time = {9, 0x04},
-                  .step_up_value = {9, 0x66, {7, 4}},
-                  .step_down_value = {9, 0x66, {3, 0}},
-              }},
+             {.available = true,
+                 .thermal_cruise = {
+                     .target_temp = {9, 0x01},
+                     .tolerance = {9, 0x02, {2, 0}},
+                     .start_value = {9, 0x06},
+                     .stop_value = {9, 0x05},
+                     .keep_min_output = {9, 0x00, {7}},
+                     .stop_time = {9, 0x07},
+                     .critical_temp = {9, 0x35},
+                 },
+                 .speed_cruise = {
+                     .target_speed_count_low = {9, 0x01},
+                     .target_speed_count_high = {9, 0x0C, {3, 0}},
+                     .tolerance_low = {9, 0x02, {2, 0}},
+                     .tolerance_high = {9, 0x0C, {6, 4}},
+                     .step_up_value = {9, 0x66, {7, 4}},
+                     .step_down_value = {9, 0x66, {3, 0}},
+                 },
+                 .step_up_time = {9, 0x03},
+                 .step_down_time = {9, 0x04},
+             },
              // Smart Fan IV
              {true,
               // Control points
@@ -286,30 +271,27 @@ const NuvotonChipInfo kNCT6793D = {
              {0, 0x7D},
              {0, 0x7E, {7}},
              // Smart Fan I
-             {true,
-              /*thermal_cruise=*/
-              {
-                  .target_temp = {0xA, 0x01},
-                  .tolerance = {0xA, 0x02, {2, 0}},
-                  .start_value = {0xA, 0x06},
-                  .stop_value = {0xA, 0x05},
-                  .keep_min_output = {0xA, 0x00, {7}},
-                  .stop_time = {0xA, 0x07},
-                  .step_up_time = {0xA, 0x03},
-                  .step_down_time = {0xA, 0x04},
-                  .critical_temp = {0xA, 0x35},
-              },
-              /*speed_cruise=*/
-              {
-                  .target_speed_count_low = {0xA, 0x01},
-                  .target_speed_count_high = {0xA, 0x0C, {3, 0}},
-                  .tolerance_low = {0xA, 0x02, {2, 0}},
-                  .tolerance_high = {0xA, 0x0C, {6, 4}},
-                  .step_up_time = {0xA, 0x03},
-                  .step_down_time = {0xA, 0x04},
-                  .step_up_value = {0xA, 0x66, {7, 4}},
-                  .step_down_value = {0xA, 0x66, {3, 0}},
-              }},
+             {.available = true,
+                 .thermal_cruise = {
+                     .target_temp = {0xA, 0x01},
+                     .tolerance = {0xA, 0x02, {2, 0}},
+                     .start_value = {0xA, 0x06},
+                     .stop_value = {0xA, 0x05},
+                     .keep_min_output = {0xA, 0x00, {7}},
+                     .stop_time = {0xA, 0x07},
+                     .critical_temp = {0xA, 0x35},
+                 },
+                 .speed_cruise = {
+                     .target_speed_count_low = {0xA, 0x01},
+                     .target_speed_count_high = {0xA, 0x0C, {3, 0}},
+                     .tolerance_low = {0xA, 0x02, {2, 0}},
+                     .tolerance_high = {0xA, 0x0C, {6, 4}},
+                     .step_up_value = {0xA, 0x66, {7, 4}},
+                     .step_down_value = {0xA, 0x66, {3, 0}},
+                 },
+                 .step_up_time = {0xA, 0x03},
+                 .step_down_time = {0xA, 0x04},
+             },
              // Smart Fan IV
              {true,
               // Control points
