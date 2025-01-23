@@ -19,10 +19,10 @@ const uint8_t kInvalidControlTemp = 128;
 
 double PowerToPercent(int power) { return 1.0 * power / 255 * 100.0; }
 
-uint8_t PercentToPower(int percent) {
-    int power = percent / 100.0 * 255;
-    if (power >= 255) {
-        return 255;
+uint8_t PercentToPower(const int percent, const int max_value) {
+    int power = percent / 100.0 * max_value;
+    if (power >= max_value) {
+        return max_value;
     } else {
         return power;
     }
@@ -58,7 +58,7 @@ class NuvotonFanControlManualImpl : public NuvotonFanControlManual {
     Status Apply() override { return chip_->WriteByte(control_addr_, power); }
     void DumpInfo(std::ostream& out) override {}
     Status SetPower(int percent) override {
-        power = PercentToPower(percent);
+        power = PercentToPower(percent, control_addr_.max_value());
         return Apply();
     }
 
@@ -372,7 +372,7 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
         for (auto& control_point : control_points_) {
             if ((uint8_t)temp == control_point.temp) {
                 LOG(INFO) << "Found an existing control point.";
-                control_point.power = PercentToPower(percent);
+                control_point.power = PercentToPower(percent, 255);
                 return Apply();
             }
         }
@@ -394,12 +394,12 @@ class NuvotonFanControlSmartFan4Impl : public NuvotonFanControlSmartFan4 {
                     control_points_[j] = control_points_[j - 1];
                 }
                 control_points_[i].temp = temp;
-                control_points_[i].power = PercentToPower(percent);
+                control_points_[i].power = PercentToPower(percent, 255);
                 return Apply();
             }
         }
         control_points_.rbegin()->temp = temp;
-        control_points_.rbegin()->power = PercentToPower(percent);
+        control_points_.rbegin()->power = PercentToPower(percent, 255);
 
         return Apply();
     }
@@ -470,8 +470,13 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
     NuvotonFanControlImpl(const NuvotonFanControlInfo& info,
             const NuvotonTempSourceTable& temp_source_table, NuvotonChip* chip)
         : info_(info), temp_source_table_(temp_source_table), chip_(chip) {
-        manual_ = std::make_unique<NuvotonFanControlManualImpl>(
-            info.output_value_write, chip);
+        if (info.output_value_write.valid) {
+            manual_ = std::make_unique<NuvotonFanControlManualImpl>(
+                    info.output_value_write, chip);
+        } else if (info.output_value_write_dc.valid) {
+            manual_ = std::make_unique<NuvotonFanControlManualImpl>(
+                    info.output_value_write_dc, chip);
+        }
         if (info.smart_fan.available) {
             thermal_ = std::make_unique<NuvotonFanControlThermalCruiseImpl>(
                 info.smart_fan, chip);
@@ -489,10 +494,14 @@ class NuvotonFanControlImpl : public NuvotonFanControl {
         double ret;
         if (info_.output_value_read.valid) {
             chip_->ReadByte(info_.output_value_read, &value);
-        } else {
+            ret = value / 255.0;
+        } else if (info_.output_value_write.valid) {
             chip_->ReadByte(info_.output_value_write, &value);
+            ret = value / 255.0;
+        } else {
+            chip_->ReadByte(info_.output_value_write_dc, &value);
+            ret = value / 64.0;
         }
-        ret = value / 255.0;
         return ret;
     }
 

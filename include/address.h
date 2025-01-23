@@ -46,6 +46,10 @@ struct BankedAddress {
 
     int width() const { return bits.total_width() + ((next == nullptr) ? 0 : next->width()); }
 
+    int max_value() const {
+        return ((uint32_t)1 << width()) - 1;
+    }
+
     bool IsAllOnes(const uint16_t value) const {
         uint32_t all_ones = (1 << width()) - 1;
         return value == all_ones;
