@@ -25,7 +25,7 @@ std::map<NuvotonTempSource, uint8_t> kNCT6776FTempSource{
 };
 
 NuvotonChipInfo kNCT6776F{
-    {{0xC333, "NCT6776F/NCT6776D"}},
+    {{0xC333, "NCT5577D/NCT6776F/NCT6776D"}},
     {0, 0x4F},
     // Fan speed info
     {
@@ -149,7 +149,9 @@ NuvotonChipInfo kNCT6776F{
         {"Vin1", {0, 0x24}},
         {"Vin2", {0, 0x25}},
         {"Vin3", {0, 0x26}},
-    }};
+    },
+    "Note: NCT5577D shares the same chip ID as NCT6776F, but it has fewer pins and less capability."
+};
 
 RegisterChip<NuvotonChipInfo> kRegisterNCT6776F(kNCT6776F);
 

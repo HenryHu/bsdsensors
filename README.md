@@ -11,6 +11,14 @@ Getting sensor values on FreeBSD
     Document available.
     No hardware to test.
 
+* NCT5577D
+
+    Docuemnt available.
+    This chip is weird: its chip ID is the same as NCT6776F, however their capabilities
+    are different. It's not clear if they really share the same ID, or the document is
+    wrong. Nonetheless, we can't identify it. Given that NCT5577D has 64 pins while NCT6776F
+    has 128 pins, maybe it's the same chip with less pins connected?
+
 * NCT5562D
 
     Document available.
@@ -30,6 +38,8 @@ Getting sensor values on FreeBSD
 
     Document available.
     No hardware to test.
+    Notice that the chip might be NCT5577D - their datasheets show same chip IDs, although
+    NCT5577D has less capability (2 fan controls, for example).a
 
 * NCT6779D
 
@@ -67,6 +77,16 @@ Getting sensor values on FreeBSD
     Not tested.
 
 * W83627EHF/EHG / W83627EF/EG
+
+    Document available.
+    Not tested.
+
+* W83667HG (lacks document)
+
+    Document unavailable, modified based on W83667HG-A.
+    Tested on ASUS P5Q & ASUS P6T-SE.
+
+* W83667HG-A
 
     Document available.
     Not tested.

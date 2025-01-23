@@ -37,13 +37,12 @@ std::map<NuvotonTempSource, uint8_t> kNCT6796DTempSource{
 };
 
 const NuvotonChipInfo kNCT6796D = {
-    {
+    .device_id_to_name = {
         {0xD421, "NCT6796D"},
         {0xD42B, "NCT6796D"},
     },
-    /*vendor_id_addr=*/{0, 0x4F},
-    // Fan speed info
-    {
+    .vendor_id_addr = {0, 0x4F},
+    .fans = {
         {
             .name = "SYSFAN",
             .rpm_high = {4, 0xC0},
@@ -355,9 +354,8 @@ const NuvotonChipInfo kNCT6796D = {
             },
         },
     },
-    // Temp sensors
-    kNCT6796DTempSource,
-    {
+    .temp_table = kNCT6796DTempSource,
+    .temps = {
         {"SMIOVT1", /*val_int=*/{0, 0x27}, /*val_frac=*/{},
          /*has_peci_frac=*/false, /*can_select=*/true,
          /*select=*/{6, 0x21, {4, 0}}},
@@ -403,8 +401,7 @@ const NuvotonChipInfo kNCT6796D = {
         {"BYTE0", {4, 0x19}},
         {"BYTE1", {4, 0x1A}},
     },
-    // Volts
-    {
+    .volts = {
         {"Vcore", {4, 0x80}},
         {"Vin1", {4, 0x81}},
         {"AVsb", {4, 0x82}, 2.0},
