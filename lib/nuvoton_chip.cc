@@ -39,6 +39,10 @@ const SuperIO::AddressType kPortBaseAddress = 0x60;
 const PortAddress kAddrPortOffset = 0x05;
 const PortAddress kDataPortOffset = 0x06;
 
+// We use the 2nd port for apps. The data port happens to be the same!
+const PortAddress kPagePortOffset = 0x04;
+const PortAddress kIndexPortOffset = 0x05;
+
 const SuperIO::AddressType kFastAccessControlRegister = 0x64;
 
 // const NuvotonChip::AddressType kConfigRegister = {0, 0x40};
@@ -104,29 +108,45 @@ class NuvotonChipImpl : public NuvotonChip {
                     continue;
                 }
                 id |= result;
-                if (id != 0xffff && GetBaseAddress()) {
-                    LOG(INFO) << "Found Nuvoton chip, ID: " << hex << "0x" << id
-                              << " at 0x" << port;
+                if (id == 0xffff || !GetBaseAddress()) {
+                    continue;
+                }
+                LOG(INFO) << "Found Nuvoton chip, ID: " << hex << "0x" << id
+                    << " at 0x" << port;
 
-                    id_ = id;
-                    info_ = GetKnownChips<NuvotonChipInfo>()->Find(id);
-                    if (info_ != nullptr) {
-                        LOG(INFO) << "Known Nuvoton Chip: " << info_->device_id_to_name.at(id);
-                        if (info_->use_ec_space) {
-                            banked_io_ = CreateECSpacecBankedIO();
-                        } else {
-                            banked_io_ = CreateBasicBankedIO(
-                                    addr_port_, data_port_,
-                                    info_->bank_select.valid ? info_->bank_select
-                                    : kBankSelect, port_io_.get());
-                        }
-                        EnableMapping();
-                        LoadSensors();
-                        return true;
+                id_ = id;
+                info_ = GetKnownChips<NuvotonChipInfo>()->Find(id);
+                if (info_ != nullptr) {
+                    LOG(INFO) << "Known Nuvoton Chip: " << info_->device_id_to_name.at(id);
+                    if (info_->use_ec_space) {
+                        const PortAddress page_port = port_base_ +
+                            kPagePortOffset;
+                        const PortAddress index_port = port_base_ +
+                            kIndexPortOffset;
+                        const PortAddress data_port = port_base_ +
+                            kDataPortOffset;
+                        LOG(INFO) << "EC ports: 0x" << hex << page_port
+                            << " 0x" << index_port << " 0x" << data_port << endl;
+
+                        banked_io_ = CreateECSpacecBankedIO(page_port,
+                                index_port, data_port, port_io_.get());
                     } else {
-                        LOG(ERROR) << "Unknown Nuvoton Chip: " << hex << "0x" << id;
-                        return false;
+                        const PortAddress addr_port = port_base_ + kAddrPortOffset;
+                        const PortAddress data_port = port_base_ + kDataPortOffset;
+                        LOG(INFO) << "HM ports: 0x" << hex << addr_port
+                            << " 0x" << data_port << endl;
+
+                        banked_io_ = CreateBasicBankedIO(
+                                addr_port, data_port,
+                                info_->bank_select.valid ? info_->bank_select
+                                : kBankSelect, port_io_.get());
                     }
+                    EnableMapping();
+                    LoadSensors();
+                    return true;
+                } else {
+                    LOG(ERROR) << "Unknown Nuvoton Chip: " << hex << "0x" << id;
+                    return false;
                 }
             }
         }
@@ -212,12 +232,8 @@ class NuvotonChipImpl : public NuvotonChip {
             return false;
         }
 
-        addr_port_ = port_base + kAddrPortOffset;
-        data_port_ = port_base + kDataPortOffset;
-
-        LOG(INFO) << "HM ports: 0x" << hex << addr_port_ << " 0x" << data_port_
-                  << endl;
-
+        LOG(INFO) << "HM Base Address: " << port_base;
+        port_base_ = port_base;
         return true;
     }
 
@@ -434,7 +450,7 @@ class NuvotonChipImpl : public NuvotonChip {
     std::unique_ptr<SuperIO> io_;
     std::unique_ptr<BankedIO> banked_io_;
 
-    PortAddress addr_port_, data_port_;
+    PortAddress port_base_;
     bool entered_;
     const NuvotonChipInfo* info_;
     std::string name_;

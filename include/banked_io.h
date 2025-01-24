@@ -32,7 +32,9 @@ class BankedIO {
 std::unique_ptr<BankedIO> CreateBasicBankedIO(
     const PortAddress addr_port, const PortAddress data_port,
     const BankedAddress& bank_select, PortIO* port_io);
-std::unique_ptr<BankedIO> CreateECSpacecBankedIO();
+std::unique_ptr<BankedIO> CreateECSpacecBankedIO(
+    const PortAddress page_port, const PortAddress index_port,
+    const PortAddress data_port, PortIO* port_io);
 
 }  // namespace bsdsensors
 
