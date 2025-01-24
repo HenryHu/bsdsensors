@@ -15,6 +15,7 @@
 #include "nuvoton_volt_sensor.h"
 #include "util.h"
 #include "testdata.pb.h"
+#include "banked_io.h"
 
 #include <unistd.h>
 #include <iomanip>
@@ -111,6 +112,14 @@ class NuvotonChipImpl : public NuvotonChip {
                     info_ = GetKnownChips<NuvotonChipInfo>()->Find(id);
                     if (info_ != nullptr) {
                         LOG(INFO) << "Known Nuvoton Chip: " << info_->device_id_to_name.at(id);
+                        if (info_->use_ec_space) {
+                            banked_io_ = CreateECSpacecBankedIO();
+                        } else {
+                            banked_io_ = CreateBasicBankedIO(
+                                    addr_port_, data_port_,
+                                    info_->bank_select.valid ? info_->bank_select
+                                    : kBankSelect, port_io_.get());
+                        }
                         EnableMapping();
                         LoadSensors();
                         return true;
@@ -166,58 +175,17 @@ class NuvotonChipImpl : public NuvotonChip {
 
     Status WriteByte(const NuvotonChip::AddressType& addr,
                      const uint8_t data) override {
-        uint8_t orig = 0;
-        if (!addr.bits.full()) {
-            RETURN_IF_ERROR(ReadByte(addr, &orig));
-        }
-        RETURN_IF_ERROR(SelectBank(addr.bank));
-        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
-        uint8_t my_part = data >> addr.other_parts_len;
-        RETURN_IF_ERROR(port_io_->WriteByte(
-            data_port_, BitsToByte(addr.bits, orig, my_part)));
-        if (addr.next) {
-            uint8_t other_part = data & ((1 << addr.other_parts_len) - 1);
-            return WriteByte(*addr.next.get(), other_part);
-        } else {
-            return OkStatus();
-        }
+        return banked_io_->WriteByte(addr, data);
     }
 
     Status ReadByte(const NuvotonChip::AddressType& addr,
                     uint8_t* data) override {
-        RETURN_IF_ERROR(SelectBank(addr.bank));
-        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
-        uint8_t value;
-        RETURN_IF_ERROR(port_io_->ReadByte(data_port_, &value));
-        uint8_t my_part = BitsFromByte(addr.bits, value);
-        if (addr.next) {
-            uint8_t other_part;
-            RETURN_IF_ERROR(ReadByte(*addr.next.get(), &other_part));
-            *data = (my_part << addr.other_parts_len) | other_part;
-        } else {
-            *data = my_part;
-        }
-        VLOG(1) << "read from " << addr << " result " << (int)*data;
-        return OkStatus();
+        return banked_io_->ReadByte(addr, data);
     }
 
     Status ReadWord2(const NuvotonChip::AddressType& addr,
             uint16_t* data) override {
-        RETURN_IF_ERROR(SelectBank(addr.bank));
-        RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
-        uint8_t value;
-        RETURN_IF_ERROR(port_io_->ReadByte(data_port_, &value));
-        // Extend to 16 bits
-        uint16_t my_part = BitsFromByte(addr.bits, value);
-        if (addr.next) {
-            uint8_t other_part;
-            RETURN_IF_ERROR(ReadByte(*addr.next.get(), &other_part));
-            *data = (my_part << addr.other_parts_len) | other_part;
-        } else {
-            *data = my_part;
-        }
-        VLOG(1) << "read from " << addr << " result " << (int)*data;
-        return OkStatus();
+        return banked_io_->ReadWord(addr, data);
     }
 
     Status ReadWord(const NuvotonChip::AddressType& addr, uint16_t* data) {
@@ -228,23 +196,6 @@ class NuvotonChipImpl : public NuvotonChip {
         RETURN_IF_ERROR(ReadByte(high_addr, &high));
         *data = Combine(high, low);
         return OkStatus();
-    }
-
-    Status SelectBank(uint8_t bank_no) {
-        if (info_->bank_select.valid) {
-            const NuvotonChip::AddressType addr = info_->bank_select;
-            uint8_t orig = 0;
-            if (!addr.bits.full()) {
-                RETURN_IF_ERROR(ReadByte(addr, &orig));
-            }
-            RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, addr.addr));
-            uint8_t my_part = bank_no >> addr.other_parts_len;
-            return port_io_->WriteByte(
-                    data_port_, BitsToByte(addr.bits, orig, my_part));
-        } else {
-            RETURN_IF_ERROR(port_io_->WriteByte(addr_port_, kBankSelect.addr));
-            return port_io_->WriteByte(data_port_, bank_no);
-        }
     }
 
     // Locked
@@ -481,6 +432,7 @@ class NuvotonChipImpl : public NuvotonChip {
 
     std::unique_ptr<PortIO> port_io_;
     std::unique_ptr<SuperIO> io_;
+    std::unique_ptr<BankedIO> banked_io_;
 
     PortAddress addr_port_, data_port_;
     bool entered_;

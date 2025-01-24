@@ -14,6 +14,7 @@
 
 namespace bsdsensors {
 
+// For Nuvoton chips with EC space, it's called 'paged address'.
 struct BankedAddress {
     int bank = 0, addr = 0;
     Bits bits;
