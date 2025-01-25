@@ -93,9 +93,20 @@ class NuvotonMultiSensorImpl : public NuvotonMultiSensor {
                 out << "  Voltage " << source->name << " at " << value() << std::endl;
                 break;
         }
+        if (read_error()) {
+            out << "  Read Error" << std::endl;
+        }
     }
 
   private:
+    bool read_error() {
+        uint8_t error;
+        if (!chip_->ReadByte(info_.read_error, &error).ok()) {
+            return true;
+        }
+        return error != 0;
+    }
+
     const NuvotonMultiSensorInfo info_;
     const NuvotonSensorSourceTable table_;
     const double volt_unit_;

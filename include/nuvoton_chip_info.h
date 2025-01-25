@@ -226,6 +226,7 @@ struct NuvotonMultiSensorInfo {
     NuvotonChip::AddressType select;
     NuvotonChip::AddressType value_high;
     NuvotonChip::AddressType value_low;
+    NuvotonChip::AddressType read_error;
 };
 
 struct NuvotonChipInfo {
