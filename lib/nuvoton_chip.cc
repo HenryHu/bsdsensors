@@ -345,7 +345,7 @@ class NuvotonChipImpl : public NuvotonChip {
         }
         for (const auto& multi_sensor : info_->multi_sensors) {
             multi_sensors_.push_back(CreateNuvotonMultiSensor(multi_sensor,
-                        info_->sensor_sources, this));
+                        info_->sensor_sources, info_->volt_unit, this));
         }
     }
 

@@ -106,6 +106,7 @@ NuvotonSensorSourceTable kNCT6686DSensorSources {
 const NuvotonChipInfo kNCT6686D = {
     .device_id_to_name = {{0xC73A, "NCT6686D"}},
     .vendor_id_addr = {0, 0x4F},
+    .volt_unit = 0.016,
     .use_ec_space = true,
     .sensor_sources = kNCT6686DSensorSources
 };

@@ -28,7 +28,7 @@ class NuvotonMultiSensor : public DumpAble {
 
 std::unique_ptr<NuvotonMultiSensor> CreateNuvotonMultiSensor(
     const NuvotonMultiSensorInfo& info, const NuvotonSensorSourceTable& table,
-    NuvotonChip* chip);
+    const double volt_unit, NuvotonChip* chip);
 
 }  // namespace bsdsensors
 

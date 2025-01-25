@@ -16,13 +16,13 @@ namespace bsdsensors {
 class NuvotonMultiSensorImpl : public NuvotonMultiSensor {
   public:
     NuvotonMultiSensorImpl(const NuvotonMultiSensorInfo& info,
-            const NuvotonSensorSourceTable& table, NuvotonChip* chip)
-        : info_(info), table_(table), chip_(chip) {}
+            const NuvotonSensorSourceTable& table, const double volt_unit,
+            NuvotonChip* chip)
+        : info_(info), table_(table), volt_unit_(volt_unit), chip_(chip) {}
 
     virtual ~NuvotonMultiSensorImpl() {}
 
-    double value() override {
-        const NuvotonSensorSourceInfo* source = GetSource();
+    double value() override { const NuvotonSensorSourceInfo* source = GetSource();
         if (source == nullptr) return 0;
         switch (source->type) {
             case NuvotonSensorType::kTemp:
@@ -30,6 +30,7 @@ class NuvotonMultiSensorImpl : public NuvotonMultiSensor {
                     uint8_t high, low;
                     if (!chip_->ReadByte(info_.value_high, &high).ok() ||
                         !chip_->ReadByte(info_.value_low, &low).ok()) {
+                        LOG(ERROR) << "read error";
                         return 0;
                     }
                     double value = high;
@@ -40,9 +41,10 @@ class NuvotonMultiSensorImpl : public NuvotonMultiSensor {
                 {
                     uint8_t value;
                     if (!chip_->ReadByte(info_.value_high, &value).ok()) {
+                        LOG(ERROR) << "read error";
                         return 0;
                     }
-                    return value * 0.016;
+                    return value * volt_unit_;
                 }
         }
         LOG(ERROR) << "Unknown sensor source type";
@@ -56,10 +58,12 @@ class NuvotonMultiSensorImpl : public NuvotonMultiSensor {
     const NuvotonSensorSourceInfo* GetSource() override {
         uint8_t selected;
         if (!chip_->ReadByte(info_.select, &selected).ok()) {
+            LOG(ERROR) << "sensor source read error";
             return nullptr;
         }
         const auto it = table_.find(selected);
         if (it == table_.end()) {
+            LOG(ERROR) << "sensor source unknown";
             return nullptr;
         }
         return &it->second;
@@ -94,13 +98,14 @@ class NuvotonMultiSensorImpl : public NuvotonMultiSensor {
   private:
     const NuvotonMultiSensorInfo info_;
     const NuvotonSensorSourceTable table_;
+    const double volt_unit_;
     NuvotonChip* chip_;
 };
 
 std::unique_ptr<NuvotonMultiSensor> CreateNuvotonMultiSensor(
     const NuvotonMultiSensorInfo& info, const NuvotonSensorSourceTable& table,
-    NuvotonChip* chip) {
-    return std::make_unique<NuvotonMultiSensorImpl>(info, table, chip);
+    const double volt_unit, NuvotonChip* chip) {
+    return std::make_unique<NuvotonMultiSensorImpl>(info, table, volt_unit, chip);
 }
 
 }
