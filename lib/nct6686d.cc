@@ -111,33 +111,39 @@ const NuvotonChipInfo kNCT6686D = {
     .sensor_sources = kNCT6686DSensorSources
 };
 
-NuvotonChipInfo AddMultiSensors(NuvotonChipInfo chip) {
-    for (int i = 0; i < 32; ++i) {
+constexpr int kMultiSensorCount = 32;
+constexpr int kFanSpeedCount = 16;
+constexpr int kFanControlCount = 8;
+constexpr uint8_t kMultiSensorSelectBase = 0xA0;
+constexpr uint8_t kFanSpeedRpmBase = 0x40;
+
+NuvotonChipInfo AddMultiSensorsAndFans(NuvotonChipInfo chip) {
+    for (int i = 0; i < kMultiSensorCount; ++i) {
         chip.multi_sensors.push_back({
           .index = i,
-          .select = {0, 0xA0 + i, {6, 0}},
+          .select = {0, kMultiSensorSelectBase + i, {6, 0}},
           .value_high = {0, i * 2},
           .value_low = {0, i * 2 + 1},
           });
     }
-    for (int i = 0; i < 16; ++i) {
-        if (i < 8) {
+    for (int i = 0; i < kFanSpeedCount; ++i) {
+        if (i < kFanControlCount) {
             chip.fans.push_back({
                     .name = "FAN" + std::to_string(i),
-                    .rpm_high = {0, 0x40 + i * 2},
-                    .rpm_low = {0, 0x41 + i * 2},
+                    .rpm_high = {0, kFanSpeedRpmBase + i * 2},
+                    .rpm_low = {0, kFanSpeedRpmBase + 1 + i * 2},
                     });
         } else {
             chip.fans.push_back({
                     .name = "FAN" + std::to_string(i),
-                    .rpm_high = {0, 0x40 + i * 2},
-                    .rpm_low = {0, 0x41 + i * 2},
+                    .rpm_high = {0, kFanSpeedRpmBase + i * 2},
+                    .rpm_low = {0, kFanSpeedRpmBase + 1 + i * 2},
                     });
         }
     }
     return chip;
 }
 
-RegisterChip<NuvotonChipInfo> kRegisterNCT6686D(AddMultiSensors(kNCT6686D));
+RegisterChip<NuvotonChipInfo> kRegisterNCT6686D(AddMultiSensorsAndFans(kNCT6686D));
 
 }
