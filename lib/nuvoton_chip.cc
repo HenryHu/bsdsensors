@@ -13,6 +13,7 @@
 #include "nuvoton_fan_control.h"
 #include "nuvoton_temp_sensor.h"
 #include "nuvoton_volt_sensor.h"
+#include "nuvoton_multi_sensor.h"
 #include "util.h"
 #include "testdata.pb.h"
 #include "banked_io.h"
@@ -276,6 +277,9 @@ class NuvotonChipImpl : public NuvotonChip {
         for (const auto& volt : volt_sensors_) {
             volt->DumpInfo(out);
         }
+        for (const auto& multi_sensor : multi_sensors_) {
+            multi_sensor->DumpInfo(out);
+        }
     }
 
     void DumpAll(ostream& out) override {
@@ -338,6 +342,10 @@ class NuvotonChipImpl : public NuvotonChip {
         for (const auto& volt : info_->volts) {
             volt_sensors_.push_back(CreateNuvotonVoltSensor(volt,
                         info_->volt_unit, this));
+        }
+        for (const auto& multi_sensor : info_->multi_sensors) {
+            multi_sensors_.push_back(CreateNuvotonMultiSensor(multi_sensor,
+                        info_->sensor_sources, this));
         }
     }
 
@@ -461,6 +469,7 @@ class NuvotonChipImpl : public NuvotonChip {
     std::vector<std::unique_ptr<NuvotonFanControl>> fan_controls_;
     std::vector<std::unique_ptr<NuvotonTempSensor>> temp_sensors_;
     std::vector<std::unique_ptr<NuvotonVoltSensor>> volt_sensors_;
+    std::vector<std::unique_ptr<NuvotonMultiSensor>> multi_sensors_;
 };
 
 std::unique_ptr<NuvotonChip> CreateNuvotonChip(std::unique_ptr<PortIO> port_io) {

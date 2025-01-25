@@ -208,6 +208,26 @@ struct NuvotonVoltInfo {
     NuvotonChip::AddressType enable;
 };
 
+enum class NuvotonSensorType {
+    kTemp,
+    kVolt,
+};
+
+struct NuvotonSensorSourceInfo {
+    std::string name;
+    NuvotonSensorType type;
+};
+
+// Maps from a sensor input index to sensor name.
+using NuvotonSensorSourceTable = std::map<int, NuvotonSensorSourceInfo>;
+
+struct NuvotonMultiSensorInfo {
+    int index;
+    NuvotonChip::AddressType select;
+    NuvotonChip::AddressType value_high;
+    NuvotonChip::AddressType value_low;
+};
+
 struct NuvotonChipInfo {
     std::map<uint16_t, std::string> device_id_to_name;
     NuvotonChip::AddressType vendor_id_addr;
@@ -220,6 +240,8 @@ struct NuvotonChipInfo {
     double volt_unit = kDefaultVoltUnit;
     std::optional<uint8_t> io_space_enable;
     bool use_ec_space = false;
+    std::vector<NuvotonMultiSensorInfo> multi_sensors;
+    NuvotonSensorSourceTable sensor_sources;
 };
 
 }  // namespace bsdsensors
