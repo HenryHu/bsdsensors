@@ -120,6 +120,21 @@ NuvotonChipInfo AddMultiSensors(NuvotonChipInfo chip) {
           .value_low = {0, i * 2 + 1},
           });
     }
+    for (int i = 0; i < 16; ++i) {
+        if (i < 8) {
+            chip.fans.push_back({
+                    .name = "FAN" + std::to_string(i),
+                    .rpm_high = {0, 0x40 + i * 2},
+                    .rpm_low = {0, 0x41 + i * 2},
+                    });
+        } else {
+            chip.fans.push_back({
+                    .name = "FAN" + std::to_string(i),
+                    .rpm_high = {0, 0x40 + i * 2},
+                    .rpm_low = {0, 0x41 + i * 2},
+                    });
+        }
+    }
     return chip;
 }
 
