@@ -26,6 +26,10 @@ ITEChipInfo kIT8772{
         {.name = "3Vsb", .value = 0x27, .alpha = 2.0},
         {.name = "VBAT", .value = 0x28},
     },
+    .fan_speeds = {
+        {.name = "FAN2", .count = 0x0E},
+        {.name = "FAN3", .count = 0x0F},
+    },
 };
 
 RegisterChip<ITEChipInfo> kRegisterIT8772(kIT8772);

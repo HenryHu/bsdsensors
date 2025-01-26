@@ -27,10 +27,16 @@ struct ITEVoltInfo {
     double alpha = 1.0, beta = 0.0;
 };
 
+struct ITEFanSpeedInfo {
+    std::string name;
+    ITEChip::AddressType count;
+};
+
 struct ITEChipInfo {
     std::map<uint16_t, std::string> device_id_to_name;
     std::vector<ITETempInfo> temps;
     std::vector<ITEVoltInfo> volts;
+    std::vector<ITEFanSpeedInfo> fan_speeds;
 };
 
 }  // namespace bsdsensors
