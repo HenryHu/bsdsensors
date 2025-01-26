@@ -9,6 +9,8 @@
 #include "super_io.h"
 #include "port_io.h"
 #include "ite_chip_info.h"
+#include "ite_volt_sensor.h"
+#include "ite_temp_sensor.h"
 
 namespace bsdsensors {
 
@@ -82,36 +84,36 @@ class ITEChipImpl : public ITEChip {
                 continue;
             }
 
-            {
-                ITELock lock(this);
+            Enter();
 
-                uint16_t id = 0;
-                uint8_t id_high, id_low;
-                if (!io_->ReadByte(kDeviceID, &id_high).ok()) {
-                    continue;
-                }
-
-                if (!io_->ReadByte(kDeviceID + 1, &id_low).ok()) {
-                    continue;
-                }
-                id = Combine(id_high, id_low);
-                if (id != 0xffff) {
-                    std::cout << "Found ITE chip, ID: " << std::hex << "0x"
-                              << id << " at 0x" << port << std::endl;
-
-                    GetBaseAddress();
-
-                    info_ = GetKnownChips<ITEChipInfo>()->Find(id);
-                    if (info_ != nullptr) {
-                        std::cout << "Known ITE Chip: " << info_->device_id_to_name.at(id)
-                                  << std::endl;
-                        return true;
-                    } else {
-                        std::cout << "Unknown ITE Chip" << std::endl;
-                        return false;
-                    }
-                }
+            uint16_t id = 0;
+            uint8_t id_high, id_low;
+            if (!io_->ReadByte(kDeviceID, &id_high).ok()) {
+                continue;
             }
+
+            if (!io_->ReadByte(kDeviceID + 1, &id_low).ok()) {
+                continue;
+            }
+            id = Combine(id_high, id_low);
+            if (id == 0xffff) continue;
+
+            std::cout << "Found ITE chip, ID: " << std::hex << "0x"
+                << id << " at 0x" << port << std::endl;
+
+            GetBaseAddress();
+
+            info_ = GetKnownChips<ITEChipInfo>()->Find(id);
+            if (info_ == nullptr) {
+                std::cout << "Unknown ITE Chip" << std::endl;
+                return false;
+            }
+
+            std::cout << "Known ITE Chip: " << info_->device_id_to_name.at(id)
+                << std::endl;
+            LoadSensors();
+            Exit();
+            return true;
         }
         return false;
     }
@@ -159,6 +161,15 @@ class ITEChipImpl : public ITEChip {
                   << data_port_ << std::endl;
     }
 
+    void LoadSensors() {
+        for (const auto& temp : info_->temps) {
+            temp_sensors_.push_back(CreateITETempSensor(temp, this));
+        }
+        for (const auto& volt : info_->volts) {
+            volt_sensors_.push_back(CreateITEVoltSensor(volt, this));
+        }
+    }
+
     Status WriteByte(const AddressType& addr, const uint8_t data) override {
         uint8_t orig = 0;
         if (!addr.bits.full()) {
@@ -185,10 +196,28 @@ class ITEChipImpl : public ITEChip {
             uint8_t version;
             io_->ReadByte(kDeviceVersion, &version);
             std::cerr << "Device version: " << std::hex << version << std::endl;
+
+            for (auto& volt : volt_sensors_) {
+                volt->DumpInfo(out);
+            }
+            for (auto& temp : temp_sensors_) {
+                temp->DumpInfo(out);
+            }
         }
     }
 
     Status GetSensorValues(SensorsProto* sensors) override {
+        sensors->set_name(name_);
+        for (auto& temp_sensor : temp_sensors_) {
+            TemperatureProto& temp = *sensors->add_temperatures();
+            temp.set_name(temp_sensor->name());
+            temp.set_value(temp_sensor->value());
+        }
+        for (auto& volt_sensor : volt_sensors_) {
+            VoltageProto& volt = *sensors->add_voltages();
+            volt.set_name(volt_sensor->name());
+            volt.set_value(volt_sensor->value());
+        }
         return OkStatus();
     }
 
@@ -200,6 +229,9 @@ class ITEChipImpl : public ITEChip {
     bool entered_;
     const ITEChipInfo* info_;
     std::string name_;
+
+    std::vector<std::unique_ptr<ITEVoltSensor>> volt_sensors_;
+    std::vector<std::unique_ptr<ITETempSensor>> temp_sensors_;
 };
 
 std::unique_ptr<ITEChip> CreateITEChip(std::unique_ptr<PortIO> port_io) {
