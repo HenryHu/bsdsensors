@@ -31,7 +31,8 @@ class ITEChip : public Chip {
     virtual Status WriteByte(const AddressType& addr, const uint8_t data) = 0;
 };
 
-std::unique_ptr<ITEChip> CreateITEChip(std::unique_ptr<PortIO> port_io = CreatePortIO());
+std::unique_ptr<ITEChip> CreateITEChip(
+        std::unique_ptr<PortIO> port_io = CreatePortIO());
 
 }  // namespace bsdsensors
 
