@@ -23,6 +23,8 @@ struct ITETempInfo {
 struct ITEVoltInfo {
     std::string name;
     ITEChip::AddressType value;
+    // out = value * 0.012 * alpha + beta
+    double alpha = 1.0, beta = 0.0;
 };
 
 struct ITEChipInfo {
