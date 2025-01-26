@@ -17,7 +17,10 @@ std::map<NuvotonTempSource, uint8_t> kW83627EHFGTempSource{
 };
 
 const NuvotonChipInfo kW83627EHFG = {
-    {{0x8863, "W83627EHF/EHG"}},
+    {
+        {0x8854, "W83627EHF-A"},
+        {0x8863, "W83627EHF/EHG"},
+    },
     /*vendor_id_addr=*/{0, 0x4F},
     // Fan speed info
     {
