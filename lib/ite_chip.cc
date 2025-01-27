@@ -107,6 +107,7 @@ class ITEChipImpl : public ITEChip {
             info_ = GetKnownChips<ITEChipInfo>()->Find(id);
             if (info_ == nullptr) {
                 std::cout << "Unknown ITE Chip" << std::endl;
+                Exit();
                 return false;
             }
 
