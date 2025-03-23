@@ -25,6 +25,8 @@ class Status {
     std::string error_message_;
 };
 
+std::ostream& operator<<(std::ostream& out, const Status& status);
+
 Status OkStatus();
 
 // Return a Status with current errno.
@@ -39,6 +41,16 @@ void CHECK(const Status& status, const std::string& message);
             return status;      \
         }                       \
     } while (0)
+
+#define RETURN_VOID_IF_ERROR(result) \
+    do {                          \
+        Status status = result;   \
+        if (!status.ok()) {       \
+            LOG(ERROR) << status; \
+            return;               \
+        }                         \
+    } while (0)
+
 
 }  // namespace bsdsensors
 

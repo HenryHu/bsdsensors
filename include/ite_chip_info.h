@@ -15,6 +15,11 @@
 
 namespace bsdsensors {
 
+enum class ITEFanControlMode {
+    kSoftwareOperation = 0,
+    kAutomaticOperation = 1,
+};
+
 struct ITETempInfo {
     std::string name;
     ITEChip::AddressType value;

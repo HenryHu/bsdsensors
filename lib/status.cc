@@ -46,4 +46,15 @@ void CHECK(const Status& status, const std::string& message) {
     }
 }
 
+std::ostream& operator<<(std::ostream& out, const Status& status) {
+    char buf[1024];
+    if (strerror_r(status.error_code(), buf, sizeof(buf)) != 0) {
+        out << (int)status.error_code();
+    } else {
+        out << buf;
+    }
+    out << ": " << status.error_message();
+    return out;
+}
+
 }  // namespace bsdsensors

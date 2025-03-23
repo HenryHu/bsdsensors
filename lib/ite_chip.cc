@@ -12,6 +12,7 @@
 #include "ite_volt_sensor.h"
 #include "ite_temp_sensor.h"
 #include "ite_fan_speed.h"
+#include "ite_fan_control.h"
 
 namespace bsdsensors {
 
@@ -173,6 +174,9 @@ class ITEChipImpl : public ITEChip {
         for (const auto& fan_speed : info_->fan_speeds) {
             fan_speeds_.push_back(CreateITEFanSpeed(fan_speed, this));
         }
+        for (const auto& fan_control : info_->fan_controls) {
+            fan_controls_.push_back(CreateITEFanControl(fan_control, this));
+        }
     }
 
     Status WriteByte(const AddressType& addr, const uint8_t data) override {
@@ -211,6 +215,9 @@ class ITEChipImpl : public ITEChip {
             for (auto& fan_speed : fan_speeds_) {
                 fan_speed->DumpInfo(out);
             }
+            for (auto& fan_control : fan_controls_) {
+                fan_control->DumpInfo(out);
+            }
         }
     }
 
@@ -231,6 +238,11 @@ class ITEChipImpl : public ITEChip {
             fan.set_name(fan_speed->name());
             fan.mutable_speed()->set_value(fan_speed->value());
         }
+        for (auto& fan_control : fan_controls_) {
+            FanProto& fan = *sensors->add_fans();
+            fan.set_name(fan_control->name());
+            RETURN_IF_ERROR(fan_control->GetSensorValues(*fan.mutable_control()));
+        }
         return OkStatus();
     }
 
@@ -246,6 +258,7 @@ class ITEChipImpl : public ITEChip {
     std::vector<std::unique_ptr<ITEVoltSensor>> volt_sensors_;
     std::vector<std::unique_ptr<ITETempSensor>> temp_sensors_;
     std::vector<std::unique_ptr<ITEFanSpeed>> fan_speeds_;
+    std::vector<std::unique_ptr<ITEFanControl>> fan_controls_;
 };
 
 std::unique_ptr<ITEChip> CreateITEChip(std::unique_ptr<PortIO> port_io) {
