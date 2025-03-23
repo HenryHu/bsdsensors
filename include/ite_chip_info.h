@@ -30,6 +30,18 @@ struct ITEVoltInfo {
 struct ITEFanSpeedInfo {
     std::string name;
     ITEChip::AddressType count;
+    ITEChip::AddressType count_high;
+    ITEChip::AddressType wide_mode;
+    ITEChip::AddressType enable;
+    ITEChip::AddressType output_mode;
+};
+
+struct ITEFanControlInfo {
+    std::string name;
+    ITEChip::AddressType mode_select;
+    ITEChip::AddressType pwm;
+    ITEChip::AddressType temp_input_select;
+    std::map<uint8_t, std::string> temp_inputs;
 };
 
 struct ITEChipInfo {
@@ -37,6 +49,7 @@ struct ITEChipInfo {
     std::vector<ITETempInfo> temps;
     std::vector<ITEVoltInfo> volts;
     std::vector<ITEFanSpeedInfo> fan_speeds;
+    std::vector<ITEFanControlInfo> fan_controls;
 };
 
 }  // namespace bsdsensors
