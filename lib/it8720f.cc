@@ -45,21 +45,21 @@ ITEChipInfo kIT8720F{
     },
     .fan_controls = {
         {
-            .name = "FAN1",
+            .name = "FAN_CTL1",
             .mode_select = {0x15, {7}},
             .pwm = {0x15, {6, 0}},
             .temp_input_select = {0x15, {1, 0}},
             .temp_inputs = kIT8720FTempSource,
         },
         {
-            .name = "FAN2",
+            .name = "FAN_CTL2",
             .mode_select = {0x16, {7}},
             .pwm = {0x16, {6, 0}},
             .temp_input_select = {0x16, {1, 0}},
             .temp_inputs = kIT8720FTempSource,
         },
         {
-            .name = "FAN3",
+            .name = "FAN_CTL3",
             .mode_select = {0x17, {7}},
             .pwm = {0x17, {6, 0}},
             .temp_input_select = {0x17, {1, 0}},
