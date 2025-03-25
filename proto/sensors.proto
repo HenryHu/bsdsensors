@@ -10,7 +10,7 @@ import "fan_control.proto";
 message FanProto {
     string name = 1;
     FanSpeedProto speed = 2;
-    FanControlProto control = 3;
+    optional FanControlProto control = 3;
 }
 
 message SensorsProto {

@@ -21,13 +21,17 @@ void PrintTempValue(const TemperatureProto& temp, std::ostream& out) {
 }
 
 void PrintFanSpeedValue(const FanProto& fan, std::ostream& out) {
-    out << "Fan " << fan.name() << ": " << fan.speed().value() << " RPM";
-    out << std::endl;
+    out << "  Speed: " << fan.speed().value() << " RPM" << std::endl;
 }
 
 void PrintFanStatus(const FanProto& fan, std::ostream& out) {
-    PrintFanSpeedValue(fan, out);
-    out << fan.control();
+    out << "Fan " << fan.name() << std::endl;
+    if (fan.has_speed()) {
+        PrintFanSpeedValue(fan, out);
+    }
+    if (fan.has_control()) {
+        out << fan.control();
+    }
 }
 
 void PrintVoltValue(const VoltageProto& volt, std::ostream& out) {
@@ -49,11 +53,18 @@ void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
 
 std::ostream& operator<<(std::ostream& out,
                          const FanControlProto& fan_control) {
-    out << "  Current: " << (int)(fan_control.current_percent() * 100) << "%";
-    out << " Control method: " << fan_control.current_method() << std::endl;
+    if (fan_control.has_current_percent()) {
+        out << "  Current: " << (int)(fan_control.current_percent() * 100) << "%";
+    }
+    if (fan_control.has_current_method()) {
+        out << " Control method: " << fan_control.current_method() << std::endl;
+    }
     if (!fan_control.temp_source().empty()) {
-        out << "  Temp source: " << fan_control.temp_source() << " at "
-            << fan_control.temp_value() << " C" << std::endl;
+        out << "  Temp source: " << fan_control.temp_source();
+        if (fan_control.has_temp_value()) {
+            out << " at " << fan_control.temp_value() << " C";
+        }
+        out << std::endl;
     }
     for (const auto& method : fan_control.methods()) {
         out << "  Method " << method.name() << ":" << std::endl;

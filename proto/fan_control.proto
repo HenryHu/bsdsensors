@@ -17,12 +17,12 @@ message FanControlMethodProto {
 }
 
 message FanControlProto {
-    string current_method = 1;
-    double current_percent = 2;
+    optional string current_method = 1;
+    optional double current_percent = 2;
     repeated FanControlMethodProto methods = 3;
 
-    string temp_source = 4;
-    double temp_value = 5;
+    optional string temp_source = 4;
+    optional double temp_value = 5;
 }
 
 message SetMethodRequest {
