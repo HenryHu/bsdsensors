@@ -81,6 +81,7 @@ class ITEFanControlImpl : public ITEFanControl {
     Status GetSensorValues(FanControlProto& proto) override {
         ITEFanControlMode mode;
         RETURN_IF_ERROR(GetControlMode(mode));
+        proto.set_current_method(GetControlModeName(mode));
         switch (mode) {
             case ITEFanControlMode::kSoftwareOperation: {
                 uint8_t pwm;
