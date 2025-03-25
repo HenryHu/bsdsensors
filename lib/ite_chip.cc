@@ -204,7 +204,7 @@ class ITEChipImpl : public ITEChip {
 
             uint8_t version;
             io_->ReadByte(kDeviceVersion, &version);
-            std::cerr << "Device version: " << std::hex << version << std::endl;
+            std::cerr << "Device version: " << std::hex << (int)version << std::endl;
 
             for (auto& volt : volt_sensors_) {
                 volt->DumpInfo(out);
