@@ -59,7 +59,7 @@ std::ostream& operator<<(std::ostream& out,
     if (fan_control.has_current_method()) {
         out << "  Control method: " << fan_control.current_method() << std::endl;
     }
-    if (!fan_control.temp_source().empty()) {
+    if (fan_control.has_temp_source()) {
         out << "  Temp source: " << fan_control.temp_source();
         if (fan_control.has_temp_value()) {
             out << " at " << fan_control.temp_value() << " C";
