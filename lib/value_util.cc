@@ -54,10 +54,10 @@ void PrintSensorValues(const SensorsProto& sensors, std::ostream& out) {
 std::ostream& operator<<(std::ostream& out,
                          const FanControlProto& fan_control) {
     if (fan_control.has_current_percent()) {
-        out << "  Current: " << (int)(fan_control.current_percent() * 100) << "%";
+        out << "  Current: " << (int)(fan_control.current_percent() * 100) << "%" << std::endl;
     }
     if (fan_control.has_current_method()) {
-        out << " Control method: " << fan_control.current_method() << std::endl;
+        out << "  Control method: " << fan_control.current_method() << std::endl;
     }
     if (!fan_control.temp_source().empty()) {
         out << "  Temp source: " << fan_control.temp_source();
