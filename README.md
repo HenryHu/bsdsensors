@@ -61,6 +61,11 @@ Getting sensor values on FreeBSD
     Document available.
     Tested on ASUS PRIME Z790-A WIFI
 
+* NCT6799D-R
+
+    Document available.
+    Tested on ASUS TUF GAMING B650-PLUS WIFI (chip ID 0xd802).
+
 * W83627HG-AW
 
     Document available.
